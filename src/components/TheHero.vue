@@ -46,10 +46,9 @@ onMounted(() => {
   }, 3000)
 })
 
-const scrollToContact = () => {
-  // Scroll suave hacia la sección de contacto
-  const footer = document.querySelector('footer')
-  footer?.scrollIntoView({ behavior: 'smooth' })
+const openWhatsApp = () => {
+  // Abrir WhatsApp con el número de contacto
+  window.open('https://wa.me/593984934039', '_blank', 'noopener,noreferrer')
 }
 </script>
 
@@ -93,7 +92,7 @@ const scrollToContact = () => {
 
           <!-- CTA Principal -->
           <div class="hero__cta">
-            <button class="btn btn--primary" @click="scrollToContact">
+            <button class="btn btn--primary" @click="openWhatsApp">
               <span>ESCALA MI NEGOCIO AHORA</span>
               <svg class="btn__icon" viewBox="0 0 24 24" fill="none">
                 <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
