@@ -1,0 +1,25 @@
+// Colores principales de Bakano
+$BAKANO-PINK: #e6285c;
+$BAKANO-DARK: #191423;
+$BAKANO-LIGHT: #f5f3ef;
+$BAKANO-PURPLE: #85529c;
+$BAKANO-GREEN: #3bb77e;
+
+// Color primario principal (usando el rosa como principal)
+$BAKANO-PRIMARY: $BAKANO-PINK;
+
+// Colores base
+$white: #ffffff;
+$text-light: #f5f5f5;
+$overlay-purple: rgba($BAKANO-PURPLE, 0.1);
+
+// Colores adicionales para UI
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
