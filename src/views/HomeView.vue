@@ -7,10 +7,18 @@ import TheTeam from '@/components/TheTeam.vue'
 
 <template>
   <main class="home">
-    <TheHero />
-    <TheStrategies />
-    <TheTestimonials />
-    <TheTeam />
+    <section id="inicio">
+      <TheHero />
+    </section>
+    <section id="servicios">
+      <TheStrategies />
+    </section>
+    <section id="testimonios">
+      <TheTestimonials />
+    </section>
+    <section id="nosotros">
+      <TheTeam />
+    </section>
     
     <!-- Aquí se pueden agregar más secciones de la página principal -->
     <!-- <AboutSection /> -->
