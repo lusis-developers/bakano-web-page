@@ -13,6 +13,28 @@ const handleScroll = () => {
   isScrolled.value = window.scrollY > 20
 }
 
+// Función para scroll suave a secciones
+const scrollToSection = (sectionId: string) => {
+  const element = document.getElementById(sectionId)
+  if (element) {
+    const headerHeight = 56 // Altura del header fijo
+    const elementPosition = element.offsetTop - headerHeight
+    
+    window.scrollTo({
+      top: elementPosition,
+      behavior: 'smooth'
+    })
+  }
+  // Cerrar menú móvil si está abierto
+  isMenuOpen.value = false
+}
+
+// Función para abrir WhatsApp
+const openWhatsApp = () => {
+  window.open('https://wa.me/593984934039', '_blank', 'noopener,noreferrer')
+  isMenuOpen.value = false
+}
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
 })
@@ -37,19 +59,19 @@ onUnmounted(() => {
         <!-- Desktop Navigation -->
         <ul class="nav__menu nav__menu--desktop">
           <li class="nav__item">
-            <RouterLink to="/" class="nav__link">Inicio</RouterLink>
+            <a href="#inicio" @click.prevent="scrollToSection('inicio')" class="nav__link">Inicio</a>
           </li>
           <li class="nav__item">
-            <RouterLink to="/servicios" class="nav__link">Servicios</RouterLink>
+            <a href="#servicios" @click.prevent="scrollToSection('servicios')" class="nav__link">Servicios</a>
           </li>
           <li class="nav__item">
-            <RouterLink to="/nosotros" class="nav__link">Nosotros</RouterLink>
+            <a href="#nosotros" @click.prevent="scrollToSection('nosotros')" class="nav__link">Nosotros</a>
           </li>
           <li class="nav__item">
-            <RouterLink to="/proyectos" class="nav__link">Proyectos</RouterLink>
+            <a href="#testimonios" @click.prevent="scrollToSection('testimonios')" class="nav__link">Testimonios</a>
           </li>
           <li class="nav__item">
-            <RouterLink to="/contacto" class="nav__link nav__link--cta">Contacto</RouterLink>
+            <a href="#contacto" @click.prevent="openWhatsApp" class="nav__link nav__link--cta">Contacto</a>
           </li>
         </ul>
 
@@ -73,19 +95,19 @@ onUnmounted(() => {
       >
         <ul class="nav__mobile-list">
           <li class="nav__mobile-item">
-            <RouterLink to="/" class="nav__mobile-link" @click="toggleMenu">Inicio</RouterLink>
+            <a href="#inicio" @click.prevent="scrollToSection('inicio')" class="nav__mobile-link">Inicio</a>
           </li>
           <li class="nav__mobile-item">
-            <RouterLink to="/servicios" class="nav__mobile-link" @click="toggleMenu">Servicios</RouterLink>
+            <a href="#servicios" @click.prevent="scrollToSection('servicios')" class="nav__mobile-link">Servicios</a>
           </li>
           <li class="nav__mobile-item">
-            <RouterLink to="/nosotros" class="nav__mobile-link" @click="toggleMenu">Nosotros</RouterLink>
+            <a href="#nosotros" @click.prevent="scrollToSection('nosotros')" class="nav__mobile-link">Nosotros</a>
           </li>
           <li class="nav__mobile-item">
-            <RouterLink to="/proyectos" class="nav__mobile-link" @click="toggleMenu">Proyectos</RouterLink>
+            <a href="#testimonios" @click.prevent="scrollToSection('testimonios')" class="nav__mobile-link">Testimonios</a>
           </li>
           <li class="nav__mobile-item">
-            <RouterLink to="/contacto" class="nav__mobile-link nav__mobile-link--cta" @click="toggleMenu">Contacto</RouterLink>
+            <a href="#contacto" @click.prevent="openWhatsApp" class="nav__mobile-link nav__mobile-link--cta">Contacto</a>
           </li>
         </ul>
       </div>
@@ -191,13 +213,15 @@ onUnmounted(() => {
     border-radius: 8px;
     transition: all 0.3s ease;
     position: relative;
+    cursor: pointer;
 
     &:hover {
       color: $BAKANO-PRIMARY;
       background: rgba($BAKANO-PRIMARY, 0.1);
     }
 
-    &.router-link-active {
+    &.router-link-active,
+    &.active {
       color: $BAKANO-PRIMARY;
       font-weight: 600;
     }
@@ -236,6 +260,7 @@ onUnmounted(() => {
     padding: 1rem 1.5rem;
     transition: all 0.3s ease;
     border-left: 3px solid transparent;
+    cursor: pointer;
 
     &:hover {
       background: rgba($BAKANO-PRIMARY, 0.1);
@@ -243,7 +268,8 @@ onUnmounted(() => {
       color: $BAKANO-PRIMARY;
     }
 
-    &.router-link-active {
+    &.router-link-active,
+    &.active {
       background: rgba($BAKANO-PRIMARY, 0.1);
       border-left-color: $BAKANO-PRIMARY;
       color: $BAKANO-PRIMARY;
