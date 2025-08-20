@@ -13,9 +13,3 @@ import TheHero from '@/components/TheHero.vue'
     <!-- <ContactSection /> -->
   </div>
 </template>
-
-<style lang="scss" scoped>
-.home {
-  // Estilos específicos para la página principal si son necesarios
-}
-</style>
