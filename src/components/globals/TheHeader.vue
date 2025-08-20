@@ -19,7 +19,7 @@ const scrollToSection = (sectionId: string) => {
   if (element) {
     const headerHeight = 56 // Altura del header fijo
     const elementPosition = element.offsetTop - headerHeight
-    
+
     window.scrollTo({
       top: elementPosition,
       behavior: 'smooth'
@@ -151,7 +151,7 @@ onUnmounted(() => {
 
   &__logo {
     text-decoration: none;
-    
+
     &-text {
       @include heading-font(700);
       font-size: 1.5rem;
@@ -179,6 +179,7 @@ onUnmounted(() => {
       top: 56px;
       left: 0;
       right: 0;
+      z-index: 999;
       background: white;
       transform: translateY(-100%);
       opacity: 0;
@@ -323,9 +324,11 @@ onUnmounted(() => {
         &:nth-child(1) {
           transform: rotate(45deg) translate(5px, 5px);
         }
+
         &:nth-child(2) {
           opacity: 0;
         }
+
         &:nth-child(3) {
           transform: rotate(-45deg) translate(7px, -6px);
         }
