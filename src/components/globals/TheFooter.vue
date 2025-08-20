@@ -8,27 +8,27 @@ const socialLinks: Array<{
   url: string
   icon: SocialIconType
 }> = [
-  {
-    name: 'LinkedIn',
-    url: 'https://linkedin.com/company/bakano',
-    icon: 'linkedin'
-  },
-  {
-    name: 'Instagram',
-    url: 'https://instagram.com/bakano',
-    icon: 'instagram'
-  },
-  {
-    name: 'Twitter',
-    url: 'https://twitter.com/bakano',
-    icon: 'twitter'
-  },
-  {
-    name: 'GitHub',
-    url: 'https://github.com/bakano',
-    icon: 'github'
-  }
-]
+    {
+      name: 'LinkedIn',
+      url: 'https://linkedin.com/company/bakano',
+      icon: 'linkedin'
+    },
+    {
+      name: 'Instagram',
+      url: 'https://instagram.com/bakano',
+      icon: 'instagram'
+    },
+    {
+      name: 'Twitter',
+      url: 'https://twitter.com/bakano',
+      icon: 'twitter'
+    },
+    {
+      name: 'GitHub',
+      url: 'https://github.com/bakano',
+      icon: 'github'
+    }
+  ]
 
 const quickLinks = [
   { name: 'Inicio', path: '/' },
