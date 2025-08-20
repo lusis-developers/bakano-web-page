@@ -4,6 +4,11 @@ import { ref, onMounted } from 'vue'
 // Animation state
 const isVisible = ref(false)
 
+// Función para abrir WhatsApp
+const openWhatsApp = () => {
+  window.open('https://wa.me/593984934039', '_blank', 'noopener,noreferrer')
+}
+
 onMounted(() => {
   // Trigger animations after component mount
   setTimeout(() => {
@@ -59,7 +64,7 @@ onMounted(() => {
               </li>
             </ul>
             
-            <button class="strategies__card-btn">
+            <button class="strategies__card-btn" @click="openWhatsApp">
               PREGUNTA CÓMO LO HACEMOS AQUÍ
             </button>
           </div>
@@ -93,7 +98,7 @@ onMounted(() => {
               </li>
             </ul>
             
-            <button class="strategies__card-btn">
+            <button class="strategies__card-btn" @click="openWhatsApp">
               PREGUNTA CÓMO LO HACEMOS AQUÍ
             </button>
           </div>
