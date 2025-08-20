@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 
 // Importar imágenes directamente
 import imgMauro from '../assets/testimonios/mauro.webp'
-import imgNicole from '../assets/testimonios/nicole.webp'
+import imgJohanna from '../assets/testimonios/johanna.png'
 import imgMariaIsabel from '../assets/testimonios/mariaisabel.webp'
 
 // Animation state
@@ -21,10 +21,10 @@ const testimonials = [
   },
   {
     id: 2,
-    name: 'Nicole Robalino',
-    quote: 'La cantidad de clientes hizo que se cayeran nuestros dispositivos de venta',
-    image: imgNicole,
-    videoUrl: 'https://www.instagram.com/p/DExquGpxwP_/',
+    name: 'Johanna Quezada',
+    quote: 'Teníamos una desorganización total en nuestros cuatros restaurantes, al momento que llega bakano, todo cambió',
+    image: imgJohanna,
+    videoUrl: 'https://www.instagram.com/p/DMtdBuMup4k',
     delay: '0.4s'
   },
   {
@@ -126,7 +126,7 @@ const openVideo = (url: string) => {
   padding: 120px 0;
   position: relative;
   overflow: hidden;
-  
+
   // Mobile first approach
   @media (max-width: 768px) {
     padding: 80px 0;
@@ -141,7 +141,7 @@ const openVideo = (url: string) => {
     right: 0;
     bottom: 0;
     background: radial-gradient(circle at 30% 70%, rgba(colors.$BAKANO-PURPLE, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 70% 30%, rgba(colors.$BAKANO-PINK, 0.08) 0%, transparent 50%);
+      radial-gradient(circle at 70% 30%, rgba(colors.$BAKANO-PINK, 0.08) 0%, transparent 50%);
     pointer-events: none;
   }
 
@@ -151,7 +151,7 @@ const openVideo = (url: string) => {
     padding: 0 24px;
     position: relative;
     z-index: 2;
-    
+
     @media (max-width: 768px) {
       padding: 0 16px;
     }
@@ -163,7 +163,7 @@ const openVideo = (url: string) => {
     opacity: 0;
     transform: translateY(30px);
     transition: all 0.8s ease-out;
-    
+
     @media (max-width: 768px) {
       margin-bottom: 60px;
     }
@@ -176,7 +176,7 @@ const openVideo = (url: string) => {
     text-transform: uppercase;
     letter-spacing: 3px;
     margin-bottom: 16px;
-    
+
     @media (max-width: 768px) {
       font-size: 0.8rem;
       letter-spacing: 2px;
@@ -189,9 +189,10 @@ const openVideo = (url: string) => {
     color: colors.$text-light;
     margin-bottom: 0;
     line-height: 1.2;
-    
+
     @media (max-width: 768px) {
       font-size: clamp(1.8rem, 6vw, 2.5rem);
+
       br {
         display: none;
       }
@@ -202,12 +203,12 @@ const openVideo = (url: string) => {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 32px;
-    
+
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
       gap: 24px;
     }
-    
+
     @media (max-width: 400px) {
       grid-template-columns: 1fr;
     }
@@ -225,7 +226,7 @@ const openVideo = (url: string) => {
     opacity: 0;
     transform: translateY(50px);
     transition: all 0.8s ease-out;
-    
+
     @media (max-width: 768px) {
       padding: 32px 24px;
       border-radius: 20px;
@@ -247,15 +248,15 @@ const openVideo = (url: string) => {
       transform: translateY(-12px);
       border-color: rgba(colors.$BAKANO-PINK, 0.3);
       box-shadow: 0 25px 50px rgba(colors.$BAKANO-PINK, 0.15);
-      
+
       &::before {
         opacity: 1;
       }
-      
+
       .testimonials__overlay {
         opacity: 1;
       }
-      
+
       .testimonials__client-photo {
         transform: scale(1.05);
       }
@@ -264,7 +265,7 @@ const openVideo = (url: string) => {
 
   &__quote {
     margin-bottom: 32px;
-    
+
     @media (max-width: 768px) {
       margin-bottom: 24px;
     }
@@ -277,7 +278,7 @@ const openVideo = (url: string) => {
     line-height: 1.6;
     margin: 0;
     font-style: italic;
-    
+
     @media (max-width: 768px) {
       font-size: 1rem;
       line-height: 1.5;
@@ -290,7 +291,7 @@ const openVideo = (url: string) => {
     align-items: center;
     gap: 16px;
     margin-bottom: 24px;
-    
+
     @media (max-width: 768px) {
       gap: 12px;
       margin-bottom: 20px;
@@ -304,12 +305,12 @@ const openVideo = (url: string) => {
     overflow: hidden;
     border: 3px solid rgba(colors.$BAKANO-PINK, 0.3);
     position: relative;
-    
+
     @media (max-width: 768px) {
       width: 70px;
       height: 70px;
     }
-    
+
     &::before {
       content: '';
       position: absolute;
@@ -338,7 +339,7 @@ const openVideo = (url: string) => {
     color: colors.$text-light;
     margin: 0;
     text-align: center;
-    
+
     @media (max-width: 768px) {
       font-size: 1.1rem;
     }
@@ -354,7 +355,7 @@ const openVideo = (url: string) => {
     border: 1px solid rgba(colors.$BAKANO-PINK, 0.3);
     border-radius: 25px;
     transition: all 0.3s ease;
-    
+
     @media (max-width: 768px) {
       padding: 10px 16px;
     }
@@ -372,7 +373,7 @@ const openVideo = (url: string) => {
     color: colors.$BAKANO-PINK;
     text-transform: uppercase;
     letter-spacing: 1px;
-    
+
     @media (max-width: 768px) {
       font-size: 0.8rem;
     }
@@ -391,7 +392,7 @@ const openVideo = (url: string) => {
     opacity: 0;
     transition: opacity 0.3s ease;
     border-radius: 24px;
-    
+
     @media (max-width: 768px) {
       border-radius: 20px;
     }
@@ -408,12 +409,12 @@ const openVideo = (url: string) => {
     color: colors.$white;
     transform: scale(0.8);
     transition: transform 0.3s ease;
-    
+
     @media (max-width: 768px) {
       width: 60px;
       height: 60px;
     }
-    
+
     svg {
       margin-left: 4px;
     }
