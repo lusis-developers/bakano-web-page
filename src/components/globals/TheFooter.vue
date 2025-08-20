@@ -140,8 +140,8 @@ const services = [
             <RouterLink to="/politicas-privacidad" class="footer__legal-link">
               Política de Privacidad
             </RouterLink>
-            <RouterLink to="/terminos" class="footer__legal-link">
-              Términos de Servicio
+            <RouterLink to="/aviso-legal" class="footer__legal-link">
+              Aviso Legal
             </RouterLink>
           </div>
         </div>
