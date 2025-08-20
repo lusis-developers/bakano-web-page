@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
+import bakanoLogo from '../../assets/logos/bakano-dark.png'
 
 const isMenuOpen = ref(false)
 const isScrolled = ref(false)
@@ -53,7 +54,7 @@ onUnmounted(() => {
       <div class="nav__container">
         <!-- Logo -->
         <RouterLink to="/" class="nav__logo">
-          <span class="nav__logo-text">Bakano</span>
+          <img :src="bakanoLogo" alt="Bakano" class="nav__logo-img" />
         </RouterLink>
 
         <!-- Desktop Navigation -->
@@ -151,12 +152,17 @@ onUnmounted(() => {
 
   &__logo {
     text-decoration: none;
+    display: flex;
+    align-items: center;
 
-    &-text {
-      @include heading-font(700);
-      font-size: 1.5rem;
-      color: $BAKANO-PRIMARY;
-      letter-spacing: -0.02em;
+    &-img {
+      height: 32px;
+      width: auto;
+      transition: all 0.3s ease;
+
+      @media (max-width: 768px) {
+        height: 28px;
+      }
     }
   }
 
