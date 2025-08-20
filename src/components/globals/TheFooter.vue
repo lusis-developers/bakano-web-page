@@ -137,7 +137,7 @@ const services = [
             © {{ currentYear }} Bakano. Todos los derechos reservados.
           </p>
           <div class="footer__legal">
-            <RouterLink to="/privacidad" class="footer__legal-link">
+            <RouterLink to="/politicas-privacidad" class="footer__legal-link">
               Política de Privacidad
             </RouterLink>
             <RouterLink to="/terminos" class="footer__legal-link">
