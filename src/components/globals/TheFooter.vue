@@ -1,5 +1,5 @@
 <script setup lang="ts">
-type SocialIconType = 'linkedin' | 'instagram' | 'twitter' | 'github'
+type SocialIconType = 'linkedin' | 'instagram' | 'facebook' | 'tiktok' | 'whatsapp'
 
 const currentYear = new Date().getFullYear()
 
@@ -10,31 +10,37 @@ const socialLinks: Array<{
 }> = [
     {
       name: 'LinkedIn',
-      url: 'https://linkedin.com/company/bakano',
+      url: 'https://www.linkedin.com/company/bakanoec/posts/?feedView=all',
       icon: 'linkedin'
     },
     {
       name: 'Instagram',
-      url: 'https://instagram.com/bakano',
+      url: 'https://www.instagram.com/bakano.ec/',
       icon: 'instagram'
     },
     {
-      name: 'Twitter',
-      url: 'https://twitter.com/bakano',
-      icon: 'twitter'
+      name: 'Facebook',
+      url: 'https://www.facebook.com/bakano.ec',
+      icon: 'facebook'
     },
     {
-      name: 'GitHub',
-      url: 'https://github.com/bakano',
-      icon: 'github'
+      name: 'TikTok',
+      url: 'https://www.tiktok.com/@bakano.ec?lang=en',
+      icon: 'tiktok'
+    },
+    {
+      name: 'WhatsApp',
+      url: 'https://wa.me/593984934039',
+      icon: 'whatsapp'
     }
   ]
 
 const services = [
-  { name: 'Desarrollo Web', path: '/servicios/desarrollo-web' },
-  { name: 'Aplicaciones Móviles', path: '/servicios/apps-moviles' },
-  { name: 'Consultoría Tech', path: '/servicios/consultoria' },
-  { name: 'UI/UX Design', path: '/servicios/diseno' }
+  { name: 'Desarrollo Web' },
+  { name: 'Estrategia de Datos' },
+  { name: 'Estrategia de Growth' },
+  { name: 'Consultoría Tech' },
+  { name: 'UI/UX Design' }
 ]
 </script>
 
@@ -78,10 +84,10 @@ const services = [
         <div class="footer__section">
           <h4 class="footer__title">Servicios</h4>
           <ul class="footer__links">
-            <li v-for="service in services" :key="service.path" class="footer__link-item">
-              <RouterLink :to="service.path" class="footer__link">
+            <li v-for="(service, index) in services" :key="index" class="footer__link-item">
+              <p class="footer__link">
                 {{ service.name }}
-              </RouterLink>
+              </p>
             </li>
           </ul>
         </div>
@@ -117,9 +123,7 @@ const services = [
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <span class="footer__social-icon" :class="`footer__social-icon--${social.icon}`">
-                  {{ getSocialIcon(social.icon) }}
-                </span>
+                <i :class="`fab fa-${social.icon} footer__social-icon`"></i>
               </a>
             </div>
           </div>
@@ -147,19 +151,7 @@ const services = [
 </template>
 
 <script lang="ts">
-export default {
-  methods: {
-    getSocialIcon(iconName: SocialIconType): string {
-      const icons: Record<SocialIconType, string> = {
-        linkedin: '💼',
-        instagram: '📷',
-        twitter: '🐦',
-        github: '💻'
-      }
-      return icons[iconName] || '🔗'
-    }
-  }
-}
+export default {}
 </script>
 
 <style lang="scss" scoped>
@@ -398,10 +390,12 @@ export default {
 
     &-icon {
       font-size: 1.2rem;
-      transition: transform 0.3s ease;
+      color: white;
+      transition: all 0.3s ease;
 
       .footer__social-link:hover & {
         transform: scale(1.1);
+        color: white;
       }
     }
   }
