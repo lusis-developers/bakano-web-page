@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 
+// Importar imágenes directamente
+import imgMauro from '../assets/testimonios/mauro.webp'
+import imgNicole from '../assets/testimonios/nicole.webp'
+import imgMariaIsabel from '../assets/testimonios/mariaisabel.webp'
+
 // Animation state
 const isVisible = ref(false)
 
@@ -10,7 +15,7 @@ const testimonials = [
     id: 1,
     name: 'Mauro Salgán',
     quote: 'Su estrategia rompió nuestro umbral de producción',
-    image: '/src/assets/testimonios/mauro.webp',
+    image: imgMauro,
     videoUrl: 'https://www.instagram.com/p/DExquGpxwP_/',
     delay: '0.2s'
   },
@@ -18,7 +23,7 @@ const testimonials = [
     id: 2,
     name: 'Nicole Robalino',
     quote: 'La cantidad de clientes hizo que se cayeran nuestros dispositivos de venta',
-    image: '/src/assets/testimonios/nicole.webp',
+    image: imgNicole,
     videoUrl: 'https://www.instagram.com/p/DExquGpxwP_/',
     delay: '0.4s'
   },
@@ -26,7 +31,7 @@ const testimonials = [
     id: 3,
     name: 'María Isabel Soriano',
     quote: 'Me hicieron dar cuenta de esquemas de mi negocio que nunca había considerado',
-    image: '/src/assets/testimonios/mariaisabel.webp',
+    image: imgMariaIsabel,
     videoUrl: 'https://drive.google.com/file/d/19QGvEoV9IbVBzMhprv61ER20XfjQMExk/view?usp=sharing',
     delay: '0.6s'
   }
