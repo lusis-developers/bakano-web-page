@@ -30,14 +30,6 @@ const socialLinks: Array<{
     }
   ]
 
-const quickLinks = [
-  { name: 'Inicio', path: '/' },
-  { name: 'Servicios', path: '/servicios' },
-  { name: 'Nosotros', path: '/nosotros' },
-  { name: 'Proyectos', path: '/proyectos' },
-  { name: 'Contacto', path: '/contacto' }
-]
-
 const services = [
   { name: 'Desarrollo Web', path: '/servicios/desarrollo-web' },
   { name: 'Aplicaciones Móviles', path: '/servicios/apps-moviles' },
@@ -62,36 +54,24 @@ const services = [
           </p>
           <div class="footer__contact">
             <div class="footer__contact-item">
-              <span class="footer__contact-icon">📧</span>
-              <a href="mailto:hola@bakano.dev" class="footer__contact-link">
-                hola@bakano.dev
+              <i class="fas fa-envelope footer__contact-icon"></i>
+              <a href="mailto:dquimi@bakano.ec" class="footer__contact-link">
+                dquimi@bakano.ec
               </a>
             </div>
             <div class="footer__contact-item">
-              <span class="footer__contact-icon">📱</span>
-              <a href="tel:+1234567890" class="footer__contact-link">
-                +1 (234) 567-890
+              <i class="fas fa-phone footer__contact-icon"></i>
+              <a href="tel:+593984934039" class="footer__contact-link">
+                +593 98 493 4039
               </a>
             </div>
             <div class="footer__contact-item">
-              <span class="footer__contact-icon">📍</span>
+              <i class="fas fa-map-marker-alt footer__contact-icon"></i>
               <span class="footer__contact-text">
-                Ciudad de México, México
+                Guayaquil, Ecuador
               </span>
             </div>
           </div>
-        </div>
-
-        <!-- Quick Links -->
-        <div class="footer__section">
-          <h4 class="footer__title">Enlaces Rápidos</h4>
-          <ul class="footer__links">
-            <li v-for="link in quickLinks" :key="link.path" class="footer__link-item">
-              <RouterLink :to="link.path" class="footer__link">
-                {{ link.name }}
-              </RouterLink>
-            </li>
-          </ul>
         </div>
 
         <!-- Services -->
@@ -210,7 +190,7 @@ export default {
     }
 
     @media (min-width: 1024px) {
-      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      grid-template-columns: 2fr 1fr 1.5fr;
       gap: 2rem;
     }
   }
@@ -260,9 +240,13 @@ export default {
     }
 
     &-icon {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       width: 24px;
       text-align: center;
+      color: $BAKANO-PRIMARY;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     &-link {
