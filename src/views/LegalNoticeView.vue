@@ -1,0 +1,300 @@
+<script setup lang="ts">
+import { onMounted } from 'vue'
+
+// Scroll to top when component mounts
+onMounted(() => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+})
+</script>
+
+<template>
+  <div class="legal-notice">
+    <div class="legal-notice__container">
+      <header class="legal-notice__header">
+        <h1 class="legal-notice__title">Aviso Legal - Términos de Uso del Sitio y Condiciones de Contratación</h1>
+        <p class="legal-notice__subtitle">Última actualización el 05 de Mayo del 2025</p>
+      </header>
+
+      <section class="legal-notice__section">
+        <h2 class="legal-notice__section-title">1. AVISO LEGAL Y TÉRMINOS DE USO</h2>
+        <p>Negocios Del Pacifico es denominado en este documento como el PROVEEDOR y usted el CLIENTE quién recibe nuestros productos o servicios (gratuitos o de pago)</p>
+        <p>Puedo garantizarte que te encuentras en un espacio 100 % seguro, para ello debes saber:</p>
+        
+        <h3 class="legal-notice__subsection-title">1.1. DATOS IDENTIFICATIVOS DEL RESPONSABLE</h3>
+        <p>Tal y como recoge la normativa vigente, le informo que:</p>
+        <ul>
+          <li>Mi denominación social es: Negocios Del Pacifico</li>
+          <li>Mi domicilio social se encuentra en Dirección: Garzota, Guayaquil, Ecuador</li>
+          <li>Email: lreyes@bakano.ec</li>
+          <li>Mi Servicios profesionales es: Servicios profesionales</li>
+        </ul>
+
+        <h3 class="legal-notice__subsection-title">1.2. FINALIDAD DE LA PÁGINA WEB</h3>
+        <p>Los servicios prestados por el responsable de la página web son los siguientes:</p>
+        <ol>
+          <li>La venta de formación y servicios sobre negocios online.</li>
+          <li>La venta de Ebooks</li>
+          <li>Gestionar la lista de suscriptores y usuarios adscritos a la web.</li>
+          <li>Suministro de contenidos en el blog</li>
+          <li>Dirigir su red de afiliados y comerciantes así como la gestión de pagos de los mismos</li>
+        </ol>
+
+        <h3 class="legal-notice__subsection-title">1.3. USUARIOS</h3>
+        <p>El acceso y/o uso de este sitio web atribuye la condición de USUARIO, que acepta, desde dicho acceso y/o uso, los presentes términos de uso, no obstante, por el mero uso de la página web no significa el inicio de relación laboral/comercial alguna.</p>
+
+        <h3 class="legal-notice__subsection-title">1.4. USO DEL SITIO WEB Y CAPTURA DE INFORMACIÓN</h3>
+        
+        <h4 class="legal-notice__subsubsection-title">1.4.1 USO DEL SITIO WEB</h4>
+        <p>La página web proporciona el acceso a artículos, informaciones, servicios y datos (en adelante, "los contenidos") propiedad de Negocios Del Pacifico. El USUARIO asume la responsabilidad del uso de la web.</p>
+        
+        <p>El USUARIO se compromete a hacer un uso adecuado de los contenidos que ofrece a través de su web y con carácter enunciativo pero no limitativo, a no emplearlos para:</p>
+        <ul>
+          <li>(a) incurrir en actividades ilícitas, ilegales o contrarias a la buena fe y al orden público;</li>
+          <li>(b) difundir contenidos o propaganda de carácter racista, xenófobo, pornográfico-ilegal, de apología del terrorismo o atentatorio contra los derechos humanos;</li>
+          <li>(c) provocar daños en los sistemas físicos y lógicos de la web, de sus proveedores o de terceras personas, introducir o difundir en la red virus informáticos o cualesquiera otros sistemas físicos o lógicos que sean susceptibles de provocar los daños anteriormente mencionados;</li>
+          <li>(d) intentar acceder y, en su caso, utilizar las cuentas de correo electrónico de otros usuarios y modificar o manipular sus mensajes.</li>
+        </ul>
+
+        <p>Negocios Del Pacifico se reserva el derecho de retirar todos aquellos comentarios y aportaciones que vulneren el respeto a la dignidad de la persona, que sean discriminatorios, xenófobos, racistas, pornográficos, que atenten contra la juventud o la infancia, el orden o la seguridad pública o que, a su juicio, no resultaran adecuados para su publicación.</p>
+
+        <h4 class="legal-notice__subsubsection-title">1.4.2 CAPTURA DE INFORMACIÓN</h4>
+        <ul>
+          <li>Formulario de contacto, donde el USUARIO deberá rellenar el campo de correo electrónico, asunto y nombre.</li>
+          <li>Formulario de suscripción, rellenando el USUARIO los campos necesarios para la suscripción a la web con los campos de nombre, y email</li>
+          <li>Formulario de venta, rellenando el USUARIO los campos necesarios para la venta con los campos de nombre, email, dirección y DNI.</li>
+        </ul>
+      </section>
+
+      <section class="legal-notice__section">
+        <h2 class="legal-notice__section-title">2. PROPIEDAD INTELECTUAL E INDUSTRIAL</h2>
+        <p>Negocios Del Pacifico por sí o como cesionario, es titular de todos los derechos de propiedad intelectual e industrial de su página web, así como de los elementos contenidos en la misma (a título enunciativo, imágenes, sonido, audio, vídeo, software o textos; marcas o logotipos, combinaciones de colores, estructura y diseño, selección de materiales usados, programas de ordenador necesarios para su funcionamiento, acceso y uso, etc.), titularidad de Negocios Del Pacifico o bien de sus licenciantes. Todos los derechos reservados.</p>
+        
+        <p>Cualquier uso no autorizado previamente por Negocios Del Pacifico será considerado un incumplimiento grave de los derechos de propiedad intelectual o industrial del autor.</p>
+        
+        <p>Queda terminantemente prohibido compartir la licencia para uso con más personas, cada licencia es personal e intransferible reservándonos cuantas acciones civiles y penales nos asistan en aras de salvaguardar nuestros derechos, todo ello bajo apercibimiento de incurrir en un delito contra la propiedad intelectual.</p>
+      </section>
+
+      <section class="legal-notice__section">
+        <h2 class="legal-notice__section-title">3. EXCLUSIÓN DE GARANTÍAS Y RESPONSABILIDAD</h2>
+        <p>Negocios Del Pacifico no se hace responsable, en ningún caso, de los daños y perjuicios de cualquier naturaleza que pudieran ocasionar, a título enunciativo: por errores u omisiones en los contenidos, por falta de disponibilidad del sitio web, – el cual realizará paradas periódicas por mantenimientos técnicos – así como por la transmisión de virus o programas maliciosos o lesivos en los contenidos, a pesar de haber adoptado todas las medidas tecnológicas necesarias para evitarlo.</p>
+        
+        <p>Usted comprende y acepta que el valor que obtendrá del Programa será en proporción al nivel de esfuerzo que realice; su nivel de comprensión; su experiencia, habilidades, nivel de deseo y disposición para tomar acciones con respecto a la información proporcionada; y factores externos como eventos mundiales, condiciones del mercado, empleo, relaciones y otras incógnitas.</p>
+      </section>
+
+      <section class="legal-notice__section">
+        <h2 class="legal-notice__section-title">4. MODIFICACIONES</h2>
+        <p>Negocios Del Pacifico se reserva el derecho de efectuar sin previo aviso las modificaciones que considere oportunas en su web, pudiendo cambiar, suprimir o añadir tanto los contenidos y servicios que se presten a través de la misma como la forma en la que éstos aparezcan presentados o localizados en su web.</p>
+      </section>
+
+      <section class="legal-notice__section">
+        <h2 class="legal-notice__section-title">5. POLÍTICA DE ENLACES</h2>
+        <p>Las personas o entidades que pretendan realizar o realicen un hiperenlace desde una página web de otro portal de Internet a la web de Negocios Del Pacifico deberá someterse las siguientes condiciones:</p>
+        <ol>
+          <li>No se permite la reproducción total o parcial de ninguno de los servicios ni contenidos del sitio web sin la previa autorización expresa de Negocios Del Pacifico</li>
+          <li>No se establecerán deep-links ni enlaces IMG o de imagen, ni frames con la web de Negocios Del Pacifico sin su previa autorización expresa.</li>
+          <li>No se establecerá ninguna manifestación falsa, inexacta o incorrecta sobre la web de Negocios Del Pacifico, ni sobre los servicios o contenidos de la misma.</li>
+        </ol>
+      </section>
+
+      <section class="legal-notice__section">
+        <h2 class="legal-notice__section-title">6. DERECHO DE EXCLUSIÓN</h2>
+        <p>Negocios Del Pacifico se reserva el derecho a denegar o retirar el acceso al portal y/o los servicios ofrecidos sin necesidad de preaviso, a instancia propia o de un tercero, a aquellos usuarios que incumplan las presentes Condiciones Generales de Uso.</p>
+      </section>
+
+      <section class="legal-notice__section">
+        <h2 class="legal-notice__section-title">7. CONDICIONES DE VENTA</h2>
+        <p>Las presentes condiciones generales tienen por objeto regular expresamente las condiciones aplicables a los procesos de contratación llevados a cabo por los usuarios "Cliente" de los cursos online ofrecido por parte de Negocios Del Pacifico a través de su sitio web.</p>
+        
+        <p>Para proceder al pago, el cliente tiene a su disposición los siguientes medios:</p>
+        <p>Visa/Mastercard/American Express; el usuario deberá proporcionar el nombre del titular de la tarjeta, el número, la fecha de caducidad y el CVV.</p>
+        
+        <p>Toda la información será tramitada a través de pasarelas de pagos externa a Negocios Del Pacifico como Stripe, Paypal o Ebanx.</p>
+      </section>
+
+      <section class="legal-notice__section">
+        <h2 class="legal-notice__section-title">8. LEY APLICABLE Y JURISDICCIÓN</h2>
+        <p>La relación entre Negocios Del Pacifico y el CLIENTE se regirá por la normativa de Estados Unidos y cualquier controversia se someterá a los Juzgados y tribunales del Estado de New Mexico, salvo que la Ley aplicable disponga otra cosa.</p>
+      </section>
+
+      <section class="legal-notice__section">
+        <h2 class="legal-notice__section-title">9. CAUSAS DE DISOLUCIÓN DEL CONTRATO</h2>
+        <ol>
+          <li>PUEDE CANCELAR ACUERDOS Y CONTRATOS FIRMADOS CON Negocios Del Pacifico EN CUALQUIER MOMENTO ANTES DE LA MEDIANOCHE DEL TERCER DÍA DESPUÉS DE LA FECHA QUE HAGA EL PRIMER PAGO.</li>
+          <li>En el caso de una reclamación o disputa, primero hablará con nosotros de buena fe y ambas partes se comprometen a intentar alcanzar un acuerdo de forma dialogada y satisfactoria para ambas partes antes de acudir a realizar una reclamación formal.</li>
+        </ol>
+      </section>
+
+      <section class="legal-notice__section">
+        <h2 class="legal-notice__section-title">10. RECLAMACIONES Y DUDAS</h2>
+        <p>Negocios Del Pacifico informa que existen hojas de reclamación a disposición de usuarios y clientes pudiendo remitir un correo a lreyes@bakano.ec indicando su nombre y apellidos, el servicio o producto adquirido y exponiendo los motivos de su reclamación.</p>
+      </section>
+    </div>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+@import '../styles/colorVariables.module.scss';
+@import '../styles/fonts.modules.scss';
+
+.legal-notice {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 2rem 0;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+
+    @media (max-width: 768px) {
+      margin: 0 1rem;
+      border-radius: 8px;
+    }
+  }
+
+  &__header {
+    background: linear-gradient(135deg, #FF6B35 0%, #e55a2b 100%);
+    color: white;
+    padding: 3rem 2rem;
+    text-align: center;
+
+    @media (max-width: 768px) {
+      padding: 2rem 1rem;
+    }
+  }
+
+  &__title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+
+    @media (max-width: 768px) {
+      font-size: 1.8rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  &__subtitle {
+    font-size: 1.1rem;
+    opacity: 1;
+    margin: 0;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.95);
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+
+  &__section {
+    padding: 2.5rem 2rem;
+    border-bottom: 1px solid #e9ecef;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    @media (max-width: 768px) {
+      padding: 2rem 1rem;
+    }
+
+    @media (max-width: 480px) {
+      padding: 1.5rem 1rem;
+    }
+  }
+
+  &__section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #FF6B35;
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #FF6B35;
+
+    @media (max-width: 768px) {
+      font-size: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.3rem;
+    }
+  }
+
+  &__subsection-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #333;
+    margin: 2rem 0 1rem 0;
+
+    @media (max-width: 768px) {
+      font-size: 1.2rem;
+      margin: 1.5rem 0 0.8rem 0;
+    }
+  }
+
+  &__subsubsection-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #555;
+    margin: 1.5rem 0 1rem 0;
+
+    @media (max-width: 768px) {
+      font-size: 1.1rem;
+      margin: 1.2rem 0 0.8rem 0;
+    }
+  }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #555;
+    margin: 0 0 1rem 0;
+    text-align: justify;
+
+    @media (max-width: 768px) {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      text-align: left;
+    }
+  }
+
+  ul,
+  ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+
+    @media (max-width: 768px) {
+      padding-left: 1.5rem;
+    }
+
+    li {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #555;
+      margin: 0.5rem 0;
+
+      @media (max-width: 768px) {
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+    }
+  }
+
+  strong {
+    color: #FF6B35;
+    font-weight: 600;
+  }
+}
+</style>
