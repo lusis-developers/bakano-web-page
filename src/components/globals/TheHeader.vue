@@ -191,7 +191,6 @@ watch(isMenuOpen, (open) => {
 <style lang="scss" scoped>
 @use 'sass:color';
 @import '@/styles/fonts.modules.scss';
-@import '@/styles/colorVariables.module.scss';
 
 $header-height: 56px;
 $bp-md: 768px;
