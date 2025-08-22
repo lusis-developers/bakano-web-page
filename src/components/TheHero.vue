@@ -39,7 +39,7 @@ const benefits = [
 
 onMounted(() => {
   isVisible.value = true
-  
+
   // Rotación de estadísticas
   setInterval(() => {
     currentStat.value = (currentStat.value + 1) % stats.length
@@ -190,12 +190,10 @@ const openWhatsApp = () => {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(colors.$BAKANO-PRIMARY, 0.1) 0%,
-      rgba(colors.$BAKANO-PURPLE, 0.05) 50%,
-      rgba(colors.$BAKANO-DARK, 0.8) 100%
-    );
+    background: linear-gradient(135deg,
+        rgba(colors.$BAKANO-PRIMARY, 0.1) 0%,
+        rgba(colors.$BAKANO-PURPLE, 0.05) 50%,
+        rgba(colors.$BAKANO-DARK, 0.8) 100%);
   }
 
   &__shapes {
@@ -271,7 +269,7 @@ const openWhatsApp = () => {
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: 1.5rem;
-    
+
     &--highlight {
       background: linear-gradient(135deg, colors.$BAKANO-PRIMARY, colors.$BAKANO-PURPLE);
       -webkit-background-clip: text;
@@ -288,7 +286,7 @@ const openWhatsApp = () => {
     font-weight: 600;
     margin-bottom: 1rem;
     color: rgba(white, 0.95);
-    
+
     strong {
       color: colors.$BAKANO-PRIMARY;
       font-weight: 700;
@@ -301,7 +299,7 @@ const openWhatsApp = () => {
     line-height: 1.6;
     margin-bottom: 2rem;
     color: rgba(white, 0.8);
-    
+
     strong {
       color: white;
       font-weight: 600;
@@ -368,7 +366,7 @@ const openWhatsApp = () => {
     position: relative;
     overflow: hidden;
     border: 2px solid rgba(white, 0.1);
-    
+
     &::before {
       content: '';
       position: absolute;
@@ -562,9 +560,12 @@ const openWhatsApp = () => {
 
 // Animaciones
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
+
   50% {
     transform: translateY(-20px) rotate(5deg);
   }
@@ -574,15 +575,19 @@ const openWhatsApp = () => {
   0% {
     text-shadow: 0 0 20px rgba(colors.$BAKANO-PRIMARY, 0.5);
   }
+
   100% {
     text-shadow: 0 0 30px rgba(colors.$BAKANO-PRIMARY, 0.8), 0 0 40px rgba(colors.$BAKANO-PURPLE, 0.3);
   }
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.05);
   }
@@ -593,6 +598,7 @@ const openWhatsApp = () => {
     opacity: 0;
     transform: translateX(30px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -604,6 +610,7 @@ const openWhatsApp = () => {
     opacity: 0;
     transform: translateY(20px) scale(0.8);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -628,7 +635,7 @@ const openWhatsApp = () => {
 @media (max-width: 768px) {
   .hero {
     min-height: 90vh;
-    
+
     &__container {
       padding: 1rem;
     }
