@@ -109,16 +109,15 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@use '../styles/fonts.modules.scss' as fonts;
-@use '../styles/colorVariables.module.scss' as colors;
+@import '../styles/colorVariables.module.scss';
 
 .strategies {
   min-height: 100vh;
-  background: linear-gradient(135deg, colors.$BAKANO-DARK 0%, colors.$gray-900 100%);
+  background: linear-gradient(135deg, $BAKANO-DARK 0%, $gray-900 100%);
   padding: 120px 0;
   position: relative;
   overflow: hidden;
-  
+
   // Mobile first approach
   @media (max-width: 768px) {
     padding: 80px 0;
@@ -132,8 +131,8 @@ onMounted(() => {
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle at 20% 80%, rgba(colors.$BAKANO-PINK, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(colors.$BAKANO-PURPLE, 0.1) 0%, transparent 50%);
+    background: radial-gradient(circle at 20% 80%, rgba($BAKANO-PINK, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba($BAKANO-PURPLE, 0.1) 0%, transparent 50%);
     pointer-events: none;
   }
 
@@ -143,7 +142,7 @@ onMounted(() => {
     padding: 0 24px;
     position: relative;
     z-index: 2;
-    
+
     @media (max-width: 768px) {
       padding: 0 16px;
     }
@@ -155,22 +154,24 @@ onMounted(() => {
     opacity: 0;
     transform: translateY(30px);
     transition: all 0.8s ease-out;
-    
+
     @media (max-width: 768px) {
       margin-bottom: 60px;
     }
   }
 
   &__title {
-    @include fonts.heading-font(700);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
     font-size: clamp(2.5rem, 5vw, 4rem);
-    color: colors.$text-light;
+    color: $text-light;
     margin-bottom: 24px;
     line-height: 1.2;
-    
+
     @media (max-width: 768px) {
       font-size: clamp(1.8rem, 6vw, 2.5rem);
       margin-bottom: 16px;
+
       br {
         display: none;
       }
@@ -178,12 +179,13 @@ onMounted(() => {
   }
 
   &__subtitle {
-    @include fonts.accent-font(600);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
     font-size: 1.5rem;
-    color: colors.$BAKANO-PINK;
+    color: $BAKANO-PINK;
     text-transform: uppercase;
     letter-spacing: 2px;
-    
+
     @media (max-width: 768px) {
       font-size: 1.2rem;
       letter-spacing: 1px;
@@ -194,20 +196,20 @@ onMounted(() => {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
-    
+
     @media (max-width: 968px) {
       grid-template-columns: 1fr;
       gap: 32px;
     }
-    
+
     @media (max-width: 768px) {
       gap: 24px;
     }
   }
 
   &__card {
-    background: rgba(colors.$white, 0.05);
-    border: 1px solid rgba(colors.$BAKANO-PINK, 0.2);
+    background: rgba($white, 0.05);
+    border: 1px solid rgba($BAKANO-PINK, 0.2);
     border-radius: 24px;
     padding: 48px;
     backdrop-filter: blur(20px);
@@ -216,7 +218,7 @@ onMounted(() => {
     opacity: 0;
     transform: translateY(50px);
     transition: all 0.8s ease-out;
-    
+
     @media (max-width: 768px) {
       padding: 32px 24px;
       border-radius: 20px;
@@ -229,16 +231,16 @@ onMounted(() => {
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(90deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
+      background: linear-gradient(90deg, $BAKANO-PINK, $BAKANO-PURPLE);
       opacity: 0;
       transition: opacity 0.3s ease;
     }
 
     &:hover {
       transform: translateY(-8px);
-      border-color: rgba(colors.$BAKANO-PINK, 0.4);
-      box-shadow: 0 20px 40px rgba(colors.$BAKANO-PINK, 0.1);
-      
+      border-color: rgba($BAKANO-PINK, 0.4);
+      box-shadow: 0 20px 40px rgba($BAKANO-PINK, 0.1);
+
       &::before {
         opacity: 1;
       }
@@ -255,21 +257,23 @@ onMounted(() => {
 
   &__card-header {
     margin-bottom: 32px;
-    
+
     @media (max-width: 768px) {
       margin-bottom: 24px;
     }
   }
 
   &__card-title {
-    @include fonts.heading-font(700);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
     font-size: clamp(1.5rem, 3vw, 2rem);
-    color: colors.$text-light;
+    color: $text-light;
     line-height: 1.3;
     margin-bottom: 0;
-    
+
     @media (max-width: 768px) {
       font-size: clamp(1.3rem, 4vw, 1.6rem);
+
       br {
         display: none;
       }
@@ -280,19 +284,20 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     gap: 32px;
-    
+
     @media (max-width: 768px) {
       gap: 24px;
     }
   }
 
   &__card-description {
-    @include fonts.body-font(400);
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
     font-size: 1.1rem;
-    color: colors.$gray-300;
+    color: $gray-300;
     line-height: 1.6;
     margin: 0;
-    
+
     @media (max-width: 768px) {
       font-size: 1rem;
       line-height: 1.5;
@@ -306,21 +311,22 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    
+
     @media (max-width: 768px) {
       gap: 12px;
     }
   }
 
   &__card-feature {
-    @include fonts.body-font(500);
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
     font-size: 1rem;
-    color: colors.$text-light;
+    color: $text-light;
     display: flex;
     align-items: flex-start;
     gap: 12px;
     line-height: 1.5;
-    
+
     @media (max-width: 768px) {
       font-size: 0.95rem;
       gap: 10px;
@@ -328,16 +334,17 @@ onMounted(() => {
   }
 
   &__card-feature-icon {
-    color: colors.$BAKANO-PINK;
+    color: $BAKANO-PINK;
     font-size: 0.8rem;
     margin-top: 4px;
     flex-shrink: 0;
   }
 
   &__card-btn {
-    @include fonts.interface-font(600);
-    background: linear-gradient(135deg, colors.$BAKANO-PINK 0%, colors.$BAKANO-PURPLE 100%);
-    color: colors.$white;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    background: linear-gradient(135deg, $BAKANO-PINK 0%, $BAKANO-PURPLE 100%);
+    color: $white;
     border: none;
     border-radius: 12px;
     padding: 18px 32px;
@@ -348,7 +355,7 @@ onMounted(() => {
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    
+
     @media (max-width: 768px) {
       padding: 16px 24px;
       font-size: 0.9rem;
@@ -368,8 +375,8 @@ onMounted(() => {
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(colors.$BAKANO-PINK, 0.3);
-      
+      box-shadow: 0 12px 24px rgba($BAKANO-PINK, 0.3);
+
       &::before {
         left: 100%;
       }
