@@ -190,7 +190,7 @@ watch(isMenuOpen, (open) => {
 
 <style lang="scss" scoped>
 @use 'sass:color';
-@import '@/styles/fonts.modules.scss';
+@use '@/styles/fonts.modules.scss' as fonts;
 
 $header-height: 56px;
 $bp-md: 768px;
@@ -274,7 +274,7 @@ $bp-md: 768px;
   }
 
   &__link {
-    @include interface-font(500);
+    @include fonts.interface-font(500);
     text-decoration: none;
     color: $BAKANO-DARK;
     font-size: 0.95rem;
@@ -320,7 +320,7 @@ $bp-md: 768px;
   }
 
   &__mobile-link {
-    @include interface-font(500);
+    @include fonts.interface-font(500);
     display: block;
     text-decoration: none;
     color: $BAKANO-DARK;
