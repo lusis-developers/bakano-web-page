@@ -109,7 +109,7 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@import '../styles/colorVariables.module.scss';
+@use '../styles/colorVariables.module.scss' as *;
 
 .strategies {
   min-height: 100vh;
