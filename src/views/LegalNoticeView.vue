@@ -133,8 +133,8 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@import '../styles/colorVariables.module.scss';
-@import '../styles/fonts.modules.scss';
+@use '../styles/colorVariables.module.scss' as *;
+@use '../styles/fonts.modules.scss' as fonts;
 
 .legal-notice {
   min-height: 100vh;
