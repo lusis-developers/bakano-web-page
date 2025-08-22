@@ -156,7 +156,7 @@ export default {}
 
 <style lang="scss" scoped>
 @use 'sass:color';
-@import '@/styles/fonts.modules.scss';
+@use '@/styles/fonts.modules.scss' as fonts;
 
 .footer {
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
@@ -202,7 +202,7 @@ export default {}
     margin-bottom: 1rem;
 
     &-text {
-      @include heading-font(700);
+      @include fonts.heading-font(700);
       font-size: 2rem;
       color: white;
       margin: 0;
@@ -211,7 +211,7 @@ export default {}
   }
 
   &__description {
-    @include body-font(400);
+    @include fonts.body-font(400);
     font-size: 1rem;
     line-height: 1.6;
     color: rgba(255, 255, 255, 0.8);
@@ -241,7 +241,7 @@ export default {}
     }
 
     &-link {
-      @include interface-font(400);
+      @include fonts.interface-font(400);
       color: rgba(255, 255, 255, 0.9);
       text-decoration: none;
       transition: color 0.3s ease;
@@ -252,13 +252,13 @@ export default {}
     }
 
     &-text {
-      @include interface-font(400);
+      @include fonts.interface-font(400);
       color: rgba(255, 255, 255, 0.8);
     }
   }
 
   &__title {
-    @include heading-font(600);
+    @include fonts.heading-font(600);
     font-size: 1.1rem;
     color: white;
     margin: 0 0 1rem 0;
@@ -279,7 +279,7 @@ export default {}
   }
 
   &__link {
-    @include interface-font(400);
+    @include fonts.interface-font(400);
     color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     font-size: 0.95rem;
@@ -307,7 +307,7 @@ export default {}
     }
 
     &-text {
-      @include body-font(400);
+      @include fonts.body-font(400);
       color: rgba(255, 255, 255, 0.8);
       font-size: 0.9rem;
       margin-bottom: 1rem;
@@ -315,7 +315,7 @@ export default {}
     }
 
     &-input {
-      @include interface-font(400);
+      @include fonts.interface-font(400);
       flex: 1;
       padding: 0.75rem 1rem;
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -337,7 +337,7 @@ export default {}
     }
 
     &-btn {
-      @include interface-font(600);
+      @include fonts.interface-font(600);
       padding: 0.75rem 1.5rem;
       background: $BAKANO-PRIMARY;
       color: white;
@@ -357,7 +357,7 @@ export default {}
 
   &__social {
     &-title {
-      @include interface-font(600);
+      @include fonts.interface-font(600);
       font-size: 0.9rem;
       color: rgba(255, 255, 255, 0.9);
       margin: 0 0 0.75rem 0;
@@ -419,7 +419,7 @@ export default {}
   }
 
   &__copyright {
-    @include interface-font(400);
+    @include fonts.interface-font(400);
     color: rgba(255, 255, 255, 0.7);
     font-size: 0.9rem;
     margin: 0;
@@ -436,7 +436,7 @@ export default {}
     }
 
     &-link {
-      @include interface-font(400);
+      @include fonts.interface-font(400);
       color: rgba(255, 255, 255, 0.7);
       text-decoration: none;
       font-size: 0.9rem;
