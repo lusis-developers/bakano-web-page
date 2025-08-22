@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter, useRoute } from 'vue-router'
 import bakanoLogo from '../../assets/logos/bakano-dark.png'
 
 const isMenuOpen = ref(false)
 const isScrolled = ref(false)
+const router = useRouter()
+const route = useRoute()
 
 // refs para manejo de foco/click-outside
 const toggleBtnRef = ref<HTMLButtonElement | null>(null)
@@ -32,12 +34,29 @@ const handleScroll = () => {
 }
 
 // Scroll suave a secciones con offset del header
-const scrollToSection = (sectionId: string) => {
-  const element = document.getElementById(sectionId)
-  if (element) {
-    const headerHeight = 56
-    const elementPosition = element.getBoundingClientRect().top + window.scrollY - headerHeight
-    window.scrollTo({ top: elementPosition, behavior: 'smooth' })
+const scrollToSection = async (sectionId: string) => {
+  // Si no estamos en la página home, navegar primero
+  if (route.name !== 'home') {
+    await router.push('/')
+    // Esperar a que la página se cargue completamente
+    await nextTick()
+    // Pequeña pausa adicional para asegurar que el DOM esté listo
+    setTimeout(() => {
+      const element = document.getElementById(sectionId)
+      if (element) {
+        const headerHeight = 56
+        const elementPosition = element.getBoundingClientRect().top + window.scrollY - headerHeight
+        window.scrollTo({ top: elementPosition, behavior: 'smooth' })
+      }
+    }, 100)
+  } else {
+    // Si ya estamos en home, hacer scroll directamente
+    const element = document.getElementById(sectionId)
+    if (element) {
+      const headerHeight = 56
+      const elementPosition = element.getBoundingClientRect().top + window.scrollY - headerHeight
+      window.scrollTo({ top: elementPosition, behavior: 'smooth' })
+    }
   }
   closeMenu()
 }
