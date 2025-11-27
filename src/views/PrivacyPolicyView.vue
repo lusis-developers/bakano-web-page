@@ -116,6 +116,81 @@ onMounted(() => {
           Negocios del Pacífico S.A. se reserva el derecho a modificar esta Política de Privacidad para adaptarla a futuras novedades legislativas, jurisprudenciales o a nuevas prácticas del sector. Cualquier modificación será publicada en esta página con una antelación razonable a su efectiva aplicación. El uso continuado del SITIO WEB después de dichos cambios implicará su aceptación.
         </p>
       </section>
+
+      <section class="privacy-policy__section">
+        <h2 class="privacy-policy__section-title">9. Políticas de Cancelación</h2>
+        <p>
+          Usted puede cancelar su suscripción o el servicio SaaS en cualquier momento, sin penalidades, conforme a la normativa ecuatoriana aplicable, incluyendo la Ley Orgánica de Defensa del Consumidor del Ecuador.
+        </p>
+
+        <h3 class="privacy-policy__subsection-title">Proceso de cancelación</h3>
+        <ul class="privacy-policy__list">
+          <li>Acceda a su cuenta y diríjase a la sección “Suscripción” o “Facturación”.</li>
+          <li>Seleccione “Cancelar suscripción” y confirme la solicitud.</li>
+          <li>Alternativamente, puede solicitar la cancelación enviando un correo al contacto indicado en este documento con el asunto “Cancelación de Servicio”.</li>
+        </ul>
+
+        <h3 class="privacy-policy__subsection-title">Plazos de efectividad</h3>
+        <p>
+          La cancelación es efectiva de manera inmediata desde su solicitud. En planes con renovación automática, puede elegir que la cancelación surta efecto al final del ciclo de facturación vigente para mantener acceso hasta esa fecha.
+        </p>
+
+        <h3 class="privacy-policy__subsection-title">Reembolsos y créditos proporcionales</h3>
+        <ul class="privacy-policy__list">
+          <li>Reembolsos completos aplican ante cargos duplicados o errores de cobro.</li>
+          <li>Podrán otorgarse créditos proporcionales por el período no utilizado a partir de la fecha de solicitud, cuando el plan lo permita y no existan servicios personalizados ya entregados.</li>
+          <li>El procesamiento de reembolsos o créditos se realiza en un plazo máximo de 10 días hábiles, sujeto a los tiempos de la pasarela de pago correspondiente.</li>
+        </ul>
+      </section>
+
+      <section class="privacy-policy__section">
+        <h2 class="privacy-policy__section-title">10. Devoluciones y Reembolsos</h2>
+        <p>
+          Las devoluciones se rigen por las condiciones aplicables a servicios digitales. Nos comprometemos a tratar cada solicitud de manera transparente y conforme a la normativa vigente.
+        </p>
+
+        <h3 class="privacy-policy__subsection-title">Condiciones de aplicación</h3>
+        <ul class="privacy-policy__list">
+          <li>Errores de facturación o cobros no autorizados.</li>
+          <li>Indisponibilidad prolongada del servicio atribuible al proveedor, no derivada de causas de fuerza mayor.</li>
+          <li>Incumplimiento material de las funcionalidades contratadas, debidamente acreditado.</li>
+        </ul>
+
+        <h3 class="privacy-policy__subsection-title">Proceso para solicitar reembolso</h3>
+        <ul class="privacy-policy__list">
+          <li>Envíe su solicitud al correo de contacto indicado en este documento con el asunto “Solicitud de Reembolso”.</li>
+          <li>Incluya: nombre completo, correo registrado, referencia de pago, fecha del cargo y una descripción clara del motivo.</li>
+          <li>Adjunte comprobantes (factura, capturas del cargo o evidencia técnica del incidente, si corresponde).</li>
+        </ul>
+
+        <h3 class="privacy-policy__subsection-title">Plazos de procesamiento</h3>
+        <p>
+          Evaluaremos su solicitud y le notificaremos la resolución en un plazo máximo de 10 días hábiles. De proceder, el reembolso se cursará por la misma pasarela o método de pago utilizado, sujeto a sus tiempos operativos.
+        </p>
+
+        <h3 class="privacy-policy__subsection-title">Excepciones</h3>
+        <ul class="privacy-policy__list">
+          <li>Servicios de consultoría ya prestados o personalizados entregados.</li>
+          <li>Promociones marcadas expresamente como “no reembolsables”.</li>
+          <li>Comisiones, cargos de terceros o impuestos ajenos al proveedor.</li>
+        </ul>
+      </section>
+
+      <section class="privacy-policy__section">
+        <h2 class="privacy-policy__section-title">11. Alcance y Limitaciones del Servicio</h2>
+        <p>
+          Nuestro servicio es exclusivamente digital; no incluye garantías físicas ni bienes tangibles. El servicio se presta “tal cual”, con soporte razonable, actualizaciones y mejoras continuas. No garantizamos resultados específicos, ya que estos dependen de factores externos y del uso que realice el usuario.
+        </p>
+      </section>
+
+      <section class="privacy-policy__section">
+        <h2 class="privacy-policy__section-title">12. Responsabilidades y Derechos de las Partes</h2>
+        <ul class="privacy-policy__list">
+          <li><strong>Del proveedor:</strong> Brindar acceso al servicio, mantener medidas de seguridad acordes al estado de la técnica, ofrecer soporte en tiempos razonables y cumplir la normativa aplicable.</li>
+          <li><strong>Del usuario:</strong> Hacer uso lícito del servicio, mantener actualizados sus datos de pago, respetar los términos de uso, no vulnerar derechos de terceros y proteger sus credenciales.</li>
+          <li>Ambas partes reconocen que en caso de controversia se actuará conforme a la normativa ecuatoriana aplicable y los mecanismos de resolución amistosa antes de escalar a instancias formales.</li>
+        </ul>
+      </section>
     </div>
   </div>
 </template>

@@ -128,6 +128,74 @@ onMounted(() => {
         <h2 class="legal-notice__section-title">10. RECLAMACIONES Y DUDAS</h2>
         <p>Negocios Del Pacifico informa que existen hojas de reclamación a disposición de usuarios y clientes pudiendo remitir un correo a lreyes@bakano.ec indicando su nombre y apellidos, el servicio o producto adquirido y exponiendo los motivos de su reclamación.</p>
       </section>
+
+      <section class="legal-notice__section">
+        <h2 class="legal-notice__section-title">11. POLÍTICAS DE CANCELACIÓN</h2>
+        <p>
+          El USUARIO puede cancelar su suscripción o cualquier servicio SaaS en cualquier momento, sin penalidades, conforme a la normativa aplicable en Ecuador, incluyendo la Ley Orgánica de Defensa del Consumidor.
+        </p>
+        <h3 class="legal-notice__subsection-title">Proceso de cancelación</h3>
+        <ul>
+          <li>Acceder a su cuenta y dirigirse a “Suscripción” o “Facturación”.</li>
+          <li>Seleccionar “Cancelar suscripción” y confirmar la solicitud.</li>
+          <li>Alternativamente, enviar un correo al contacto indicado en este documento con el asunto “Cancelación de Servicio”.</li>
+        </ul>
+        <h3 class="legal-notice__subsection-title">Plazos de efectividad</h3>
+        <p>
+          La cancelación es efectiva de manera inmediata desde la solicitud. En planes con renovación automática, el USUARIO puede optar por que surta efecto al finalizar el ciclo de facturación vigente para mantener acceso hasta esa fecha.
+        </p>
+        <h3 class="legal-notice__subsection-title">Reembolsos y créditos proporcionales</h3>
+        <ul>
+          <li>Se otorgan reembolsos completos ante cargos duplicados o errores de cobro.</li>
+          <li>Podrán otorgarse créditos proporcionales por el tiempo no utilizado desde la fecha de solicitud, cuando el plan lo permita y no existan servicios personalizados ya entregados.</li>
+          <li>El procesamiento de reembolsos o créditos se realiza en un plazo máximo de 10 días hábiles, sujeto a los tiempos de la pasarela de pago.</li>
+        </ul>
+      </section>
+
+      <section class="legal-notice__section">
+        <h2 class="legal-notice__section-title">12. DEVOLUCIONES Y REEMBOLSOS</h2>
+        <p>
+          Las devoluciones aplican a servicios digitales conforme a la normativa ecuatoriana. Todas las solicitudes se evaluarán de forma objetiva y transparente.
+        </p>
+        <h3 class="legal-notice__subsection-title">Condiciones de aplicación</h3>
+        <ul>
+          <li>Errores de facturación o cobros no autorizados.</li>
+          <li>Indisponibilidad prolongada del servicio atribuible al proveedor, no derivada de fuerza mayor.</li>
+          <li>Incumplimiento material de las funcionalidades contratadas, debidamente acreditado.</li>
+        </ul>
+        <h3 class="legal-notice__subsection-title">Proceso para solicitar reembolso</h3>
+        <ul>
+          <li>Enviar la solicitud al correo de contacto indicado en este documento con el asunto “Solicitud de Reembolso”.</li>
+          <li>Incluir: nombre completo, correo registrado, referencia de pago, fecha del cargo y descripción del motivo.</li>
+          <li>Adjuntar comprobantes (factura, evidencia del cargo o evidencia técnica del incidente, si aplica).</li>
+        </ul>
+        <h3 class="legal-notice__subsection-title">Plazos de procesamiento</h3>
+        <p>
+          La evaluación y notificación de la resolución se realizará en un plazo máximo de 10 días hábiles. De proceder, el reembolso se cursará por el mismo método de pago utilizado, sujeto a los tiempos de la pasarela.
+        </p>
+        <h3 class="legal-notice__subsection-title">Excepciones</h3>
+        <ul>
+          <li>Servicios de consultoría ya prestados o personalizados entregados.</li>
+          <li>Promociones marcadas como “no reembolsables”.</li>
+          <li>Comisiones de terceros o impuestos ajenos al proveedor.</li>
+        </ul>
+      </section>
+
+      <section class="legal-notice__section">
+        <h2 class="legal-notice__section-title">13. ALCANCE Y LIMITACIONES DEL SERVICIO</h2>
+        <p>
+          El servicio es exclusivamente digital; no incluye garantías físicas ni bienes tangibles. Se provee con soporte razonable, actualizaciones y mejoras continuas, sin garantía de resultados específicos, los cuales dependen de factores externos y del uso del USUARIO.
+        </p>
+      </section>
+
+      <section class="legal-notice__section">
+        <h2 class="legal-notice__section-title">14. RESPONSABILIDADES Y DERECHOS DE LAS PARTES</h2>
+        <ul>
+          <li><strong>Del proveedor:</strong> Proveer acceso al servicio, mantener medidas de seguridad acordes a la técnica, ofrecer soporte razonable y cumplir la normativa aplicable.</li>
+          <li><strong>Del USUARIO:</strong> Usar el servicio de forma lícita, mantener datos de pago actualizados, respetar los términos de uso, no vulnerar derechos de terceros y proteger sus credenciales.</li>
+          <li>En caso de controversias, las partes procurarán una resolución amistosa y, de ser necesario, se someterán a la normativa ecuatoriana aplicable.</li>
+        </ul>
+      </section>
     </div>
   </div>
 </template>
