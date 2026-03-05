@@ -8,7 +8,6 @@ gsap.registerPlugin(ScrollTrigger)
 const heroContainer = ref<HTMLElement | null>(null)
 const revealShape = ref<HTMLElement | null>(null)
 const revealContent = ref<HTMLElement | null>(null)
-const hugeTitle = ref<HTMLElement | null>(null)
 const horizontalTrack = ref<HTMLElement | null>(null)
 
 // Animaciones y estado reactivo
@@ -55,53 +54,50 @@ onMounted(() => {
   }, 3000)
 
   // GSAP Scroll Animations
-  if (!heroContainer.value || !revealShape.value || !revealContent.value || !hugeTitle.value || !horizontalTrack.value) return
+  if (!heroContainer.value || !revealShape.value || !revealContent.value || !horizontalTrack.value) return
 
   ctx = gsap.context(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: heroContainer.value,
         start: 'top top',
-        end: '+=400%', // Extendemos el scroll para dar espacio a la pista horizontal
-        scrub: 1, // Smooth scrubbing
+        end: '+=400%', // Scroll extendido
+        scrub: 1.5, // Suavidad del scroll
         pin: true,
         anticipatePin: 1
       }
     })
 
-    // Fase 1: Animar salida del título gigante
-    tl.to(hugeTitle.value, {
-      y: '-20vh',
-      opacity: 0,
-      scale: 0.8,
-      duration: 1,
+    // Fase 1: Rotar y Escalar Masivamente el Cubo (Efecto Portal)
+    tl.to(revealShape.value, {
+      scale: 30, // Escalar masivamente para que cubra la pantalla y la sobrepase
+      rotationY: 180, // Rotación 3D en el recorrido
+      rotationZ: 90,
+      duration: 2,
       ease: 'power2.inOut'
     }, 0)
 
-    // Fase 2: Escalar la forma magenta para revelar background oscuro
-    tl.to(revealShape.value, {
-      scale: 50, // Escalar masivamente para cubrir la pantalla
-      rotation: 90,
-      duration: 1.5,
-      ease: 'power3.inOut'
-    }, 0)
+    // Fase 2: El fondo del héroe debe volverse oscuro gradualmente (o ya lo era)
 
-    // Fase 3: Aparición del contenido que estaba oculto en la forma escalada (ahora oscuro)
+    // Fase 3: Aparición del contenido desde dentro del portal
     tl.fromTo(revealContent.value, {
       opacity: 0,
-      y: 50
+      scale: 0.9
     }, {
       opacity: 1,
-      y: 0,
-      duration: 1,
+      scale: 1,
+      duration: 1.5,
       ease: 'power2.out'
-    }, 1) // Inicia antes de que termine de escalar la forma
+    }, 1) // Inicia justo cuando el cubo es lo suficientemente grande
 
     // Fase 4: Scroll horizontal del track de beneficios
+    // Mover horizontalmente según el ancho total de sus elementos hijos
+    const getTrackWidth = () => horizontalTrack.value!.scrollWidth - window.innerWidth + (window.innerWidth * 0.2); // Padding extra compesation
+
     tl.to(horizontalTrack.value, {
-      x: () => -(horizontalTrack.value!.scrollWidth - window.innerWidth),
+      x: () => -getTrackWidth(),
       ease: 'none',
-      duration: 2 // Ocupará la segunda mitad del pin
+      duration: 2.5
     }, 2)
 
   }, heroContainer.value)
@@ -118,19 +114,12 @@ const openWhatsApp = () => {
 
 <template>
   <section class="hero-huge" ref="heroContainer">
-    <!-- Capa 1: Fondo claro y texto gigante (Estado Inicial) -->
-    <div class="hero-huge__initial">
-      <h1 class="hero-huge__title" ref="hugeTitle">
-        <span class="block">TOMA EL</span>
-        <span class="block highlight">CONTROL</span>
-        <span class="block">CRECE</span>
-        <span class="block">SMART.</span>
-      </h1>
-    </div>
-
-    <!-- Capa 2: La forma geométrica animada (El 'Cubo' estilo Huge) -->
-    <div class="hero-huge__shape-container">
-      <div class="hero-huge__shape" ref="revealShape"></div>
+    <!-- Capa 1: Contenedor 3D del Portal -->
+    <div class="hero-huge__cube-container">
+      <div class="hero-huge__cube" ref="revealShape">
+        <!-- Contenido pseudo-video animado -->
+        <h1 class="hero-huge__cube-title">BAKANO</h1>
+      </div>
     </div>
 
     <!-- Capa 3: El contenido revelado (Horizontal Track) -->
@@ -187,48 +176,14 @@ const openWhatsApp = () => {
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background-color: colors.$BAKANO-LIGHT;
-  color: colors.$BAKANO-DARK;
+  background-color: #000; // Fondo absoluto estilo Huge Inc
+  color: colors.$white;
 }
 
 // ---------------------------------
-// Capa 1: Intro Light
+// Capa 1: Cubo 3D (Portal)
 // ---------------------------------
-.hero-huge__initial {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
-  pointer-events: none; // Permite scroll sin interrupción
-}
-
-.hero-huge__title {
-  @include fonts.heading-font(800);
-  font-size: clamp(4rem, 12vw, 15rem); // Texto MASIVO estilo Huge Inc
-  line-height: 0.85;
-  text-transform: uppercase;
-  letter-spacing: -0.05em;
-  text-align: center;
-  margin: 0;
-
-  .block {
-    display: block;
-  }
-
-  .highlight {
-    color: colors.$BAKANO-PRIMARY;
-  }
-}
-
-// ---------------------------------
-// Capa 2: Shape (El "Cubo" Magenta)
-// ---------------------------------
-.hero-huge__shape-container {
+.hero-huge__cube-container {
   position: absolute;
   top: 0;
   left: 0;
@@ -238,30 +193,57 @@ const openWhatsApp = () => {
   align-items: center;
   justify-content: center;
   z-index: 2;
-  pointer-events: none;
+  perspective: 1000px;
+  pointer-events: none; // Evitar bloquear clicks de otras capas
 }
 
-.hero-huge__shape {
-  width: 10vw;
-  height: 10vw;
-  min-width: 100px;
-  min-height: 100px;
-  background-color: colors.$BAKANO-DARK; // Transiciona a Dark bg
-  // Inicialmente forma un paralelogramo o polígono orgánico
-  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-  transform-origin: center center;
-  position: relative;
+@keyframes fluidGradient {
+  0% {
+    background-position: 0% 50%;
+  }
 
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.hero-huge__cube {
+  position: relative;
+  width: 30vw;
+  height: 30vw;
+  min-width: 250px;
+  min-height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  will-change: transform;
+
+  // Fondo simulando video abstracto con degradado potente
   &::before {
     content: '';
     position: absolute;
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
-    background: colors.$BAKANO-PRIMARY;
-    z-index: -1;
+    inset: 0;
+    // Efecto "video" dinámico
+    background: linear-gradient(-45deg, colors.$BAKANO-PINK, #ff00cc, #3300ff, colors.$BAKANO-PURPLE);
+    background-size: 400% 400%;
+    animation: fluidGradient 6s ease infinite;
+    z-index: 0;
   }
+}
+
+.hero-huge__cube-title {
+  position: relative;
+  z-index: 1;
+  @include fonts.heading-font(800);
+  font-size: clamp(3rem, 6vw, 8rem);
+  color: colors.$white;
+  letter-spacing: -0.05em;
+  margin: 0;
 }
 
 // ---------------------------------
@@ -488,8 +470,9 @@ const openWhatsApp = () => {
 }
 
 @media (max-width: 600px) {
-  .hero-huge__shape {
-    clip-path: circle(50% at 50% 50%);
+  .hero-huge__cube {
+    width: 60vw;
+    height: 60vw;
   }
 }
 </style>
