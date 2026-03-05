@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
 
-// Animation state
-const isVisible = ref(false)
+gsap.registerPlugin(ScrollTrigger)
+
+const sectionRef = ref<HTMLElement | null>(null)
+let ctx: gsap.Context
 
 // Función para abrir WhatsApp
 const openWhatsApp = () => {
@@ -10,15 +14,41 @@ const openWhatsApp = () => {
 }
 
 onMounted(() => {
-  // Trigger animations after component mount
-  setTimeout(() => {
-    isVisible.value = true
-  }, 200)
+  if (!sectionRef.value) return
+
+  ctx = gsap.context(() => {
+    gsap.from('.strategies__header', {
+      scrollTrigger: {
+        trigger: sectionRef.value,
+        start: 'top 80%'
+      },
+      y: 50,
+      opacity: 0,
+      duration: 1,
+      ease: 'power3.out'
+    })
+
+    gsap.from('.strategies__card', {
+      scrollTrigger: {
+        trigger: '.strategies__cards',
+        start: 'top 85%'
+      },
+      y: 80,
+      opacity: 0,
+      duration: 1.2,
+      stagger: 0.3,
+      ease: 'power3.out'
+    })
+  }, sectionRef.value)
+})
+
+onUnmounted(() => {
+  ctx?.revert()
 })
 </script>
 
 <template>
-  <section class="strategies" :class="{ 'strategies--visible': isVisible }">
+  <section class="strategies" ref="sectionRef">
     <div class="strategies__container">
       <!-- Header Section -->
       <div class="strategies__header">
@@ -151,9 +181,6 @@ onMounted(() => {
   &__header {
     text-align: center;
     margin-bottom: 80px;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s ease-out;
 
     @media (max-width: 768px) {
       margin-bottom: 60px;
@@ -162,14 +189,17 @@ onMounted(() => {
 
   &__title {
     font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    font-size: clamp(3rem, 7vw, 6rem);
+    /* Huge Inc Style Size */
+    text-transform: uppercase;
     color: $text-light;
     margin-bottom: 24px;
-    line-height: 1.2;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
 
     @media (max-width: 768px) {
-      font-size: clamp(1.8rem, 6vw, 2.5rem);
+      font-size: clamp(2.5rem, 8vw, 3.5rem);
       margin-bottom: 16px;
 
       br {
@@ -208,16 +238,13 @@ onMounted(() => {
   }
 
   &__card {
-    background: rgba($white, 0.05);
+    background: rgba($white, 0.03);
     border: 1px solid rgba($BAKANO-PINK, 0.2);
     border-radius: 24px;
     padding: 48px;
     backdrop-filter: blur(20px);
     position: relative;
     overflow: hidden;
-    opacity: 0;
-    transform: translateY(50px);
-    transition: all 0.8s ease-out;
 
     @media (max-width: 768px) {
       padding: 32px 24px;
@@ -385,19 +412,8 @@ onMounted(() => {
     &:active {
       transform: translateY(0);
     }
-  }
 
-  // Visibility animations
-  &--visible {
-    .strategies__header {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .strategies__card {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    // Removed .strategies--visible logic since GSAP handles it now
   }
 }
 </style>
