@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
 
-// Animation state
-const isVisible = ref(false)
+gsap.registerPlugin(ScrollTrigger)
+
+const sectionRef = ref<HTMLElement | null>(null)
+let ctx: gsap.Context
 
 // Función para abrir WhatsApp
 const openWhatsApp = () => {
@@ -10,218 +14,282 @@ const openWhatsApp = () => {
 }
 
 onMounted(() => {
-  // Trigger animations after component mount
+  if (!sectionRef.value) return
+
+  ctx = gsap.context(() => {
+    gsap.fromTo('.strategies__header',
+      { y: 50, opacity: 0 },
+      {
+        scrollTrigger: {
+          trigger: sectionRef.value,
+          start: 'top 80%',
+          toggleActions: 'play none none reverse'
+        },
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: 'power3.out'
+      }
+    )
+
+    // Animación del botón volando y dando vueltas
+    gsap.fromTo('.btn-header-contact',
+      { x: window.innerWidth, rotation: 720, opacity: 0 },
+      {
+        scrollTrigger: {
+          trigger: sectionRef.value,
+          start: 'top 75%',
+          toggleActions: 'play none none reverse'
+        },
+        x: 0,
+        rotation: 0,
+        opacity: 1,
+        duration: 1.5,
+        ease: 'back.out(1.2)'
+      }
+    )
+
+    gsap.fromTo('.step-card',
+      { y: 80, opacity: 0 },
+      {
+        scrollTrigger: {
+          trigger: '.strategies__grid',
+          start: 'top 85%', // Iniciar cuando el grid aparece en pantalla
+          toggleActions: 'play none none reverse'
+        },
+        y: 0,
+        opacity: 1,
+        duration: 1.2,
+        stagger: 0.2,
+        ease: 'power3.out'
+      }
+    )
+
+    gsap.fromTo('.cta-banner',
+      { y: 50, opacity: 0, scale: 0.95 },
+      {
+        scrollTrigger: {
+          trigger: '.strategies__footer',
+          start: 'top 90%',
+          toggleActions: 'play none none reverse'
+        },
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 1,
+        ease: 'power3.out'
+      }
+    )
+  }, sectionRef.value)
+
+  // Forzar actualización de ScrollTrigger después del render por el posible Hero pinning
   setTimeout(() => {
-    isVisible.value = true
-  }, 200)
+    ScrollTrigger.refresh()
+  }, 500)
+})
+
+onUnmounted(() => {
+  ctx?.revert()
 })
 </script>
 
 <template>
-  <section class="strategies" :class="{ 'strategies--visible': isVisible }">
+  <section class="strategies" ref="sectionRef">
     <div class="strategies__container">
+      
       <!-- Header Section -->
       <div class="strategies__header">
+        <p class="strategies__subtitle">METODOLOGÍA 1M</p>
         <h2 class="strategies__title">
-          Estrategias basadas tu negocio sin
-          <br>
-          gastos recurrentes innecesarios
+          Ingeniería de Crecimiento al<br>
+          Estilo <span>Silicon Valley</span>
         </h2>
-        <p class="strategies__subtitle">
-          Atraemos datos
+        <p class="strategies__header-desc">
+          No operamos con fe ni esperanza. Aplicamos el marco de trabajo <strong>Lean Startup</strong> para encontrar
+          tu oferta ganadora rápida y económicamente, y luego escalar con precisión matemática hacia las 7 cifras anuales.
         </p>
-      </div>
-
-      <!-- Cards Section -->
-      <div class="strategies__cards">
-        <!-- Data Usage Card -->
-        <div class="strategies__card strategies__card--data">
-          <div class="strategies__card-header">
-            <h3 class="strategies__card-title">
-              USAMOS DATOS!
-              <br>
-              NO SUPOSICIONES
-            </h3>
-          </div>
-          
-          <div class="strategies__card-content">
-            <p class="strategies__card-description">
-              Diseñamos anuncios simples y efectivos en Meta Ads que comunican lo que tu cliente ya está buscando, sin necesidad de inventar combos al azar ni depender del contenido viral.
-            </p>
-            
-            <ul class="strategies__card-features">
-              <li class="strategies__card-feature">
-                <span class="strategies__card-feature-icon">●</span>
-                Campañas con Mensajes Validados por Datos
-              </li>
-              <li class="strategies__card-feature">
-                <span class="strategies__card-feature-icon">●</span>
-                Visibilidad Total de lo que Funciona
-              </li>
-              <li class="strategies__card-feature">
-                <span class="strategies__card-feature-icon">●</span>
-                Control en tus ventas mensuales
-              </li>
-            </ul>
-            
-            <button class="strategies__card-btn" @click="openWhatsApp">
-              PREGUNTA CÓMO LO HACEMOS AQUÍ
-            </button>
-          </div>
-        </div>
-
-        <!-- Growth Card -->
-        <div class="strategies__card strategies__card--growth">
-          <div class="strategies__card-header">
-            <h3 class="strategies__card-title">
-              ATRAEMOS CRECIMIENTO
-            </h3>
-          </div>
-          
-          <div class="strategies__card-content">
-            <p class="strategies__card-description">
-              Analizamos tu facturación y comportamiento de consumo para identificar las oportunidades más rentables y las áreas donde estás perdiendo dinero sin darte cuenta.
-            </p>
-            
-            <ul class="strategies__card-features">
-              <li class="strategies__card-feature">
-                <span class="strategies__card-feature-icon">●</span>
-                Activación de estrategias digitales con Meta Ads
-              </li>
-              <li class="strategies__card-feature">
-                <span class="strategies__card-feature-icon">●</span>
-                Diagnóstico estratégico con tu historial de ventas
-              </li>
-              <li class="strategies__card-feature">
-                <span class="strategies__card-feature-icon">●</span>
-                Enfoque en resultados reales que impactan tu caja
-              </li>
-            </ul>
-            
-            <button class="strategies__card-btn" @click="openWhatsApp">
-              PREGUNTA CÓMO LO HACEMOS AQUÍ
-            </button>
-          </div>
+        
+        <div class="strategies__header-cta">
+          <button class="btn-header-contact" @click="openWhatsApp">
+            <span>HABLAR CON UN ESTRATEGA</span>
+            <i class="fa-solid fa-rocket"></i>
+          </button>
         </div>
       </div>
+
+      <!-- Grid de Metodología (3 Pasos) -->
+      <div class="strategies__grid">
+        
+        <!-- Fase 1 -->
+        <div class="step-card">
+          <div class="step-card__number">01</div>
+          <h3 class="step-card__title">Diagnóstico<br>Data-Driven</h3>
+          <p class="step-card__desc">
+            Eliminamos las suposiciones y el "yo creo que funcionaría". Auditamos tus finanzas, histórico de ventas y fuga de capital para encontrar dónde estás perdiendo dinero ahora mismo.
+          </p>
+          <ul class="step-card__features">
+            <li><i class="fa-solid fa-check"></i> Auditoría de Facturación</li>
+            <li><i class="fa-solid fa-check"></i> Mapeo de Fugas de Capital</li>
+            <li><i class="fa-solid fa-check"></i> Proyección Real de Rentabilidad</li>
+          </ul>
+        </div>
+
+        <!-- Fase 2 -->
+        <div class="step-card">
+          <div class="step-card__number">02</div>
+          <h3 class="step-card__title">Lean Startup<br>Framework</h3>
+          <p class="step-card__desc">
+            Construir, Medir, Aprender. Lanzamos experimentos ágiles en Meta Ads (MVP) para validar ofertas con tus clientes reales sin quemar presupuesto. Encontramos el Product-Market Fit.
+          </p>
+          <ul class="step-card__features">
+            <li><i class="fa-solid fa-check"></i> Pruebas A/B Omnicanal</li>
+            <li><i class="fa-solid fa-check"></i> Iteración Rápida de Mensajes</li>
+            <li><i class="fa-solid fa-check"></i> Optimización de CPA en Tiempo Real</li>
+          </ul>
+        </div>
+
+        <!-- Fase 3 -->
+        <div class="step-card">
+          <div class="step-card__number">03</div>
+          <h3 class="step-card__title">Escalamiento<br>Agresivo</h3>
+          <p class="step-card__desc">
+            Una vez que validamos el embudo y confirmamos el ROAS (Retorno de Inversión), inyectamos capital agresivamente. Construimos sistemas de adquisición predecibles hacia el $1M.
+          </p>
+          <ul class="step-card__features">
+            <li><i class="fa-solid fa-check"></i> Sistemas Automatizados</li>
+            <li><i class="fa-solid fa-check"></i> Retargeting Avanzado</li>
+            <li><i class="fa-solid fa-check"></i> Crecimiento Exponencial Seguro</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- CTA Section -->
+      <div class="strategies__footer">
+        <div class="cta-banner">
+          <div class="cta-banner__content">
+            <h3 class="cta-banner__title">¿Listo para escalar al siguiente nivel?</h3>
+            <p class="cta-banner__desc">Implementa el marco de trabajo Lean Startup en tu empresa hoy mismo.</p>
+          </div>
+          <button class="btn-primary-massive" @click="openWhatsApp">
+            <span>IMPLEMENTAR SISTEMA</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
     </div>
   </section>
 </template>
 
 <style lang="scss" scoped>
-@use '../styles/colorVariables.module.scss' as *;
+@use '../styles/fonts.modules.scss' as fonts;
+@use '../styles/colorVariables.module.scss' as colors;
 
 .strategies {
-  min-height: 100vh;
-  background: linear-gradient(135deg, $BAKANO-DARK 0%, $gray-900 100%);
-  padding: 120px 0;
+  background-color: #000;
+  padding: 15vw 0;
   position: relative;
   overflow: hidden;
 
-  // Mobile first approach
-  @media (max-width: 768px) {
-    padding: 80px 0;
-    min-height: auto;
-  }
-
+  // Decoración abstracta de fondo para sofisticación "Tech/Silicon Valley"
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at 20% 80%, rgba($BAKANO-PINK, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba($BAKANO-PURPLE, 0.1) 0%, transparent 50%);
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 30%, rgba(colors.$BAKANO-PINK, 0.05) 0%, transparent 30%),
+      radial-gradient(circle at 70% 70%, rgba(colors.$BAKANO-PURPLE, 0.05) 0%, transparent 30%);
     pointer-events: none;
+    z-index: 0;
   }
 
   &__container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 4vw;
     position: relative;
     z-index: 2;
-
-    @media (max-width: 768px) {
-      padding: 0 16px;
-    }
   }
 
+  // -------------------------
+  // Header
+  // -------------------------
   &__header {
-    text-align: center;
-    margin-bottom: 80px;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s ease-out;
-
-    @media (max-width: 768px) {
-      margin-bottom: 60px;
-    }
-  }
-
-  &__title {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    color: $text-light;
-    margin-bottom: 24px;
-    line-height: 1.2;
-
-    @media (max-width: 768px) {
-      font-size: clamp(1.8rem, 6vw, 2.5rem);
-      margin-bottom: 16px;
-
-      br {
-        display: none;
-      }
-    }
+    max-width: 900px;
+    margin-bottom: 8vw;
   }
 
   &__subtitle {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 1.5rem;
-    color: $BAKANO-PINK;
+    @include fonts.body-font(600);
+    color: colors.$BAKANO-PINK;
+    font-size: 1rem;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+  }
 
-    @media (max-width: 768px) {
-      font-size: 1.2rem;
-      letter-spacing: 1px;
+  &__title {
+    @include fonts.heading-font(800);
+    font-size: clamp(3rem, 6vw, 6.5rem);
+    color: colors.$white;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 2rem;
+
+    span {
+      color: transparent;
+      -webkit-text-stroke: 2px rgba(colors.$white, 0.9);
+      // Otra opción: usar un gradiente de texto
+      // background: linear-gradient(90deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
+      // -webkit-background-clip: text;
+      // -webkit-text-fill-color: transparent;
     }
   }
 
-  &__cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
+  &__header-desc {
+    @include fonts.body-font(400);
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    color: rgba(colors.$white, 0.7);
+    line-height: 1.6;
+    max-width: 700px;
+    margin-bottom: 3vw;
 
-    @media (max-width: 968px) {
-      grid-template-columns: 1fr;
-      gap: 32px;
-    }
-
-    @media (max-width: 768px) {
-      gap: 24px;
+    strong {
+      color: colors.$white;
     }
   }
 
-  &__card {
-    background: rgba($white, 0.05);
-    border: 1px solid rgba($BAKANO-PINK, 0.2);
-    border-radius: 24px;
-    padding: 48px;
-    backdrop-filter: blur(20px);
+  &__header-cta {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .btn-header-contact {
+    @include fonts.body-font(700);
+    background: transparent;
+    border: 2px solid colors.$BAKANO-PINK;
+    color: colors.$white;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     position: relative;
     overflow: hidden;
-    opacity: 0;
-    transform: translateY(50px);
-    transition: all 0.8s ease-out;
+    transition: all 0.4s ease;
+    box-shadow: 0 10px 30px rgba(colors.$BAKANO-PINK, 0.2);
 
-    @media (max-width: 768px) {
-      padding: 32px 24px;
-      border-radius: 20px;
+    i {
+      font-size: 1.2rem;
+      color: colors.$BAKANO-PINK;
+      transition: all 0.4s ease;
     }
 
     &::before {
@@ -229,174 +297,226 @@ onMounted(() => {
       position: absolute;
       top: 0;
       left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, $BAKANO-PINK, $BAKANO-PURPLE);
-      opacity: 0;
-      transition: opacity 0.3s ease;
+      width: 100%;
+      height: 100%;
+      background: colors.$BAKANO-PINK;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.4s ease;
+      z-index: 0;
+    }
+
+    span,
+    i {
+      position: relative;
+      z-index: 1;
     }
 
     &:hover {
-      transform: translateY(-8px);
-      border-color: rgba($BAKANO-PINK, 0.4);
-      box-shadow: 0 20px 40px rgba($BAKANO-PINK, 0.1);
+      box-shadow: 0 15px 40px rgba(colors.$BAKANO-PINK, 0.4);
+      transform: translateY(-5px);
 
       &::before {
-        opacity: 1;
+        transform: scaleX(1);
+        transform-origin: left;
       }
-    }
 
-    &--data {
-      transition-delay: 0.2s;
-    }
-
-    &--growth {
-      transition-delay: 0.4s;
-    }
-  }
-
-  &__card-header {
-    margin-bottom: 32px;
-
-    @media (max-width: 768px) {
-      margin-bottom: 24px;
-    }
-  }
-
-  &__card-title {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    color: $text-light;
-    line-height: 1.3;
-    margin-bottom: 0;
-
-    @media (max-width: 768px) {
-      font-size: clamp(1.3rem, 4vw, 1.6rem);
-
-      br {
-        display: none;
+      i {
+        color: colors.$white;
+        transform: translateX(5px) rotate(45deg);
       }
     }
   }
 
-  &__card-content {
+  // -------------------------
+  // Grid de Cartas (Metodología)
+  // -------------------------
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3vw;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: 1fr;
+      gap: 6vw;
+    }
+  }
+
+  // -------------------------
+  // Carta Individual
+  // -------------------------
+  .step-card {
+    background: rgba(colors.$white, 0.02);
+    border-top: 2px solid rgba(colors.$white, 0.1);
+    padding: 4vw 3vw;
+    position: relative;
+    transition: all 0.4s ease;
+
+    &:hover {
+      background: rgba(colors.$white, 0.05);
+      border-color: colors.$BAKANO-PRIMARY;
+      transform: translateY(-10px);
+
+      .step-card__number {
+        color: colors.$BAKANO-PRIMARY;
+      }
+    }
+
+    &__number {
+      @include fonts.heading-font(800);
+      font-size: clamp(4rem, 6vw, 6rem);
+      line-height: 1;
+      color: rgba(colors.$white, 0.1);
+      margin-bottom: 2rem;
+      transition: color 0.4s ease;
+    }
+
+    &__title {
+      @include fonts.heading-font(700);
+      font-size: clamp(1.8rem, 2.5vw, 2.5rem);
+      color: colors.$white;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    &__desc {
+      @include fonts.body-font(400);
+      font-size: 1.1rem;
+      color: rgba(colors.$white, 0.7);
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+      min-height: 120px; // Alinear las descripciones más o menos
+    }
+
+    &__features {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      li {
+        @include fonts.body-font(500);
+        font-size: 1rem;
+        color: rgba(colors.$white, 0.9);
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+
+        i {
+          color: colors.$BAKANO-PINK;
+          margin-top: 4px;
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+
+  // -------------------------
+  // Footer CTA Banner
+  // -------------------------
+  &__footer {
+    margin-top: 6vw;
     display: flex;
-    flex-direction: column;
-    gap: 32px;
-
-    @media (max-width: 768px) {
-      gap: 24px;
-    }
+    justify-content: center;
+    padding-bottom: 4vw; // Espacio extra al final de la sección
   }
 
-  &__card-description {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
-    font-size: 1.1rem;
-    color: $gray-300;
-    line-height: 1.6;
-    margin: 0;
-
-    @media (max-width: 768px) {
-      font-size: 1rem;
-      line-height: 1.5;
-    }
-  }
-
-  &__card-features {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  .cta-banner {
     display: flex;
-    flex-direction: column;
-    gap: 16px;
-
-    @media (max-width: 768px) {
-      gap: 12px;
-    }
-  }
-
-  &__card-feature {
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
-    font-size: 1rem;
-    color: $text-light;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    line-height: 1.5;
-
-    @media (max-width: 768px) {
-      font-size: 0.95rem;
-      gap: 10px;
-    }
-  }
-
-  &__card-feature-icon {
-    color: $BAKANO-PINK;
-    font-size: 0.8rem;
-    margin-top: 4px;
-    flex-shrink: 0;
-  }
-
-  &__card-btn {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    background: linear-gradient(135deg, $BAKANO-PINK 0%, $BAKANO-PURPLE 100%);
-    color: $white;
-    border: none;
-    border-radius: 12px;
-    padding: 18px 32px;
-    font-size: 0.95rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, rgba(colors.$BAKANO-DARK, 0.9) 0%, rgba(#111, 0.9) 100%);
+    border: 1px solid rgba(colors.$BAKANO-PINK, 0.3);
+    border-radius: 20px;
+    padding: 3rem 4rem;
+    width: 100%;
+    max-width: 1000px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(colors.$BAKANO-PINK, 0.1);
     position: relative;
     overflow: hidden;
-
-    @media (max-width: 768px) {
-      padding: 16px 24px;
-      font-size: 0.9rem;
-      border-radius: 10px;
-    }
 
     &::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.5s ease;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 50% 10%, rgba(colors.$BAKANO-PINK, 0.15) 0%, transparent 60%);
+      pointer-events: none;
     }
 
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba($BAKANO-PINK, 0.3);
+    &__content {
+      position: relative;
+      z-index: 1;
+      max-width: 500px;
+    }
 
-      &::before {
-        left: 100%;
+    &__title {
+      @include fonts.heading-font(700);
+      font-size: clamp(1.8rem, 2.5vw, 2.5rem);
+      color: colors.$white;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+
+    &__desc {
+      @include fonts.body-font(400);
+      font-size: 1.1rem;
+      color: rgba(colors.$white, 0.7);
+      margin: 0;
+    }
+
+    @media (max-width: 900px) {
+      flex-direction: column;
+      text-align: center;
+      gap: 2rem;
+      padding: 3rem 2rem;
+
+      &__content {
+        max-width: 100%;
       }
-    }
-
-    &:active {
-      transform: translateY(0);
     }
   }
 
-  // Visibility animations
-  &--visible {
-    .strategies__header {
-      opacity: 1;
-      transform: translateY(0);
+  .btn-primary-massive {
+    @include fonts.body-font(700);
+    background: colors.$BAKANO-PRIMARY;
+    color: colors.$white;
+    border: none;
+    padding: 1.5rem 3rem;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 1.2rem;
+    transition: all 0.3s ease;
+    border-radius: 50px; // Botón más moderno y redondeado
+    position: relative;
+    z-index: 1;
+
+    i {
+      transition: transform 0.3s ease;
     }
 
-    .strategies__card {
-      opacity: 1;
-      transform: translateY(0);
+    &:hover {
+      background: colors.$BAKANO-PINK;
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(colors.$BAKANO-PRIMARY, 0.4);
+
+      i {
+        transform: translateX(8px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      padding: 1.2rem 2rem;
+      width: 100%;
+      justify-content: center;
     }
   }
 }

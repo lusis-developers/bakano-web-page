@@ -1,23 +1,57 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import { RouterLink, useRouter, useRoute } from 'vue-router'
-import bakanoLogo from '../../assets/logos/bakano-dark.png'
+import { gsap } from 'gsap'
 
+import bakanoLogo from '../../assets/logos/bakano-light.png'
+
+// ── Estado ────────────────────────────────────────────────────────────────────
 const isMenuOpen = ref(false)
 const isScrolled = ref(false)
 const router = useRouter()
 const route = useRoute()
 
-// refs para manejo de foco/click-outside
+// Refs de accesibilidad
 const toggleBtnRef = ref<HTMLButtonElement | null>(null)
-const mobileMenuRef = ref<HTMLDivElement | null>(null)
+const mobileMenuRef = ref<HTMLElement | null>(null)
 
+// ── Datos de navegación ────────────────────────────────────────────────────────
+const navLinks = [
+  { id: 'inicio', num: '01', label: 'Inicio', section: 'inicio' },
+  { id: 'servicios', num: '02', label: 'Servicios', section: 'servicios' },
+  { id: 'nosotros', num: '03', label: 'Nosotros', section: 'nosotros' },
+  { id: 'testimonios', num: '04', label: 'Testimonios', section: 'testimonios' },
+]
+
+// ── Scroll / nav helpers ───────────────────────────────────────────────────────
+const handleScroll = () => { isScrolled.value = window.scrollY > 30 }
+
+const scrollToSection = async (sectionId: string) => {
+  if (route.name !== 'home') {
+    await router.push('/')
+    await nextTick()
+    setTimeout(() => {
+      const el = document.getElementById(sectionId)
+      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 56, behavior: 'smooth' })
+    }, 100)
+  } else {
+    const el = document.getElementById(sectionId)
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 56, behavior: 'smooth' })
+  }
+  closeMenu()
+}
+
+const openWhatsApp = () => {
+  window.open('https://wa.me/593984934039', '_blank', 'noopener,noreferrer')
+  closeMenu()
+}
+
+// ── Menú móvil ────────────────────────────────────────────────────────────────
 const toggleMenu = async () => {
   isMenuOpen.value = !isMenuOpen.value
   if (isMenuOpen.value) {
     await nextTick()
-    const firstLink = mobileMenuRef.value?.querySelector<HTMLAnchorElement>('a')
-    firstLink?.focus()
+    mobileMenuRef.value?.querySelector<HTMLElement>('a, button')?.focus()
   } else {
     toggleBtnRef.value?.focus()
   }
@@ -29,57 +63,40 @@ const closeMenu = () => {
   toggleBtnRef.value?.focus()
 }
 
-const handleScroll = () => {
-  isScrolled.value = window.scrollY > 20
-}
-
-// Scroll suave a secciones con offset del header
-const scrollToSection = async (sectionId: string) => {
-  // Si no estamos en la página home, navegar primero
-  if (route.name !== 'home') {
-    await router.push('/')
-    // Esperar a que la página se cargue completamente
-    await nextTick()
-    // Pequeña pausa adicional para asegurar que el DOM esté listo
-    setTimeout(() => {
-      const element = document.getElementById(sectionId)
-      if (element) {
-        const headerHeight = 56
-        const elementPosition = element.getBoundingClientRect().top + window.scrollY - headerHeight
-        window.scrollTo({ top: elementPosition, behavior: 'smooth' })
-      }
-    }, 100)
-  } else {
-    // Si ya estamos en home, hacer scroll directamente
-    const element = document.getElementById(sectionId)
-    if (element) {
-      const headerHeight = 56
-      const elementPosition = element.getBoundingClientRect().top + window.scrollY - headerHeight
-      window.scrollTo({ top: elementPosition, behavior: 'smooth' })
-    }
-  }
-  closeMenu()
-}
-
-// Abrir WhatsApp
-const openWhatsApp = () => {
-  window.open('https://wa.me/593984934039', '_blank', 'noopener,noreferrer')
-  closeMenu()
-}
-
-// Cerrar con click fuera
+// Click fuera
 const handleClickOutside = (e: MouseEvent) => {
-  const target = e.target as Node
   if (!isMenuOpen.value) return
-  const clickedInsideMenu = mobileMenuRef.value?.contains(target)
-  const clickedToggle = toggleBtnRef.value?.contains(target)
-  if (!clickedInsideMenu && !clickedToggle) closeMenu()
+  const t = e.target as Node
+  if (!mobileMenuRef.value?.contains(t) && !toggleBtnRef.value?.contains(t)) closeMenu()
 }
 
-// Cerrar con Esc
-const handleKeydown = (e: KeyboardEvent) => {
-  if (e.key === 'Escape') closeMenu()
-}
+// Teclado
+const handleKeydown = (e: KeyboardEvent) => { if (e.key === 'Escape') closeMenu() }
+
+// Bloqueo de scroll + animaciones GSAP al abrir el overlay
+watch(isMenuOpen, async (open) => {
+  document.documentElement.style.overflow = open ? 'hidden' : ''
+
+  if (open) {
+    await nextTick()
+    // Stagger en los links del overlay
+    gsap.from('.nav__overlay-link', {
+      x: 48,
+      opacity: 0,
+      stagger: 0.07,
+      duration: 0.55,
+      ease: 'power3.out',
+      delay: 0.2,
+    })
+    gsap.from('.nav__overlay-cta', {
+      y: 20,
+      opacity: 0,
+      duration: 0.5,
+      ease: 'power3.out',
+      delay: 0.5,
+    })
+  }
+})
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll, { passive: true })
@@ -92,358 +109,527 @@ onUnmounted(() => {
   document.removeEventListener('mousedown', handleClickOutside)
   document.removeEventListener('keydown', handleKeydown)
 })
-
-// Bloqueo de scroll cuando el menú está abierto
-watch(isMenuOpen, (open) => {
-  const el = document.documentElement
-  el.style.overflow = open ? 'hidden' : ''
-})
 </script>
 
 <template>
   <header class="header" :class="{ 'header--scrolled': isScrolled }">
-    <nav class="nav" aria-label="Primary">
-      <div class="nav__container">
-        <!-- Logo -->
-        <RouterLink to="/" class="nav__logo" aria-label="Inicio">
+    <div class="nav">
+      <div class="nav__inner">
+
+        <!-- ── Logo ─────────────────────────────────── -->
+        <RouterLink to="/" class="nav__logo" aria-label="Ir al inicio">
           <img :src="bakanoLogo" alt="Bakano" class="nav__logo-img" />
         </RouterLink>
 
-        <!-- Desktop Navigation -->
-        <ul class="nav__menu nav__menu--desktop">
-          <li class="nav__item">
-            <a href="#inicio" @click.prevent="scrollToSection('inicio')" class="nav__link">Inicio</a>
-          </li>
-          <li class="nav__item">
-            <a href="#servicios" @click.prevent="scrollToSection('servicios')" class="nav__link">Servicios</a>
-          </li>
-          <li class="nav__item">
-            <a href="#nosotros" @click.prevent="scrollToSection('nosotros')" class="nav__link">Nosotros</a>
-          </li>
-          <li class="nav__item">
-            <a href="#testimonios" @click.prevent="scrollToSection('testimonios')" class="nav__link">Testimonios</a>
-          </li>
-          <li class="nav__item">
-            <a href="#contacto" @click.prevent="openWhatsApp" class="nav__link nav__link--cta">Contacto</a>
+        <!-- ── Links desktop ─────────────────────────── -->
+        <ul class="nav__links" role="list">
+          <li v-for="link in navLinks" :key="link.id">
+            <a
+              :href="`#${link.section}`"
+              class="nav__link"
+              @click.prevent="scrollToSection(link.section)"
+            >{{ link.label }}</a>
           </li>
         </ul>
 
-        <!-- Mobile Menu Button -->
+        <!-- ── CTA desktop ───────────────────────────── -->
+        <button class="nav__cta" @click="scrollToSection('contacto')" aria-label="Ir al formulario de contacto">
+          <span>Contáctanos</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+
+        <!-- ── Hamburger (mobile) ────────────────────── -->
         <button
           ref="toggleBtnRef"
-          class="nav__toggle"
+          class="nav__hamburger"
+          :class="{ 'is-open': isMenuOpen }"
           @click="toggleMenu"
-          :class="{ 'nav__toggle--active': isMenuOpen }"
-          :aria-expanded="isMenuOpen ? 'true' : 'false'"
-          aria-controls="mobile-menu"
-          aria-label="Abrir menú"
+          :aria-expanded="isMenuOpen"
+          aria-controls="mobile-overlay"
+          aria-label="Abrir menú de navegación"
         >
-          <span class="nav__toggle-line"></span>
-          <span class="nav__toggle-line"></span>
-          <span class="nav__toggle-line"></span>
+          <span class="nav__hamburger-line" />
+          <span class="nav__hamburger-line" />
+          <span class="nav__hamburger-line" />
         </button>
+
       </div>
+    </div>
 
-      <!-- Backdrop -->
-      <Transition name="fade">
-        <div
-          v-show="isMenuOpen"
-          class="nav__backdrop"
-          aria-hidden="true"
-          @click="closeMenu"
-        />
-      </Transition>
-
-      <!-- Mobile Navigation (con transición) -->
-      <Transition name="slide-down">
-        <div
-          v-show="isMenuOpen"
-          id="mobile-menu"
-          ref="mobileMenuRef"
-          class="nav__menu nav__menu--mobile"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Menú móvil"
-        >
-          <ul class="nav__mobile-list">
-            <li class="nav__mobile-item">
-              <a href="#inicio" @click.prevent="scrollToSection('inicio')" class="nav__mobile-link">Inicio</a>
-            </li>
-            <li class="nav__mobile-item">
-              <a href="#servicios" @click.prevent="scrollToSection('servicios')" class="nav__mobile-link">Servicios</a>
-            </li>
-            <li class="nav__mobile-item">
-              <a href="#nosotros" @click.prevent="scrollToSection('nosotros')" class="nav__mobile-link">Nosotros</a>
-            </li>
-            <li class="nav__mobile-item">
-              <a href="#testimonios" @click.prevent="scrollToSection('testimonios')" class="nav__mobile-link">Testimonios</a>
-            </li>
-            <li class="nav__mobile-item">
-              <a href="#contacto" @click.prevent="openWhatsApp" class="nav__mobile-link nav__mobile-link--cta">Contacto</a>
-            </li>
-          </ul>
+    <!-- ════════════════════════════════════════════════
+         OVERLAY MÓVIL — full-screen, desliza desde la derecha
+         ════════════════════════════════════════════════ -->
+    <Transition name="overlay">
+      <div
+        v-show="isMenuOpen"
+        id="mobile-overlay"
+        ref="mobileMenuRef"
+        class="nav__overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menú de navegación"
+      >
+        <!-- Barra superior del overlay -->
+        <div class="nav__overlay-bar">
+          <img :src="bakanoLogo" alt="Bakano" class="nav__overlay-logo" />
+          <button
+            class="nav__overlay-close"
+            @click="closeMenu"
+            aria-label="Cerrar menú"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M18 6 6 18M6 6l12 12"/>
+            </svg>
+          </button>
         </div>
-      </Transition>
-    </nav>
+
+        <!-- Separador -->
+        <div class="nav__overlay-sep" aria-hidden="true" />
+
+        <!-- Links numerados -->
+        <nav class="nav__overlay-nav" aria-label="Navegación móvil">
+          <a
+            v-for="link in navLinks"
+            :key="link.id"
+            :href="`#${link.section}`"
+            class="nav__overlay-link"
+            @click.prevent="scrollToSection(link.section)"
+          >
+            <span class="nav__overlay-num" aria-hidden="true">{{ link.num }}</span>
+            <span class="nav__overlay-label">{{ link.label }}</span>
+          </a>
+        </nav>
+
+        <!-- CTA Formulario -->
+        <button class="nav__overlay-cta" @click="scrollToSection('contacto')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span>Contáctanos</span>
+        </button>
+
+        <!-- Decoración de fondo -->
+        <div class="nav__overlay-glow" aria-hidden="true" />
+      </div>
+    </Transition>
+
   </header>
 </template>
 
 <style lang="scss" scoped>
 @use 'sass:color';
 @use '@/styles/fonts.modules.scss' as fonts;
+@use '@/styles/colorVariables.module.scss' as colors;
 
-$header-height: 56px;
-$bp-md: 768px;
+// ── Variables ─────────────────────────────────────────────────────────────────
+$header-h: 56px;
+$bp: 768px;
+$dark-bg: #0b0815;
 
+// ─────────────────────────────────────────────────────────────────────────────
+// HEADER
+// ─────────────────────────────────────────────────────────────────────────────
 .header {
   position: fixed;
   inset: 0 0 auto 0;
-  z-index: 1000;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-  height: $header-height;
+  z-index: 900;
+  height: $header-h;
+  // Transparente sobre el hero (que usa margin-top: -56px)
+  background: transparent;
+  transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 
+  // Cuando el usuario ha hecho scroll
   &--scrolled {
-    background: rgba(255, 255, 255, 0.98);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    background: rgba($dark-bg, 0.88);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 1px 40px rgba(0, 0, 0, 0.3);
   }
 }
 
+// ── Nav container ─────────────────────────────────────────────────────────────
 .nav {
-  &__container {
+  height: 100%;
+
+  &__inner {
     max-width: 1200px;
+    height: 100%;
     margin-inline: auto;
-    padding-inline: 1rem;
+    padding-inline: 24px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    height: $header-height;
+    gap: 40px;
+
+    @media (max-width: $bp) {
+      padding-inline: 16px;
+      gap: 0;
+    }
   }
 
+  // ── Logo ──────────────────────────────────────────────────────────────────
   &__logo {
-    text-decoration: none;
     display: flex;
     align-items: center;
+    flex-shrink: 0;
+    text-decoration: none;
 
     &-img {
-      height: 32px;
+      height: 28px;
       width: auto;
-      transition: transform 0.3s ease;
+      filter: brightness(1);
+      transition: opacity 0.25s ease;
 
-      @media (max-width: $bp-md) {
-        height: 28px;
+      &:hover {
+        opacity: 0.8;
       }
     }
   }
 
-  &__menu {
-    &--desktop {
+  // ── Links desktop ─────────────────────────────────────────────────────────
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+    margin: 0 auto 0 40px;
+    padding: 0;
+
+    @media (max-width: $bp) {
       display: none;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      gap: 2rem;
-
-      @media (min-width: $bp-md) {
-        display: flex;
-        align-items: center;
-      }
     }
-
-    &--mobile {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: white;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      z-index: 1001; // sobre el backdrop
-      border-radius: 8px;
-
-      @media (min-width: $bp-md) {
-        display: none !important;
-      }
-    }
-  }
-
-  &__item {
-    margin: 0;
   }
 
   &__link {
     @include fonts.interface-font(500);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: rgba(255, 255, 255, 0.6);
     text-decoration: none;
-    color: $BAKANO-DARK;
-    font-size: 0.95rem;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    transition: color 0.3s ease, background 0.3s ease, transform 0.2s ease;
-    cursor: pointer;
+    padding: 4px 0;
+    position: relative;
+    transition: color 0.25s ease;
+
+    // Underline gradiente en hover
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
 
     &:hover {
-      color: $BAKANO-PRIMARY;
-      background: rgba($BAKANO-PRIMARY, 0.1);
-    }
+      color: colors.$white;
 
-    &.router-link-active,
-    &.active {
-      color: $BAKANO-PRIMARY;
-      font-weight: 600;
-    }
-
-    &--cta {
-      background: $BAKANO-PRIMARY;
-      color: white;
-      font-weight: 600;
-      margin-left: 1rem;
-
-      &:hover {
-        background: color.adjust($BAKANO-PRIMARY, $lightness: -10%);
-        color: white;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba($BAKANO-PRIMARY, 0.3);
+      &::after {
+        transform: scaleX(1);
       }
     }
   }
 
-  &__mobile-list {
-    list-style: none;
-    margin: 0;
-    padding: 0.5rem 0;
-  }
-
-  &__mobile-item {
-    margin: 0;
-  }
-
-  &__mobile-link {
-    @include fonts.interface-font(500);
-    display: block;
-    text-decoration: none;
-    color: $BAKANO-DARK;
-    font-size: 1rem;
-    padding: 0.9rem 1.5rem;
-    transition: background 0.2s ease, color 0.2s ease;
+  // ── CTA desktop ───────────────────────────────────────────────────────────
+  &__cta {
+    @include fonts.interface-font(600);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.70rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: colors.$white;
+    background: transparent;
+    border: 1px solid rgba(colors.$BAKANO-PINK, 0.45);
+    border-radius: 24px;
+    padding: 7px 16px;
     cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition:
+      background 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+
+    svg {
+      transition: transform 0.25s ease;
+    }
 
     &:hover {
-      background: rgba($BAKANO-PRIMARY, 0.08);
-      color: $BAKANO-PRIMARY;
-    }
+      background: colors.$BAKANO-PINK;
+      border-color: colors.$BAKANO-PINK;
+      box-shadow: 0 0 24px rgba(colors.$BAKANO-PINK, 0.35);
 
-    &.router-link-active,
-    &.active {
-      background: rgba($BAKANO-PRIMARY, 0.1);
-      color: $BAKANO-PRIMARY;
-      font-weight: 600;
-    }
-
-    &--cta {
-      background: $BAKANO-PRIMARY;
-      color: white;
-      font-weight: 600;
-      margin: 0.5rem 1rem 0.75rem;
-      border-radius: 8px;
-      text-align: center;
-
-      &:hover {
-        background: color.adjust($BAKANO-PRIMARY, $lightness: -8%);
-        color: white;
+      svg {
+        transform: translateX(3px);
       }
+    }
+
+    @media (max-width: $bp) {
+      display: none;
     }
   }
 
-  &__toggle {
-    display: inline-flex;
+  // ── Hamburger ─────────────────────────────────────────────────────────────
+  &__hamburger {
+    display: none;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    width: 36px;
-    height: 36px;
+    align-items: flex-end;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    margin-left: auto;
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
-    gap: 5px;
 
-    @media (min-width: $bp-md) {
-      display: none;
+    @media (max-width: $bp) {
+      display: flex;
     }
 
     &-line {
-      width: 22px;
-      height: 2px;
-      background: $BAKANO-DARK;
-      transition: transform 0.3s ease, opacity 0.3s ease;
+      display: block;
+      height: 1.5px;
+      background: rgba(255, 255, 255, 0.85);
       border-radius: 1px;
+      transition: transform 0.3s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.2s ease, width 0.3s ease;
+
+      &:nth-child(1) {
+        width: 22px;
+      }
+
+      &:nth-child(2) {
+        width: 16px;
+      }
+
+      // más corta → detalle visual
+      &:nth-child(3) {
+        width: 22px;
+      }
     }
 
-    &--active {
-      .nav__toggle-line {
+    &.is-open {
+      .nav__hamburger-line {
         &:nth-child(1) {
-          transform: rotate(45deg) translate(5px, 6px);
+          width: 22px;
+          transform: rotate(45deg) translate(5px, 4.5px);
         }
 
         &:nth-child(2) {
           opacity: 0;
+          transform: scaleX(0);
         }
 
         &:nth-child(3) {
-          transform: rotate(-45deg) translate(6px, -6px);
+          width: 22px;
+          transform: rotate(-45deg) translate(5px, -4.5px);
         }
       }
     }
   }
 
-  /* Backdrop para el menú móvil */
-  &__backdrop {
+  // ── Overlay móvil ─────────────────────────────────────────────────────────
+  &__overlay {
     position: fixed;
-    inset: $header-height 0 0 0;
-    /* debajo del header */
-    background: rgba(0, 0, 0, 0.35);
-    z-index: 1000;
+    inset: 0;
+    z-index: 901;
+    background: $dark-bg;
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 40px;
+    overflow-y: auto;
 
-    @media (min-width: $bp-md) {
-      display: none;
+    // Gradiente decorativo
+    &-glow {
+      position: absolute;
+      bottom: 0;
+      right: -60px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle,
+          rgba(colors.$BAKANO-PINK, 0.09) 0%,
+          rgba(colors.$BAKANO-PURPLE, 0.05) 50%,
+          transparent 70%);
+      pointer-events: none;
+      border-radius: 50%;
+    }
+  }
+
+  // Barra superior del overlay
+  &__overlay-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: $header-h;
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  &__overlay-logo {
+    height: 26px;
+    width: auto;
+  }
+
+  &__overlay-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.7);
+    transition: background 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: colors.$white;
+    }
+  }
+
+  // Separador
+  &__overlay-sep {
+    display: none; // ya está la border-bottom en overlay-bar
+  }
+
+  // Nav links del overlay
+  &__overlay-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 40px 32px 0;
+    flex: 1;
+    gap: 4px;
+  }
+
+  &__overlay-link {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    text-decoration: none;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+
+    // Línea de hover a la izquierda
+    &::before {
+      content: '';
+      position: absolute;
+      left: -32px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
+      transition: left 0.3s ease;
+    }
+
+    &:hover::before {
+      left: 0;
+    }
+
+    &:hover .nav__overlay-label {
+      color: colors.$white;
+    }
+
+    &:hover .nav__overlay-num {
+      color: colors.$BAKANO-PINK;
+    }
+  }
+
+  &__overlay-num {
+    @include fonts.accent-font(600);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(colors.$BAKANO-PINK, 0.5);
+    transition: color 0.25s ease;
+    flex-shrink: 0;
+    padding-top: 4px;
+  }
+
+  &__overlay-label {
+    @include fonts.heading-font(700);
+    font-size: clamp(2rem, 8vw, 2.8rem);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1;
+    transition: color 0.25s ease;
+  }
+
+  // CTA WhatsApp del overlay
+  &__overlay-cta {
+    @include fonts.interface-font(600);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 40px 32px 0;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
+    border: none;
+    border-radius: 14px;
+    color: colors.$white;
+    font-size: 0.88rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: opacity 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+
+    &:hover {
+      opacity: 0.92;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(colors.$BAKANO-PINK, 0.35);
+    }
+
+    &:active {
+      transform: translateY(0);
     }
   }
 }
 
-/* ===== Transitions ===== */
-/* Slide down para el contenedor del menú */
-.slide-down-enter-from,
-.slide-down-leave-to {
-  opacity: 0;
-  transform: translateY(-8px);
+// ─────────────────────────────────────────────────────────────────────────────
+// TRANSICIÓN del overlay (desliza desde la derecha)
+// ─────────────────────────────────────────────────────────────────────────────
+.overlay-enter-from,
+.overlay-leave-to {
+  transform: translateX(100%);
 }
 
-.slide-down-enter-active,
-.slide-down-leave-active {
-  transition: opacity 0.18s ease, transform 0.18s ease;
+.overlay-enter-active {
+  transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1);
 }
 
-/* Fade para el backdrop */
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+.overlay-leave-active {
+  transition: transform 0.35s cubic-bezier(0.76, 0, 0.24, 1);
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.18s ease;
-}
-
-/* Respeto a reduce motion */
+// ─────────────────────────────────────────────────────────────────────────────
+// Respeto a reduce-motion
+// ─────────────────────────────────────────────────────────────────────────────
 @media (prefers-reduced-motion: reduce) {
 
-  .slide-down-enter-active,
-  .slide-down-leave-active,
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: none;
+  .overlay-enter-active,
+  .overlay-leave-active {
+    transition: opacity 0.2s ease;
+  }
+
+  .overlay-enter-from,
+  .overlay-leave-to {
+    transform: none;
+    opacity: 0;
   }
 }
 </style>

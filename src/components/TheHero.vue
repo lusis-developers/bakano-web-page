@@ -1,9 +1,29 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useContactModal } from '@/composables/useContactModal'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+const heroVideo = 'https://res.cloudinary.com/dpimsaaa4/video/upload/v1772741967/IMG_8601_y5tgbu.mov'
+const bgFoto1   = 'https://res.cloudinary.com/dpimsaaa4/image/upload/v1772741965/IMG_7973_fm7dfc.jpg'
+const bgFoto2   = 'https://res.cloudinary.com/dpimsaaa4/image/upload/v1772741964/IMG_8099_h9zifs.jpg'
+
+gsap.registerPlugin(ScrollTrigger)
+
+const heroContainer = ref<HTMLElement | null>(null)
+const revealShape = ref<HTMLElement | null>(null)
+const revealContent = ref<HTMLElement | null>(null)
+const horizontalTrack = ref<HTMLElement | null>(null)
+const hiddenVideo = ref<HTMLElement | null>(null)
+const bgSlide1 = ref<HTMLElement | null>(null)
+const bgSlide2 = ref<HTMLElement | null>(null)
 
 // Animaciones y estado reactivo
-const isVisible = ref(false)
 const currentStat = ref(0)
+
+// ── Indicadores de scroll ───────────────────────────────────────────────────
+const showScrollDown   = ref(true)   // flecha inicial "scroll"
+const showHorizontal   = ref(false)  // barra + hint horizontal
+const hProgress        = ref(0)      // 0–1 progreso del track horizontal
 
 // Estadísticas que rotan
 const stats = [
@@ -16,683 +36,724 @@ const stats = [
 // Beneficios clave
 const benefits = [
   {
-    icon: '📈',
+    icon: 'fa-solid fa-chart-line',
     title: 'Crecimiento Garantizado',
     description: 'Estrategias probadas que aumentan tu facturación hasta un 20%'
   },
   {
-    icon: '🎯',
+    icon: 'fa-solid fa-bullseye', // Sin Dependencias
     title: 'Sin Dependencias',
     description: 'No necesitas agencias, campañas virales ni caos operativo'
   },
   {
-    icon: '🚀',
+    icon: 'fa-solid fa-rocket',
     title: 'Resultados Rápidos',
     description: 'Ve el impacto en tu negocio desde el primer mes'
   },
   {
-    icon: '💡',
+    icon: 'fa-solid fa-lightbulb',
     title: 'Soluciones Inteligentes',
     description: 'Tecnología avanzada adaptada a tu industria'
   }
 ]
 
-onMounted(() => {
-  isVisible.value = true
+let ctx: gsap.Context
 
+onMounted(() => {
   // Rotación de estadísticas
   setInterval(() => {
     currentStat.value = (currentStat.value + 1) % stats.length
   }, 3000)
+
+  // GSAP Scroll Animations
+  if (!heroContainer.value || !revealShape.value || !revealContent.value || !horizontalTrack.value) return
+
+  ctx = gsap.context(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: heroContainer.value,
+        start: 'top top',
+        end: '+=400%', // Scroll extendido
+        scrub: 1.5, // Suavidad del scroll
+        pin: true,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          const p = self.progress
+          // "SCROLL ↓" solo visible antes de empezar
+          showScrollDown.value = p < 0.03
+          // Indicador horizontal: aparece cuando el track empieza a moverse (~44%)
+          showHorizontal.value  = p >= 0.44 && p < 0.99
+          // Progreso dentro del rango horizontal (0 → 1)
+          hProgress.value = Math.max(0, Math.min(1, (p - 0.44) / 0.52))
+        }
+      }
+    })
+
+    // Fase 1: Rotar y Escalar Masivamente el Cubo (Efecto Portal)
+    tl.to(revealShape.value, {
+      scale: 30, // Escalar masivamente para que cubra la pantalla y la sobrepase
+      rotationY: 180, // Rotación 3D en el recorrido
+      rotationZ: 90,
+      duration: 2,
+      ease: 'power2.inOut'
+    }, 0)
+
+    // Forzar la opacidad del video a 1 cuando empieza el scroll aunque no tengan hover
+    tl.to(hiddenVideo.value, {
+      opacity: 1,
+      duration: 0.1
+    }, 0)
+
+    // Desvanecer el texto/logo interno rápidamente para evitar pixelación al hacer zoom masivo
+    tl.to('.cube-logo', {
+      opacity: 0,
+      scale: 0.8,
+      duration: 0.3, // Se desvanece de inmediato al empezar
+      ease: 'power1.inOut'
+    }, 0)
+
+    // Fase 2: El fondo del héroe debe volverse oscuro gradualmente (o ya lo era)
+
+    // Fase 3: Aparición del contenido desde dentro del portal
+    tl.fromTo(revealContent.value, {
+      opacity: 0,
+      scale: 0.9
+    }, {
+      opacity: 1,
+      scale: 1,
+      duration: 1.5,
+      ease: 'power2.out'
+    }, 1) // Inicia justo cuando el cubo es lo suficientemente grande
+
+    // Fase 4: Scroll horizontal del track de beneficios
+    const getTrackWidth = () => horizontalTrack.value!.scrollWidth - window.innerWidth + (window.innerWidth * 0.2); // Padding extra compesation
+
+    tl.to(horizontalTrack.value, {
+      x: () => -getTrackWidth(),
+      ease: 'none',
+      duration: 2.5
+    }, 2)
+
+    // Fase 5: Transición de Fondos Fotográficos
+    // El primer fondo aparece justo cuando revelamos el contenido (después del portal)
+    tl.fromTo(bgSlide1.value, { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: 1, ease: 'power2.out' }, 1.5)
+
+    // A la mitad del scroll horizontal, se cruzan las opacidades hacia la foto 2
+    tl.to(bgSlide1.value, { opacity: 0, duration: 0.8 }, 3)
+    tl.fromTo(bgSlide2.value, { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: 1 }, 3)
+
+  }, heroContainer.value)
 })
 
-const openWhatsApp = () => {
-  // Abrir WhatsApp con el número de contacto
-  window.open('https://wa.me/593984934039', '_blank', 'noopener,noreferrer')
-}
+onUnmounted(() => {
+  ctx?.revert()
+})
+
+const { open: openContactModal } = useContactModal()
 </script>
 
 <template>
-  <section class="hero">
-    <!-- Fondo con gradiente y elementos decorativos -->
-    <div class="hero__background">
-      <div class="hero__gradient"></div>
-      <div class="hero__shapes">
-        <div class="shape shape--1"></div>
-        <div class="shape shape--2"></div>
-        <div class="shape shape--3"></div>
+  <section class="hero-huge" ref="heroContainer">
+    <!-- Capa 1: Contenedor 3D del Portal -->
+    <div class="hero-huge__cube-container">
+      <div class="hero-huge__cube" ref="revealShape">
+        
+        <!-- Cara Frontal (Negra + Video) -->
+        <div class="cube-face cube-front">
+          <!-- Video Oculto (Se muestra en hover o scroll) -->
+          <video :src="heroVideo" ref="hiddenVideo" class="cube-abstract-video" autoplay loop muted playsinline></video>
+          
+          <!-- Logo Textual Sutil (Se oculta al hacer zoom) -->
+          <div class="cube-logo">
+            <svg viewBox="0 0 300 100" class="cube-logo__svg">
+              <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-size="48" font-weight="900" letter-spacing="4">BAKANO</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Cara Trasera (Rosa Estático) -->
+        <div class="cube-face cube-back"></div>
+
       </div>
     </div>
 
-    <div class="hero__container">
-      <!-- Contenido principal -->
-      <div class="hero__content" :class="{ 'hero__content--visible': isVisible }">
-        <div class="hero__text">
-          <h1 class="hero__title">
-            Toma el control y
-            <span class="hero__title--highlight">CRECE SMART</span>
-          </h1>
-          
-          <p class="hero__subtitle">
-            Ayudamos a Dueños de Negocios a Aumentar hasta un 
-            <strong>20% su Facturación Mensual/Rentabilidad</strong>
-          </p>
-          
-          <p class="hero__description">
-            Sin depender de agencias, campañas virales, ni caos operativo.
-            <br>
-            <strong>Resultados medibles, crecimiento sostenible.</strong>
-          </p>
+    <!-- Capa 3: El contenido revelado (Horizontal Track) -->
+    <div class="hero-huge__revealed" ref="revealContent">
+      <!-- Sistema de Fondos Dinámicos Fotográficos -->
+      <div class="hero-huge__bg-layer">
+        <div class="bg-slide" ref="bgSlide1" :style="{ backgroundImage: `url(${bgFoto1})` }"></div>
+        <div class="bg-slide" ref="bgSlide2" :style="{ backgroundImage: `url(${bgFoto2})` }"></div>
+        <div class="bg-overlay"></div>
+      </div>
 
-          <!-- Estadística rotativa -->
-          <div class="hero__stat">
-            <div class="hero__stat-number">{{ stats[currentStat].number }}</div>
-            <div class="hero__stat-label">{{ stats[currentStat].label }}</div>
-          </div>
-
-          <!-- CTA Principal -->
-          <div class="hero__cta">
-            <button class="btn btn--primary" @click="openWhatsApp">
-              <span>ESCALA MI NEGOCIO AHORA</span>
-              <svg class="btn__icon" viewBox="0 0 24 24" fill="none">
-                <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-            
-            <p class="hero__cta-note">
-              ✅ Consulta gratuita • ✅ Sin compromisos • ✅ Resultados garantizados
+      <div class="hero-huge__track" ref="horizontalTrack">
+        
+        <!-- Panel 1: Texto Masivo -->
+        <div class="track-panel panel-intro">
+          <div class="panel-intro__content">
+            <p class="hero-huge__subtitle">
+              Ayudamos a Dueños de Negocios a Aumentar hasta un<br/>
+              <strong>20% su Facturación Mensual o Rentabilidad</strong>
             </p>
-          </div>
-        </div>
+            <p class="hero-huge__desc">
+              Sin depender de agencias, campañas virales, ni caos operativo.<br/>
+              Resultados medibles, crecimiento sostenible.
+            </p>
 
-        <!-- Sección visual con beneficios -->
-        <div class="hero__visual">
-          <div class="hero__image-container">
-            <!-- Imagen principal con overlay -->
-            <div class="hero__main-image">
-              <div class="hero__image-overlay">
-                <div class="hero__success-badge">
-                  <span class="hero__success-icon">🏆</span>
-                  <div>
-                    <div class="hero__success-title">Éxito Comprobado</div>
-                    <div class="hero__success-subtitle">+150 negocios transformados</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Cards de beneficios flotantes -->
-            <div class="hero__floating-cards">
-              <div 
-                v-for="(benefit, index) in benefits" 
-                :key="index"
-                class="hero__benefit-card"
-                :style="{ animationDelay: `${index * 0.2}s` }"
-              >
-                <div class="hero__benefit-icon">{{ benefit.icon }}</div>
-                <div class="hero__benefit-content">
-                  <h3 class="hero__benefit-title">{{ benefit.title }}</h3>
-                  <p class="hero__benefit-description">{{ benefit.description }}</p>
-                </div>
-              </div>
+            <div class="hero-huge__cta">
+              <button class="btn btn--primary" @click="openContactModal">
+                <span>ESCALA MI NEGOCIO AHORA</span>
+              </button>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Indicadores de confianza -->
-      <div class="hero__trust" :class="{ 'hero__trust--visible': isVisible }">
-        <div class="hero__trust-item">
-          <span class="hero__trust-number">5.0</span>
-          <div class="hero__trust-stars">⭐⭐⭐⭐⭐</div>
-          <span class="hero__trust-label">Calificación promedio</span>
+        <!-- Panel 2: Estadísticas -->
+        <div class="track-panel panel-stats">
+          <div class="huge-stat-card">
+            <span class="stat-number">{{ stats[currentStat].number }}</span>
+            <span class="stat-label">{{ stats[currentStat].label }}</span>
+          </div>
         </div>
-        
-        <div class="hero__trust-item">
-          <span class="hero__trust-number">24h</span>
-          <span class="hero__trust-label">Tiempo de respuesta</span>
+
+        <!-- Panels 3+: Beneficios (Scroll Horizontal) -->
+        <div class="track-panel panel-benefit" v-for="(benefit, index) in benefits" :key="index">
+          <div class="huge-benefit-card">
+            <span class="benefit-icon"><i :class="benefit.icon"></i></span>
+            <h3 class="benefit-title">{{ benefit.title }}</h3>
+            <p class="benefit-desc">{{ benefit.description }}</p>
+          </div>
         </div>
-        
-        <div class="hero__trust-item">
-          <span class="hero__trust-number">100%</span>
-          <span class="hero__trust-label">Satisfacción garantizada</span>
-        </div>
+
       </div>
     </div>
+    <!-- ══════════════════════════════════════════
+         INDICADOR INICIAL — "scroll para empezar"
+         Se muestra solo cuando progress < 3 %
+         ══════════════════════════════════════════ -->
+    <Transition name="hint">
+      <div v-if="showScrollDown" class="scroll-hint scroll-hint--down" aria-hidden="true">
+        <div class="scroll-hint__mouse">
+          <div class="scroll-hint__wheel" />
+        </div>
+        <span class="scroll-hint__label">SCROLL</span>
+      </div>
+    </Transition>
+
+    <!-- ══════════════════════════════════════════
+         INDICADOR HORIZONTAL — barra de progreso
+         + flechas mientras el track se mueve
+         ══════════════════════════════════════════ -->
+    <Transition name="hint">
+      <div v-if="showHorizontal" class="scroll-hint scroll-hint--h" aria-hidden="true">
+        <!-- Label + flecha -->
+        <div class="scroll-hint__h-label">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+          <span>DESLIZA</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </div>
+        <!-- Barra de progreso -->
+        <div class="scroll-hint__bar">
+          <div class="scroll-hint__fill" :style="{ width: `${hProgress * 100}%` }" />
+        </div>
+      </div>
+    </Transition>
+
   </section>
 </template>
 
 <style lang="scss" scoped>
-@use 'sass:color';
 @use '@/styles/fonts.modules.scss' as fonts;
 @use '@/styles/colorVariables.module.scss' as colors;
 
-.hero {
+.hero-huge {
   position: relative;
-  min-height: 100vh;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #000; // Fondo absoluto estilo Huge Inc
+  color: colors.$white;
+}
+
+// ---------------------------------
+// Capa 1: Cubo 3D (Portal)
+// ---------------------------------
+.hero-huge__cube-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   align-items: center;
-  overflow: hidden;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  justify-content: center;
+  z-index: 2;
+  perspective: 1000px;
+  pointer-events: none; // Evitar bloquear clicks de otras capas
+}
 
-  &__background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1;
+@keyframes spinOrbs {
+  0% {
+    transform: rotate(0deg) scale(1);
   }
 
-  &__gradient {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg,
-        rgba(colors.$BAKANO-PRIMARY, 0.1) 0%,
-        rgba(colors.$BAKANO-PURPLE, 0.05) 50%,
-        rgba(colors.$BAKANO-DARK, 0.8) 100%);
+  50% {
+    transform: rotate(180deg) scale(1.2);
   }
 
-  &__shapes {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
 
-    .shape {
-      position: absolute;
-      border-radius: 50%;
-      background: linear-gradient(45deg, rgba(colors.$BAKANO-PRIMARY, 0.1), rgba(colors.$BAKANO-PURPLE, 0.1));
-      animation: float 6s ease-in-out infinite;
+.hero-huge__cube {
+  position: relative;
+  width: 30vw;
+  height: 30vw;
+  min-width: 250px;
+  min-height: 250px;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 
-      &--1 {
-        width: 300px;
-        height: 300px;
-        top: 10%;
-        right: 10%;
-        animation-delay: 0s;
-      }
+  // Efecto Hover
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
 
-      &--2 {
-        width: 200px;
-        height: 200px;
-        bottom: 20%;
-        left: 5%;
-        animation-delay: 2s;
-      }
-
-      &--3 {
-        width: 150px;
-        height: 150px;
-        top: 50%;
-        left: 50%;
-        animation-delay: 4s;
-      }
+    .cube-abstract-video {
+      opacity: 0.7; // Reveal video on hover
     }
   }
+}
 
-  &__container {
-    position: relative;
-    z-index: 2;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem;
+.cube-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; // Video contenido
+}
+
+.cube-front {
+  background-color: #000;
+  transform: rotateY(0deg);
+}
+
+.cube-back {
+  background-color: colors.$BAKANO-PRIMARY; // Color estático post-transición
+  transform: rotateY(180deg);
+}
+
+.cube-abstract-video {
+  position: absolute;
+  inset: -10%; // Sobredimensionado para que la rotación no muestre bordes negros
+  width: 120%;
+  height: 120%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0; // Oculto inicialmente
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+
+.cube-logo {
+  position: relative;
+  z-index: 2;
+  width: 80%;
+  max-width: 250px;
+  will-change: opacity, transform;
+
+  &__svg {
     width: 100%;
+    height: auto;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
   }
+}
+
+// ---------------------------------
+// Capa 3: Contenido Revelado (Horizontal Scroll)
+// ---------------------------------
+.hero-huge__revealed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  color: colors.$white;
+  opacity: 0; // Oculto hasta que el scroll lo revela
+  overflow: hidden; // Prevenir barras de scroll reales
+  display: flex;
+  align-items: center;
+}
+
+// ---------------------------------
+// Fondos Dinámicos Fotográficos
+// ---------------------------------
+.hero-huge__bg-layer {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+
+  .bg-slide {
+    position: absolute;
+    inset: -5%; // Sobredimensionado para el efecto de scale al aparecer
+    background-size: cover;
+    background-position: center;
+    opacity: 0; // Animado por GSAP
+    will-change: opacity, transform;
+  }
+
+  .bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(colors.$BAKANO-DARK, 0.75); // Dark overlay para contraste de texto
+    mix-blend-mode: multiply; // Enriquece los colores del fondo
+  }
+}
+
+.hero-huge__track {
+  display: flex;
+  flex-wrap: nowrap;
+  width: max-content;
+  height: 100vh;
+  align-items: center;
+  padding: 0 10vw; // padding inicial y final para centrado
+  gap: 8vw;
+}
+
+.track-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+// Panel 1: Texto Masivo
+.panel-intro {
+  width: 900px;
+  flex-direction: row;
+  align-items: center;
 
   &__content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: center;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s ease-out;
-
-    &--visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    flex: 1;
   }
 
-  &__text {
-    color: white;
-  }
-
-  &__title {
+  .hero-huge__subtitle {
     @include fonts.heading-font(800);
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 800;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
     line-height: 1.1;
-    margin-bottom: 1.5rem;
-
-    &--highlight {
-      background: linear-gradient(135deg, colors.$BAKANO-PRIMARY, colors.$BAKANO-PURPLE);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      display: block;
-      animation: glow 2s ease-in-out infinite alternate;
-    }
-  }
-
-  &__subtitle {
-    @include fonts.body-font(600);
-    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: rgba(white, 0.95);
+    margin-bottom: 2rem;
+    letter-spacing: -0.02em;
+    color: colors.$white; // Contraste absoluto
 
     strong {
-      color: colors.$BAKANO-PRIMARY;
-      font-weight: 700;
+      color: colors.$BAKANO-PRIMARY; // Un toque de color de marca en el keyword principal
     }
   }
 
-  &__description {
+  .hero-huge__desc {
     @include fonts.body-font(400);
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-    color: rgba(white, 0.8);
-
-    strong {
-      color: white;
-      font-weight: 600;
-    }
+    font-size: clamp(1.2rem, 2vw, 1.6rem);
+    line-height: 1.5;
+    opacity: 0.95;
+    margin-bottom: 3rem;
+    color: rgba(colors.$white, 0.9);
   }
 
-  &__stat {
-    background: rgba(white, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(white, 0.2);
-    border-radius: 16px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    text-align: center;
-    transition: all 0.3s ease;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(colors.$BAKANO-PRIMARY, 0.3);
-    }
-  }
-
-  &__stat-number {
-    @include fonts.heading-font(800);
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: colors.$BAKANO-PRIMARY;
-    display: block;
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  &__stat-label {
-    @include fonts.body-font(400);
-    font-size: 0.9rem;
-    color: rgba(white, 0.7);
-    margin-top: 0.5rem;
-  }
-
-  &__cta {
-    text-align: center;
-  }
-
-  &__cta-note {
-    @include fonts.body-font(400);
-    font-size: 0.9rem;
-    color: rgba(white, 0.7);
-    margin-top: 1rem;
-  }
-
-  &__visual {
-    position: relative;
-  }
-
-  &__image-container {
-    position: relative;
-    height: 500px;
-  }
-
-  &__main-image {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(colors.$BAKANO-PRIMARY, 0.2), rgba(colors.$BAKANO-PURPLE, 0.2));
-    border-radius: 24px;
-    position: relative;
-    overflow: hidden;
-    border: 2px solid rgba(white, 0.1);
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-    }
-  }
-
-  &__image-overlay {
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
-    z-index: 2;
-  }
-
-  &__success-badge {
-    background: rgba(white, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 16px;
-    padding: 1rem 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    animation: slideInRight 0.8s ease-out 0.5s both;
-  }
-
-  &__success-icon {
-    font-size: 1.5rem;
-  }
-
-  &__success-title {
-    @include fonts.heading-font(700);
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: colors.$BAKANO-DARK;
-  }
-
-  &__success-subtitle {
-    @include fonts.body-font(400);
-    font-size: 0.8rem;
-    color: rgba(colors.$BAKANO-DARK, 0.7);
-  }
-
-  &__floating-cards {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-  }
-
-  &__benefit-card {
-    position: absolute;
-    background: rgba(white, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    padding: 1rem;
-    max-width: 200px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    animation: floatIn 0.8s ease-out both;
-
-    &:nth-child(1) {
-      top: 10%;
-      left: -10%;
-    }
-
-    &:nth-child(2) {
-      top: 30%;
-      right: -15%;
-    }
-
-    &:nth-child(3) {
-      bottom: 30%;
-      left: -5%;
-    }
-
-    &:nth-child(4) {
-      bottom: 10%;
-      right: -10%;
-    }
-  }
-
-  &__benefit-icon {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-  }
-
-  &__benefit-title {
-    @include fonts.heading-font(700);
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: colors.$BAKANO-DARK;
-    margin-bottom: 0.25rem;
-  }
-
-  &__benefit-description {
-    @include fonts.body-font(400);
-    font-size: 0.7rem;
-    color: rgba(colors.$BAKANO-DARK, 0.7);
-    line-height: 1.4;
-  }
-
-  &__trust {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin-top: 4rem;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.8s ease-out 0.3s;
-
-    &--visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  &__trust-item {
-    text-align: center;
-    color: white;
-  }
-
-  &__trust-number {
-    @include fonts.heading-font(700);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: colors.$BAKANO-PRIMARY;
-    display: block;
-  }
-
-  &__trust-stars {
-    margin: 0.25rem 0;
-    font-size: 0.9rem;
-  }
-
-  &__trust-label {
-    @include fonts.body-font(400);
-    font-size: 0.8rem;
-    color: rgba(white, 0.7);
+  .hero-huge__cta {
+    margin-top: 2rem;
   }
 }
 
-// Botón principal
-.btn {
+.btn--primary {
   @include fonts.body-font(700);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 2rem;
+  background: colors.$BAKANO-PRIMARY;
+  color: colors.$white;
+  padding: 1.5rem 3rem;
   border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 700;
-  text-decoration: none;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 
-  &--primary {
-    background: linear-gradient(135deg, colors.$BAKANO-PRIMARY, color.adjust(colors.$BAKANO-PRIMARY, $lightness: 10%));
-    color: white;
-    box-shadow: 0 8px 32px rgba(colors.$BAKANO-PRIMARY, 0.3);
+  &:hover {
+    transform: translateY(-4px);
+    background: colors.$BAKANO-PURPLE;
+    box-shadow: 0 20px 40px rgba(colors.$BAKANO-PRIMARY, 0.4);
+  }
+}
+
+.hero-huge__note {
+  @include fonts.body-font(500);
+  font-size: 0.95rem;
+  margin-top: 1.5rem;
+  opacity: 0.7;
+}
+
+// Panel 2: Estadísticas enormes
+.panel-stats {
+  width: 500px;
+  display: flex;
+  justify-content: center;
+}
+
+.huge-stat-card {
+  background: rgba(colors.$white, 0.05);
+  border: 1px solid rgba(colors.$white, 0.1);
+  border-radius: 30px;
+  padding: 5rem 3rem;
+  text-align: center;
+  width: 100%;
+
+  .stat-number {
+    @include fonts.heading-font(800);
+    font-size: clamp(4rem, 8vw, 7rem);
+    color: colors.$white;
+    line-height: 1;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .stat-label {
+    @include fonts.body-font(600);
+    font-size: 1.5rem;
+    color: rgba(colors.$white, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+// Panel 3+: Beneficios masivos
+.panel-benefit {
+  width: 450px;
+
+  .huge-benefit-card {
+    background: transparent;
+    border: 1px solid rgba(colors.$white, 0.2);
+    border-radius: 30px;
+    padding: 4rem 3rem;
+    height: 550px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: background 0.4s ease, border-color 0.4s ease;
 
     &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(colors.$BAKANO-PRIMARY, 0.4);
-      background: linear-gradient(135deg, color.adjust(colors.$BAKANO-PRIMARY, $lightness: 5%), color.adjust(colors.$BAKANO-PRIMARY, $lightness: 15%));
+      background: rgba(colors.$white, 0.05);
+      border-color: colors.$white;
     }
 
-    &:active {
-      transform: translateY(0);
+    .benefit-icon {
+      font-size: 5rem;
+      color: colors.$white; // Contraste total
+      margin-bottom: 2.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover .benefit-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .benefit-title {
+      @include fonts.heading-font(800);
+      font-size: 2.5rem;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      color: colors.$white; // Contraste total
+    }
+
+    .benefit-desc {
+      @include fonts.body-font(400);
+      font-size: 1.25rem;
+      opacity: 0.8;
+      line-height: 1.6;
+      color: rgba(colors.$white, 0.8); // Contraste total
     }
   }
+}
 
-  &__icon {
-    width: 20px;
-    height: 20px;
-    transition: transform 0.3s ease;
-  }
+// ─────────────────────────────────────────────────────────────────────────────
+// INDICADORES DE SCROLL
+// ─────────────────────────────────────────────────────────────────────────────
+.scroll-hint {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+  user-select: none;
+}
 
-  &:hover &__icon {
-    transform: translateX(4px);
+// ── "SCROLL ↓" inicial ────────────────────────────────────────────────────────
+.scroll-hint--down {
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.scroll-hint__mouse {
+  width: 24px;
+  height: 38px;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  padding-top: 7px;
+  animation: mouse-bounce 2s ease-in-out infinite;
+}
+
+.scroll-hint__wheel {
+  width: 3px;
+  height: 7px;
+  background: colors.$BAKANO-PINK;
+  border-radius: 2px;
+  animation: wheel-scroll 2s ease-in-out infinite;
+}
+
+.scroll-hint__label {
+  @include fonts.interface-font(600);
+  font-size: 0.6rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+@keyframes mouse-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(5px); }
+}
+
+@keyframes wheel-scroll {
+  0%   { opacity: 1; transform: translateY(0); }
+  60%  { opacity: 0; transform: translateY(6px); }
+  61%  { opacity: 0; transform: translateY(0); }
+  100% { opacity: 1; }
+}
+
+// ── Indicador horizontal ──────────────────────────────────────────────────────
+.scroll-hint--h {
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: min(400px, 80vw);
+}
+
+.scroll-hint__h-label {
+  @include fonts.interface-font(600);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.62rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+
+  svg {
+    opacity: 0.5;
+    animation: arrow-pulse 1.4s ease-in-out infinite;
+
+    &:last-child { animation-delay: 0.2s; }
   }
 }
 
-// Animaciones
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-
-  50% {
-    transform: translateY(-20px) rotate(5deg);
-  }
+.scroll-hint__bar {
+  width: 100%;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1px;
+  overflow: hidden;
 }
 
-@keyframes glow {
-  0% {
-    text-shadow: 0 0 20px rgba(colors.$BAKANO-PRIMARY, 0.5);
-  }
-
-  100% {
-    text-shadow: 0 0 30px rgba(colors.$BAKANO-PRIMARY, 0.8), 0 0 40px rgba(colors.$BAKANO-PURPLE, 0.3);
-  }
+.scroll-hint__fill {
+  height: 100%;
+  background: linear-gradient(90deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
+  border-radius: 1px;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px rgba(colors.$BAKANO-PINK, 0.6);
 }
 
-@keyframes pulse {
-
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.05);
-  }
+@keyframes arrow-pulse {
+  0%, 100% { opacity: 0.3; transform: translateX(0); }
+  50%       { opacity: 0.8; transform: translateX(3px); }
 }
 
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+// ── Transición de entrada/salida de los hints ─────────────────────────────────
+.hint-enter-active,
+.hint-leave-active {
+  transition: opacity 0.6s ease;
 }
 
-@keyframes floatIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.8);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+.hint-enter-from,
+.hint-leave-to {
+  opacity: 0;
 }
 
 // Responsive
 @media (max-width: 1024px) {
-  .hero {
-    &__content {
-      grid-template-columns: 1fr;
-      gap: 3rem;
-      text-align: center;
-    }
+  .hero-huge__track {
+    gap: 6vw;
+  }
 
-    &__trust {
-      gap: 2rem;
-    }
+  .panel-intro {
+    width: 600px;
+  }
+
+  .panel-stats {
+    width: 400px;
+  }
+
+  .panel-benefit {
+    width: 400px;
   }
 }
 
 @media (max-width: 768px) {
-  .hero {
-    min-height: 90vh;
-
-    &__container {
-      padding: 1rem;
-    }
-
-    &__content {
-      gap: 2rem;
-    }
-
-    &__image-container {
-      height: 300px;
-    }
-
-    &__benefit-card {
-      display: none; // Ocultar en móvil para mejor rendimiento
-    }
-
-    &__trust {
-      flex-direction: column;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-
-    &__trust-item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-    }
-
-    &__trust-number {
-      font-size: 1.2rem;
-    }
-
-    &__trust-label {
-      font-size: 0.9rem;
-    }
+  .hero-huge__track {
+    gap: 15vw;
+    padding: 0 5vw;
   }
 
-  .btn {
-    padding: 0.875rem 1.5rem;
-    font-size: 0.9rem;
+  .panel-intro {
+    width: 85vw;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .panel-stats {
+    width: 85vw;
+  }
+
+  .panel-benefit {
+    width: 85vw;
+  }
+
+  .btn--primary {
+    padding: 1rem 2rem;
+    font-size: 1rem;
   }
 }
 
-@media (max-width: 480px) {
-  .hero {
-    &__stat {
-      padding: 1rem;
-    }
-
-    &__stat-number {
-      font-size: 2rem;
-    }
-
-    &__image-container {
-      height: 250px;
-    }
+@media (max-width: 600px) {
+  .hero-huge__cube {
+    width: 60vw;
+    height: 60vw;
   }
 }
 </style>
