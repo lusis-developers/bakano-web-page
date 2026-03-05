@@ -8,9 +8,9 @@ gsap.registerPlugin(ScrollTrigger)
 const sectionRef = ref<HTMLElement | null>(null)
 let ctx: gsap.Context
 
-// Función para abrir WhatsApp
-const openWhatsApp = () => {
-  window.open('https://wa.me/593984934039', '_blank', 'noopener,noreferrer')
+const scrollToContact = () => {
+  const el = document.getElementById('contacto')
+  if (el) el.scrollIntoView({ behavior: 'smooth' })
 }
 
 onMounted(() => {
@@ -110,7 +110,7 @@ onUnmounted(() => {
         </p>
         
         <div class="strategies__header-cta">
-          <button class="btn-header-contact" @click="openWhatsApp">
+          <button class="btn-header-contact" @click="scrollToContact">
             <span>HABLAR CON UN ESTRATEGA</span>
             <i class="fa-solid fa-rocket"></i>
           </button>
@@ -171,7 +171,7 @@ onUnmounted(() => {
             <h3 class="cta-banner__title">¿Listo para escalar al siguiente nivel?</h3>
             <p class="cta-banner__desc">Implementa el marco de trabajo Lean Startup en tu empresa hoy mismo.</p>
           </div>
-          <button class="btn-primary-massive" @click="openWhatsApp">
+          <button class="btn-primary-massive" @click="scrollToContact">
             <span>IMPLEMENTAR SISTEMA</span>
             <i class="fa-solid fa-arrow-right"></i>
           </button>
