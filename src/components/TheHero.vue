@@ -3,7 +3,8 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import heroVideo from '@/assets/hero/IMG_8601.MOV'
-import heroImage from '@/assets/hero/IMG_8906.JPG'
+import bgFoto1 from '@/assets/hero/fotos/IMG_8906.JPG'
+import bgFoto2 from '@/assets/hero/fotos/IMG_8099.JPG'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -12,6 +13,8 @@ const revealShape = ref<HTMLElement | null>(null)
 const revealContent = ref<HTMLElement | null>(null)
 const horizontalTrack = ref<HTMLElement | null>(null)
 const hiddenVideo = ref<HTMLElement | null>(null)
+const bgSlide1 = ref<HTMLElement | null>(null)
+const bgSlide2 = ref<HTMLElement | null>(null)
 
 // Animaciones y estado reactivo
 const currentStat = ref(0)
@@ -108,7 +111,6 @@ onMounted(() => {
     }, 1) // Inicia justo cuando el cubo es lo suficientemente grande
 
     // Fase 4: Scroll horizontal del track de beneficios
-    // Mover horizontalmente según el ancho total de sus elementos hijos
     const getTrackWidth = () => horizontalTrack.value!.scrollWidth - window.innerWidth + (window.innerWidth * 0.2); // Padding extra compesation
 
     tl.to(horizontalTrack.value, {
@@ -116,6 +118,14 @@ onMounted(() => {
       ease: 'none',
       duration: 2.5
     }, 2)
+
+    // Fase 5: Transición de Fondos Fotográficos
+    // El primer fondo aparece justo cuando revelamos el contenido (después del portal)
+    tl.fromTo(bgSlide1.value, { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: 1, ease: 'power2.out' }, 1.5)
+
+    // A la mitad del scroll horizontal, se cruzan las opacidades hacia la foto 2
+    tl.to(bgSlide1.value, { opacity: 0, duration: 0.8 }, 3)
+    tl.fromTo(bgSlide2.value, { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: 1 }, 3)
 
   }, heroContainer.value)
 })
@@ -156,9 +166,16 @@ const openWhatsApp = () => {
 
     <!-- Capa 3: El contenido revelado (Horizontal Track) -->
     <div class="hero-huge__revealed" ref="revealContent">
+      <!-- Sistema de Fondos Dinámicos Fotográficos -->
+      <div class="hero-huge__bg-layer">
+        <div class="bg-slide" ref="bgSlide1" :style="{ backgroundImage: `url(${bgFoto1})` }"></div>
+        <div class="bg-slide" ref="bgSlide2" :style="{ backgroundImage: `url(${bgFoto2})` }"></div>
+        <div class="bg-overlay"></div>
+      </div>
+
       <div class="hero-huge__track" ref="horizontalTrack">
         
-        <!-- Panel 1: Texto Masivo y Fotografía Humanizada -->
+        <!-- Panel 1: Texto Masivo -->
         <div class="track-panel panel-intro">
           <div class="panel-intro__content">
             <p class="hero-huge__subtitle">
@@ -175,10 +192,6 @@ const openWhatsApp = () => {
                 <span>ESCALA MI NEGOCIO AHORA</span>
               </button>
             </div>
-          </div>
-          
-          <div class="panel-intro__image">
-            <img :src="heroImage" alt="Equipo Bakano humanizado" class="human-image" />
           </div>
         </div>
 
@@ -333,6 +346,32 @@ const openWhatsApp = () => {
   align-items: center;
 }
 
+// ---------------------------------
+// Fondos Dinámicos Fotográficos
+// ---------------------------------
+.hero-huge__bg-layer {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+
+  .bg-slide {
+    position: absolute;
+    inset: -5%; // Sobredimensionado para el efecto de scale al aparecer
+    background-size: cover;
+    background-position: center;
+    opacity: 0; // Animado por GSAP
+    will-change: opacity, transform;
+  }
+
+  .bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(colors.$BAKANO-DARK, 0.75); // Dark overlay para contraste de texto
+    mix-blend-mode: multiply; // Enriquece los colores del fondo
+  }
+}
+
 .hero-huge__track {
   display: flex;
   flex-wrap: nowrap;
@@ -350,29 +389,14 @@ const openWhatsApp = () => {
   height: 100%;
 }
 
-// Panel 1: Texto Masivo y Foto
+// Panel 1: Texto Masivo
 .panel-intro {
-  width: 1200px;
+  width: 900px;
   flex-direction: row;
   align-items: center;
-  gap: 4rem;
 
   &__content {
     flex: 1;
-  }
-
-  &__image {
-    flex: 1;
-    height: 60vh;
-    border-radius: 30px;
-    overflow: hidden;
-
-    .human-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: grayscale(20%) contrast(1.1);
-    }
   }
 
   .hero-huge__subtitle {
@@ -384,7 +408,7 @@ const openWhatsApp = () => {
     color: colors.$white; // Contraste absoluto
 
     strong {
-      color: colors.$white;
+      color: colors.$BAKANO-PRIMARY; // Un toque de color de marca en el keyword principal
     }
   }
 
@@ -392,9 +416,9 @@ const openWhatsApp = () => {
     @include fonts.body-font(400);
     font-size: clamp(1.2rem, 2vw, 1.6rem);
     line-height: 1.5;
-    opacity: 0.9;
+    opacity: 0.95;
     margin-bottom: 3rem;
-    color: rgba(colors.$white, 0.8);
+    color: rgba(colors.$white, 0.9);
   }
 
   .hero-huge__cta {
@@ -517,11 +541,7 @@ const openWhatsApp = () => {
   }
 
   .panel-intro {
-    width: 900px;
-
-    &__image {
-      height: 40vh;
-    }
+    width: 600px;
   }
 
   .panel-stats {
@@ -543,11 +563,6 @@ const openWhatsApp = () => {
     width: 85vw;
     flex-direction: column;
     gap: 2rem;
-
-    &__image {
-      height: 30vh;
-      width: 100%;
-    }
   }
 
   .panel-stats {
