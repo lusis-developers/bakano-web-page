@@ -103,11 +103,13 @@ onMounted(() => {
         0,
       )
 
-      // 2 ─ Título: parte centrado (y ≈ 40 vh) y sube al top (y = 0)
-      //    Ocupa los primeros 40 % del recorrido de scroll
+      // 2 ─ Título: parte centrado en pantalla (y ≈ 20 vh bajo su posición
+      //    natural en el layout centrado) y sube a su lugar (y = 0).
+      //    Con justify-content:center en __ui, y=0 es el top del bloque
+      //    completo (header + gap + grid) perfectamente centrado en el viewport.
       tl.fromTo(
         header,
-        { y: '40vh' },
+        { y: '20vh' },
         { y: 0, ease: 'power2.out', duration: 0.4 },
         0,
       )
@@ -243,12 +245,14 @@ const openVideo = (url: string) => window.open(url, '_blank')
     display: flex;
     flex-direction: column;
     align-items: center;
-    // El padding-top da el "tope" donde el título se detiene al subir
-    padding: 56px 24px 32px;
+    // justify-content:center mantiene el bloque título+grid centrado
+    // verticalmente, evitando el espacio vacío en la mitad inferior.
+    justify-content: center;
+    padding: 24px 24px;
     gap: 44px;
 
     @media (max-width: 768px) {
-      padding: 48px 16px 24px;
+      padding: 20px 16px;
       gap: 32px;
     }
   }

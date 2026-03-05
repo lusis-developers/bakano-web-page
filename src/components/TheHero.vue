@@ -3,7 +3,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import heroVideo from '@/assets/hero/IMG_8601.MOV'
-import bgFoto1 from '@/assets/hero/fotos/IMG_8906.JPG'
+import bgFoto1 from '@/assets/hero/fotos/IMG_7973.JPG'
 import bgFoto2 from '@/assets/hero/fotos/IMG_8099.JPG'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -18,6 +18,11 @@ const bgSlide2 = ref<HTMLElement | null>(null)
 
 // Animaciones y estado reactivo
 const currentStat = ref(0)
+
+// ── Indicadores de scroll ───────────────────────────────────────────────────
+const showScrollDown   = ref(true)   // flecha inicial "scroll"
+const showHorizontal   = ref(false)  // barra + hint horizontal
+const hProgress        = ref(0)      // 0–1 progreso del track horizontal
 
 // Estadísticas que rotan
 const stats = [
@@ -70,7 +75,16 @@ onMounted(() => {
         end: '+=400%', // Scroll extendido
         scrub: 1.5, // Suavidad del scroll
         pin: true,
-        anticipatePin: 1
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          const p = self.progress
+          // "SCROLL ↓" solo visible antes de empezar
+          showScrollDown.value = p < 0.03
+          // Indicador horizontal: aparece cuando el track empieza a moverse (~44%)
+          showHorizontal.value  = p >= 0.44 && p < 0.99
+          // Progreso dentro del rango horizontal (0 → 1)
+          hProgress.value = Math.max(0, Math.min(1, (p - 0.44) / 0.52))
+        }
       }
     })
 
@@ -214,6 +228,42 @@ const openWhatsApp = () => {
 
       </div>
     </div>
+    <!-- ══════════════════════════════════════════
+         INDICADOR INICIAL — "scroll para empezar"
+         Se muestra solo cuando progress < 3 %
+         ══════════════════════════════════════════ -->
+    <Transition name="hint">
+      <div v-if="showScrollDown" class="scroll-hint scroll-hint--down" aria-hidden="true">
+        <div class="scroll-hint__mouse">
+          <div class="scroll-hint__wheel" />
+        </div>
+        <span class="scroll-hint__label">SCROLL</span>
+      </div>
+    </Transition>
+
+    <!-- ══════════════════════════════════════════
+         INDICADOR HORIZONTAL — barra de progreso
+         + flechas mientras el track se mueve
+         ══════════════════════════════════════════ -->
+    <Transition name="hint">
+      <div v-if="showHorizontal" class="scroll-hint scroll-hint--h" aria-hidden="true">
+        <!-- Label + flecha -->
+        <div class="scroll-hint__h-label">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+          <span>DESLIZA</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </div>
+        <!-- Barra de progreso -->
+        <div class="scroll-hint__bar">
+          <div class="scroll-hint__fill" :style="{ width: `${hProgress * 100}%` }" />
+        </div>
+      </div>
+    </Transition>
+
   </section>
 </template>
 
@@ -532,6 +582,128 @@ const openWhatsApp = () => {
       color: rgba(colors.$white, 0.8); // Contraste total
     }
   }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INDICADORES DE SCROLL
+// ─────────────────────────────────────────────────────────────────────────────
+.scroll-hint {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+  user-select: none;
+}
+
+// ── "SCROLL ↓" inicial ────────────────────────────────────────────────────────
+.scroll-hint--down {
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.scroll-hint__mouse {
+  width: 24px;
+  height: 38px;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  padding-top: 7px;
+  animation: mouse-bounce 2s ease-in-out infinite;
+}
+
+.scroll-hint__wheel {
+  width: 3px;
+  height: 7px;
+  background: colors.$BAKANO-PINK;
+  border-radius: 2px;
+  animation: wheel-scroll 2s ease-in-out infinite;
+}
+
+.scroll-hint__label {
+  @include fonts.interface-font(600);
+  font-size: 0.6rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+@keyframes mouse-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(5px); }
+}
+
+@keyframes wheel-scroll {
+  0%   { opacity: 1; transform: translateY(0); }
+  60%  { opacity: 0; transform: translateY(6px); }
+  61%  { opacity: 0; transform: translateY(0); }
+  100% { opacity: 1; }
+}
+
+// ── Indicador horizontal ──────────────────────────────────────────────────────
+.scroll-hint--h {
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: min(400px, 80vw);
+}
+
+.scroll-hint__h-label {
+  @include fonts.interface-font(600);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.62rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+
+  svg {
+    opacity: 0.5;
+    animation: arrow-pulse 1.4s ease-in-out infinite;
+
+    &:last-child { animation-delay: 0.2s; }
+  }
+}
+
+.scroll-hint__bar {
+  width: 100%;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.scroll-hint__fill {
+  height: 100%;
+  background: linear-gradient(90deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
+  border-radius: 1px;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px rgba(colors.$BAKANO-PINK, 0.6);
+}
+
+@keyframes arrow-pulse {
+  0%, 100% { opacity: 0.3; transform: translateX(0); }
+  50%       { opacity: 0.8; transform: translateX(3px); }
+}
+
+// ── Transición de entrada/salida de los hints ─────────────────────────────────
+.hint-enter-active,
+.hint-leave-active {
+  transition: opacity 0.6s ease;
+}
+
+.hint-enter-from,
+.hint-leave-to {
+  opacity: 0;
 }
 
 // Responsive

@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import Header from './components/globals/TheHeader.vue'
 import Footer from './components/globals/TheFooter.vue'
 import TheGlobalLoader from './components/globals/TheGlobalLoader.vue'
+import TheScrollGuide from './components/globals/TheScrollGuide.vue'
 
 const isLoaded = ref(false)
 
@@ -26,6 +27,9 @@ onMounted(() => {
     </main>
     <Footer />
   </div>
+
+  <!-- Indicadores globales de scroll (dots + flecha) -->
+  <TheScrollGuide />
 </template>
 
 <style lang="scss">
