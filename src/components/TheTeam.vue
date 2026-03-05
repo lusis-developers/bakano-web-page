@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 // Importar imágenes del equipo
 import luisImage from '@/assets/team/luis.webp'
@@ -35,12 +35,45 @@ const teamMembers = ref([
 ])
 
 // Animaciones de entrada
-const isVisible = ref(false)
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
+const sectionRef = ref<HTMLElement | null>(null)
+let ctx: gsap.Context
 
 onMounted(() => {
-  setTimeout(() => {
-    isVisible.value = true
-  }, 100)
+  if (!sectionRef.value) return
+
+  ctx = gsap.context(() => {
+    gsap.from('.team__header', {
+      scrollTrigger: {
+        trigger: sectionRef.value,
+        start: 'top 80%'
+      },
+      y: 50,
+      opacity: 0,
+      duration: 1,
+      ease: 'power3.out'
+    })
+
+    gsap.from('.team__card', {
+      scrollTrigger: {
+        trigger: '.team__grid',
+        start: 'top 85%'
+      },
+      y: 80,
+      opacity: 0,
+      duration: 1.2,
+      stagger: 0.2,
+      ease: 'power3.out'
+    })
+  }, sectionRef.value)
+})
+
+onUnmounted(() => {
+  ctx?.revert()
 })
 
 // Función para abrir LinkedIn
@@ -50,7 +83,7 @@ const openLinkedIn = (url: string) => {
 </script>
 
 <template>
-  <section class="team" :class="{ 'team--visible': isVisible }">
+  <section class="team" ref="sectionRef">
     <div class="team__container">
       <!-- Header de la sección -->
       <div class="team__header">
@@ -107,15 +140,13 @@ const openLinkedIn = (url: string) => {
 
 .team {
   padding: 120px 0;
-  background: linear-gradient(
-    135deg,
-    colors.$BAKANO-DARK 0%,
-    colors.$gray-900 50%,
-    colors.$BAKANO-DARK 100%
-  );
+  background: linear-gradient(135deg,
+      colors.$BAKANO-DARK 0%,
+      colors.$gray-900 50%,
+      colors.$BAKANO-DARK 100%);
   position: relative;
   overflow: hidden;
-  
+
   // Efectos de fondo
   &::before {
     content: '';
@@ -124,15 +155,13 @@ const openLinkedIn = (url: string) => {
     left: -10%;
     width: 300px;
     height: 300px;
-    background: radial-gradient(
-      circle,
-      rgba(colors.$BAKANO-PINK, 0.15) 0%,
-      transparent 70%
-    );
+    background: radial-gradient(circle,
+        rgba(colors.$BAKANO-PINK, 0.15) 0%,
+        transparent 70%);
     border-radius: 50%;
     filter: blur(60px);
   }
-  
+
   &::after {
     content: '';
     position: absolute;
@@ -140,11 +169,9 @@ const openLinkedIn = (url: string) => {
     right: -10%;
     width: 400px;
     height: 400px;
-    background: radial-gradient(
-      circle,
-      rgba(colors.$BAKANO-PURPLE, 0.12) 0%,
-      transparent 70%
-    );
+    background: radial-gradient(circle,
+        rgba(colors.$BAKANO-PURPLE, 0.12) 0%,
+        transparent 70%);
     border-radius: 50%;
     filter: blur(80px);
   }
@@ -160,9 +187,6 @@ const openLinkedIn = (url: string) => {
   &__header {
     text-align: center;
     margin-bottom: 80px;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s ease;
   }
 
   &__subtitle {
@@ -175,7 +199,7 @@ const openLinkedIn = (url: string) => {
     color: colors.$BAKANO-PINK;
     margin-bottom: 16px;
     position: relative;
-    
+
     &::after {
       content: '';
       position: absolute;
@@ -184,29 +208,28 @@ const openLinkedIn = (url: string) => {
       transform: translateX(-50%);
       width: 40px;
       height: 2px;
-      background: linear-gradient(
-        90deg,
-        colors.$BAKANO-PINK,
-        colors.$BAKANO-PURPLE
-      );
+      background: linear-gradient(90deg,
+          colors.$BAKANO-PINK,
+          colors.$BAKANO-PURPLE );
       border-radius: 1px;
     }
   }
 
   &__title {
     font-family: fonts.$font-principal;
-    font-size: clamp(32px, 5vw, 48px);
-    font-weight: 700;
-    line-height: 1.2;
+    font-size: clamp(3rem, 7vw, 6rem);
+    /* Huge Inc Style Size */
+    font-weight: 800;
+    line-height: 1.05;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
     color: colors.$white;
     margin-bottom: 24px;
-    
+
     &-highlight {
-      background: linear-gradient(
-        135deg,
-        colors.$BAKANO-PINK,
-        colors.$BAKANO-PURPLE
-      );
+      background: linear-gradient(135deg,
+          colors.$BAKANO-PINK,
+          colors.$BAKANO-PURPLE );
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -226,7 +249,7 @@ const openLinkedIn = (url: string) => {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 40px;
-    
+
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
       gap: 32px;
@@ -242,12 +265,9 @@ const openLinkedIn = (url: string) => {
     cursor: pointer;
     transition: all 0.4s ease;
     backdrop-filter: blur(10px);
-    opacity: 0;
-    transform: translateY(40px);
-    animation-delay: var(--delay);
     position: relative;
     overflow: hidden;
-    
+
     &::before {
       content: '';
       position: absolute;
@@ -255,31 +275,29 @@ const openLinkedIn = (url: string) => {
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(
-        135deg,
-        rgba(colors.$BAKANO-PINK, 0.1) 0%,
-        rgba(colors.$BAKANO-PURPLE, 0.05) 100%
-      );
+      background: linear-gradient(135deg,
+          rgba(colors.$BAKANO-PINK, 0.1) 0%,
+          rgba(colors.$BAKANO-PURPLE, 0.05) 100%);
       opacity: 0;
       transition: opacity 0.3s ease;
       border-radius: 24px;
     }
-    
+
     &:hover {
       transform: translateY(-8px);
       border-color: rgba(colors.$BAKANO-PINK, 0.3);
-      box-shadow: 
+      box-shadow:
         0 20px 40px rgba(colors.$BAKANO-DARK, 0.3),
         0 0 0 1px rgba(colors.$BAKANO-PINK, 0.2);
-      
+
       &::before {
         opacity: 1;
       }
-      
+
       .team__card-overlay {
         opacity: 1;
       }
-      
+
       .team__image {
         transform: scale(1.05);
       }
@@ -322,7 +340,7 @@ const openLinkedIn = (url: string) => {
   &__linkedin-icon {
     color: colors.$white;
     margin-bottom: 8px;
-    
+
     svg {
       width: 24px;
       height: 24px;
@@ -368,18 +386,6 @@ const openLinkedIn = (url: string) => {
   }
 
   // Animaciones de entrada
-  &--visible {
-    .team__header {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    
-    .team__card {
-      opacity: 1;
-      transform: translateY(0);
-      animation: slideInUp 0.8s ease forwards;
-    }
-  }
 }
 
 @keyframes slideInUp {
@@ -387,6 +393,7 @@ const openLinkedIn = (url: string) => {
     opacity: 0;
     transform: translateY(40px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -397,28 +404,28 @@ const openLinkedIn = (url: string) => {
 @media (max-width: 768px) {
   .team {
     padding: 80px 0;
-    
+
     &__container {
       padding: 0 16px;
     }
-    
+
     &__header {
       margin-bottom: 60px;
     }
-    
+
     &__card {
       padding: 24px;
     }
-    
+
     &__card-image {
       width: 100px;
       height: 100px;
     }
-    
+
     &__member-name {
       font-size: 20px;
     }
-    
+
     &__member-role {
       font-size: 14px;
     }
