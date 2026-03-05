@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useContactModal } from '@/composables/useContactModal'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 const heroVideo = 'https://res.cloudinary.com/dpimsaaa4/video/upload/v1772741967/IMG_8601_y5tgbu.mov'
@@ -148,9 +149,7 @@ onUnmounted(() => {
   ctx?.revert()
 })
 
-const openWhatsApp = () => {
-  window.open('https://wa.me/593984934039', '_blank', 'noopener,noreferrer')
-}
+const { open: openContactModal } = useContactModal()
 </script>
 
 <template>
@@ -202,7 +201,7 @@ const openWhatsApp = () => {
             </p>
 
             <div class="hero-huge__cta">
-              <button class="btn btn--primary" @click="openWhatsApp">
+              <button class="btn btn--primary" @click="openContactModal">
                 <span>ESCALA MI NEGOCIO AHORA</span>
               </button>
             </div>

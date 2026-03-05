@@ -3,6 +3,7 @@ import TheHero from '@/components/TheHero.vue'
 import TheStrategies from '@/components/TheStrategies.vue'
 import TheTestimonials from '@/components/TheTestimonials.vue'
 import TheTeam from '@/components/TheTeam.vue'
+import TheContact from '@/components/TheContact.vue'
 </script>
 
 <template>
@@ -19,6 +20,7 @@ import TheTeam from '@/components/TheTeam.vue'
     <section id="nosotros">
       <TheTeam />
     </section>
+    <TheContact />
   </main>
 </template>
 

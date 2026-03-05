@@ -133,7 +133,7 @@ onUnmounted(() => {
         </ul>
 
         <!-- ── CTA desktop ───────────────────────────── -->
-        <button class="nav__cta" @click="openWhatsApp" aria-label="Contáctanos por WhatsApp">
+        <button class="nav__cta" @click="scrollToSection('contacto')" aria-label="Ir al formulario de contacto">
           <span>Contáctanos</span>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
             <path d="M5 12h14M12 5l7 7-7 7"/>

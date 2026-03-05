@@ -10,6 +10,7 @@ const sections = [
   { id: 'servicios',   label: 'Servicios' },
   { id: 'testimonios', label: 'Testimonios' },
   { id: 'nosotros',    label: 'Equipo' },
+  { id: 'contacto',    label: 'Contacto' },
 ]
 
 // Flecha: oculta en el primer tramo (el hero ya tiene la suya)
