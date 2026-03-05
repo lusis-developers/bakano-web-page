@@ -14,7 +14,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 // ── Refs del DOM ────────────────────────────────────────────────────────────
 const sectionRef = ref<HTMLElement | null>(null)
-const videoRef  = ref<HTMLVideoElement | null>(null)
+const videoRef = ref<HTMLVideoElement | null>(null)
 const headerRef = ref<HTMLElement | null>(null)
 
 // Refs individuales de cada wrapper de tarjeta (para stagger de GSAP)
@@ -52,7 +52,7 @@ const testimonials = [
 let ctx: gsap.Context | null = null
 
 onMounted(() => {
-  const video   = videoRef.value
+  const video = videoRef.value
   const section = sectionRef.value
   if (!video || !section) return
 
@@ -80,7 +80,7 @@ onMounted(() => {
           scrollTrigger: {
             trigger: section,
             start: 'top top',
-            end:   'bottom bottom',
+            end: 'bottom bottom',
             scrub: 1,
             invalidateOnRefresh: true,
           },
@@ -94,7 +94,7 @@ onMounted(() => {
           scrollTrigger: {
             trigger: section,
             start: 'top top',
-            end:   'bottom bottom',
+            end: 'bottom bottom',
             scrub: 1,
           },
         })
@@ -174,7 +174,7 @@ const openVideo = (url: string) => window.open(url, '_blank')
         <header class="testimonials__header" ref="headerRef">
           <p class="testimonials__label">Testimonios</p>
           <h2 class="testimonials__title">
-            Lo que dicen<br>nuestros clientes
+            Lo que dicen <br>nuestros clientes
           </h2>
         </header>
 
@@ -237,11 +237,9 @@ const openVideo = (url: string) => window.open(url, '_blank')
     inset: 0;
     z-index: 1;
     pointer-events: none;
-    background: linear-gradient(
-      175deg,
-      rgba(colors.$BAKANO-DARK, 0.15) 0%,
-      rgba(#000, 0.78) 100%
-    );
+    background: linear-gradient(175deg,
+        rgba(colors.$BAKANO-DARK, 0.15) 0%,
+        rgba(#000, 0.78) 100%);
   }
 
   // ── Capa de UI (título + cards) ────────────────────────────────
@@ -299,7 +297,9 @@ const openVideo = (url: string) => window.open(url, '_blank')
     @media (max-width: 768px) {
       font-size: clamp(2rem, 8vw, 3rem);
 
-      br { display: none; }
+      br {
+        display: none;
+      }
     }
   }
 
@@ -333,7 +333,7 @@ const openVideo = (url: string) => window.open(url, '_blank')
 // ─────────────────────────────────────────────────────────────────
 @media (max-width: 768px) {
   .testimonials {
-    height: 350vh;  // Suficiente para 3 tarjetas con buen ritmo de scroll
+    height: 350vh; // Suficiente para 3 tarjetas con buen ritmo de scroll
   }
 
   // El sticky se mantiene: position:sticky + height:100vh siguen activos.
@@ -345,7 +345,7 @@ const openVideo = (url: string) => window.open(url, '_blank')
   // UI: header arriba, tarjetas debajo (sin centering vertical del desktop)
   .testimonials__ui {
     justify-content: flex-start;
-    padding: 72px 0 24px;   // 72 px = espacio para la nav de la app
+    padding: 72px 0 24px; // 72 px = espacio para la nav de la app
     gap: 28px;
   }
 
@@ -353,7 +353,7 @@ const openVideo = (url: string) => window.open(url, '_blank')
   .testimonials__grid {
     display: flex;
     flex-wrap: nowrap;
-    width: max-content;     // Se expande para contener las 3 tarjetas
+    width: max-content; // Se expande para contener las 3 tarjetas
     gap: 16px;
     padding: 0 24px;
     max-width: none;

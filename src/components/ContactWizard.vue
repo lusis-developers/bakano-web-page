@@ -10,14 +10,14 @@ defineEmits<{ close: [] }>()
 // ── Países ───────────────────────────────────────────────────────────────────
 const COUNTRIES = [
   { dial: '+593', label: '🇪🇨 +593 Ecuador' },
-  { dial: '+57',  label: '🇨🇴 +57  Colombia' },
-  { dial: '+51',  label: '🇵🇪 +51  Perú' },
-  { dial: '+52',  label: '🇲🇽 +52  México' },
-  { dial: '+1',   label: '🇺🇸 +1   EE. UU.' },
-  { dial: '+34',  label: '🇪🇸 +34  España' },
-  { dial: '+54',  label: '🇦🇷 +54  Argentina' },
-  { dial: '+56',  label: '🇨🇱 +56  Chile' },
-  { dial: '+58',  label: '🇻🇪 +58  Venezuela' },
+  { dial: '+57', label: '🇨🇴 +57  Colombia' },
+  { dial: '+51', label: '🇵🇪 +51  Perú' },
+  { dial: '+52', label: '🇲🇽 +52  México' },
+  { dial: '+1', label: '🇺🇸 +1   EE. UU.' },
+  { dial: '+34', label: '🇪🇸 +34  España' },
+  { dial: '+54', label: '🇦🇷 +54  Argentina' },
+  { dial: '+56', label: '🇨🇱 +56  Chile' },
+  { dial: '+58', label: '🇻🇪 +58  Venezuela' },
   { dial: '+507', label: '🇵🇦 +507 Panamá' },
   { dial: '+502', label: '🇬🇹 +502 Guatemala' },
   { dial: '+506', label: '🇨🇷 +506 Costa Rica' },
@@ -32,36 +32,36 @@ function detectDial(): string {
   const lang = navigator.language || ''
   const map: Record<string, string> = {
     'es-EC': '+593', 'es-CO': '+57', 'es-PE': '+51',
-    'es-MX': '+52',  'es-AR': '+54', 'es-CL': '+56',
-    'es-ES': '+34',  'en-US': '+1',  'es-VE': '+58',
+    'es-MX': '+52', 'es-AR': '+54', 'es-CL': '+56',
+    'es-ES': '+34', 'en-US': '+1', 'es-VE': '+58',
     'es-PA': '+507',
   }
   return map[lang] ?? '+593'
 }
 
 // ── Estado ───────────────────────────────────────────────────────────────────
-const step    = ref<1 | 2 | 'ok'>(1)
+const step = ref<1 | 2 | 'ok'>(1)
 const loading = ref(false)
-const errMsg  = ref('')
-const dir     = ref<'fwd' | 'back'>('fwd')
+const errMsg = ref('')
+const dir = ref<'fwd' | 'back'>('fwd')
 
 // Step 1
 const s1 = ref({
   firstName: '',
-  lastName:  '',
-  email:     '',
-  dial:      detectDial(),
-  phone:     '',
-  company:   '',
+  lastName: '',
+  email: '',
+  dial: detectDial(),
+  phone: '',
+  company: '',
 })
 
 // Step 2
 const s2 = ref({
-  revenue:   '',
-  location:  '',
+  revenue: '',
+  location: '',
   objective: '',
-  urgency:   '' as '' | 'immediate' | 'next-month' | 'just-looking',
-  message:   '',
+  urgency: '' as '' | 'immediate' | 'next-month' | 'just-looking',
+  message: '',
 })
 
 // ── Validación ───────────────────────────────────────────────────────────────
@@ -69,10 +69,10 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const s1Valid = computed(() =>
   s1.value.firstName.trim().length >= 2 &&
-  s1.value.lastName.trim().length  >= 2 &&
+  s1.value.lastName.trim().length >= 2 &&
   emailRegex.test(s1.value.email.trim()) &&
   s1.value.phone.replace(/\D/g, '').length >= 7 &&
-  s1.value.company.trim().length   >= 2
+  s1.value.company.trim().length >= 2
 )
 
 const s2Valid = computed(() =>
@@ -82,8 +82,8 @@ const s2Valid = computed(() =>
 
 // ── Mapas legibles para notas ─────────────────────────────────────────────────
 const URGENCY_LABEL: Record<string, string> = {
-  'immediate':    'Necesita ayuda inmediata (menos de 24 h)',
-  'next-month':   'Lo necesita en el próximo mes',
+  'immediate': 'Necesita ayuda inmediata (menos de 24 h)',
+  'next-month': 'Lo necesita en el próximo mes',
   'just-looking': 'Solo explorando, sin urgencia',
 }
 
@@ -109,7 +109,7 @@ function calcTags(): string[] {
   // Los 3 criterios deben cumplirse para cualificar
   const qualifies =
     (s2.value.revenue === 'Entre $10,000 y $25,000 USD' || s2.value.revenue === 'Más de $25,000 USD') &&
-    s2.value.location  === 'Guayaquil / Samborondón' &&
+    s2.value.location === 'Guayaquil / Samborondón' &&
     s2.value.objective !== 'Aumentar seguidores, likes y hacerme viral con tendencias.'
 
   return [
@@ -122,23 +122,23 @@ function calcTags(): string[] {
 async function submitS1() {
   if (!s1Valid.value || loading.value) return
   loading.value = true
-  errMsg.value  = ''
+  errMsg.value = ''
   try {
     const phone = `${s1.value.dial}${s1.value.phone.replace(/\D/g, '')}`
     await fetch(WH_CONTACT, {
-      method:  'POST',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        firstName:   s1.value.firstName.trim(),
-        lastName:    s1.value.lastName.trim(),
-        email:       s1.value.email.trim(),
+        firstName: s1.value.firstName.trim(),
+        lastName: s1.value.lastName.trim(),
+        email: s1.value.email.trim(),
         phone,
         companyName: s1.value.company.trim(),
-        source:      'bakano-web',
-        tags:        ['web-lead'],
+        source: 'bakano-web',
+        tags: ['web-lead'],
       }),
     })
-    dir.value  = 'fwd'
+    dir.value = 'fwd'
     step.value = 2
   } catch {
     errMsg.value = 'Algo salió mal. Por favor intenta de nuevo.'
@@ -150,29 +150,29 @@ async function submitS1() {
 async function submitS2() {
   if (!s2Valid.value || loading.value) return
   loading.value = true
-  errMsg.value  = ''
+  errMsg.value = ''
   try {
-    const tags  = calcTags()
+    const tags = calcTags()
     const phone = `${s1.value.dial}${s1.value.phone.replace(/\D/g, '')}`
     const notes = buildNotes()
     if (WH_QUALIFY) {
       await fetch(WH_QUALIFY, {
-        method:  'POST',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           // Datos de contacto (Step 1)
-          firstName:   s1.value.firstName.trim(),
-          lastName:    s1.value.lastName.trim(),
-          email:       s1.value.email.trim(),
+          firstName: s1.value.firstName.trim(),
+          lastName: s1.value.lastName.trim(),
+          email: s1.value.email.trim(),
           phone,
           companyName: s1.value.company.trim(),
-          source:      'bakano-web',
+          source: 'bakano-web',
           // Datos de cualificación (Step 2) — keys = texto exacto de la pregunta en GHL
-          '1. ¿Cuál es el rango de facturación mensual actual de tu negocio?':                  s2.value.revenue,
+          '1. ¿Cuál es el rango de facturación mensual actual de tu negocio?': s2.value.revenue,
           '2. ¿Dónde se encuentra ubicado tu establecimiento o base de operaciones principal?': s2.value.location,
-          '3. ¿Cuál es tu objetivo principal al invertir en marketing este año?':               s2.value.objective,
-          urgency:  s2.value.urgency,
-          message:  s2.value.message.trim(),
+          '3. ¿Cuál es tu objetivo principal al invertir en marketing este año?': s2.value.objective,
+          urgency: s2.value.urgency,
+          message: s2.value.message.trim(),
           tags,
           // Resumen legible para notas en GHL
           notes,
@@ -188,32 +188,32 @@ async function submitS2() {
 }
 
 function goBack() {
-  dir.value   = 'back'
-  step.value  = 1
+  dir.value = 'back'
+  step.value = 1
   errMsg.value = ''
 }
 
 // ── Opciones step 2 ───────────────────────────────────────────────────────────
 const revenueOpts = [
-  { value: 'Menos de $10,000 USD',        label: 'Menos de $10,000 USD' },
+  { value: 'Menos de $10,000 USD', label: 'Menos de $10,000 USD' },
   { value: 'Entre $10,000 y $25,000 USD', label: 'Entre $10,000 y $25,000 USD' },
-  { value: 'Más de $25,000 USD',          label: 'Más de $25,000 USD' },
+  { value: 'Más de $25,000 USD', label: 'Más de $25,000 USD' },
 ]
 
 const locationOpts = [
-  { value: 'Guayaquil / Samborondón',                label: 'Guayaquil / Samborondón' },
+  { value: 'Guayaquil / Samborondón', label: 'Guayaquil / Samborondón' },
   { value: 'Otra ciudad de Ecuador o el extranjero', label: 'Otra ciudad de Ecuador o el extranjero' },
 ]
 
 const objectiveOpts = [
-  { value: 'Aumentar seguidores, likes y hacerme viral con tendencias.',             label: 'Aumentar seguidores, likes y hacerme viral con tendencias.' },
+  { value: 'Aumentar seguidores, likes y hacerme viral con tendencias.', label: 'Aumentar seguidores, likes y hacerme viral con tendencias.' },
   { value: 'Abrir mercado, aumentar la facturación y mejorar la rentabilidad con datos.', label: 'Abrir mercado, aumentar la facturación y mejorar la rentabilidad con datos.' },
-  { value: 'Profesionalizar mi proceso de ventas y captación de clientes.',          label: 'Profesionalizar mi proceso de ventas y captación de clientes.' },
+  { value: 'Profesionalizar mi proceso de ventas y captación de clientes.', label: 'Profesionalizar mi proceso de ventas y captación de clientes.' },
 ]
 
 const urgencyOpts = [
-  { value: 'immediate',    label: 'Necesito ayuda inmediata',       sub: 'Contacto en menos de 24 h' },
-  { value: 'next-month',   label: 'Lo necesito en el próximo mes',  sub: 'Estoy evaluando opciones' },
+  { value: 'immediate', label: 'Necesito ayuda inmediata', sub: 'Contacto en menos de 24 h' },
+  { value: 'next-month', label: 'Lo necesito en el próximo mes', sub: 'Estoy evaluando opciones' },
   { value: 'just-looking', label: 'Solo estoy explorando por ahora', sub: 'Sin urgencia particular' },
 ]
 </script>
@@ -223,16 +223,18 @@ const urgencyOpts = [
 
     <!-- ── Indicador de paso ───────────────────────────────────────────────── -->
     <div class="wiz__stepper" v-if="step !== 'ok'">
-      <div class="wiz__dot" :class="{ 'is-active': true, 'is-done': step === 2 }">
-        <svg v-if="step === 2" width="12" height="12" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="3">
-          <polyline points="20 6 9 17 4 12"/>
-        </svg>
-        <span v-else>1</span>
-      </div>
-      <div class="wiz__line" :class="{ 'is-active': step === 2 }" />
-      <div class="wiz__dot" :class="{ 'is-active': step === 2 }">
-        <span>2</span>
+      <div class="wiz__stepper-track">
+        <div class="wiz__dot" :class="{ 'is-active': true, 'is-done': step === 2 }">
+          <svg v-if="step === 2" width="12" height="12" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span v-else>1</span>
+        </div>
+        <div class="wiz__line" :class="{ 'is-active': step === 2 }" />
+        <div class="wiz__dot" :class="{ 'is-active': step === 2 }">
+          <span>2</span>
+        </div>
       </div>
       <p class="wiz__step-hint">
         Paso {{ step === 1 ? '1' : '2' }} de 2 —
@@ -471,10 +473,14 @@ const urgencyOpts = [
 // ── Accesibilidad ──────────────────────────────────────────────────────────────
 .sr-only {
   position: absolute;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0,0,0,0);
-  white-space: nowrap; border: 0;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 // ── Contenedor raíz ──────────────────────────────────────────────────────────
@@ -488,9 +494,15 @@ const urgencyOpts = [
 // ── Stepper ──────────────────────────────────────────────────────────────────
 .wiz__stepper {
   display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wiz__stepper-track {
+  display: flex;
   align-items: center;
   gap: 10px;
-  flex-wrap: wrap;
+  width: 100%;
 }
 
 .wiz__dot {
@@ -535,13 +547,11 @@ const urgencyOpts = [
 }
 
 .wiz__step-hint {
-  width: 100%;
   @include fonts.interface-font(500);
-  font-size: 0.7rem;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
+  font-size: 0.72rem;
   color: rgba(255, 255, 255, 0.35);
   margin: 0;
+  line-height: 1.4;
 }
 
 // ── Cuerpo del paso ──────────────────────────────────────────────────────────
@@ -565,7 +575,9 @@ const urgencyOpts = [
 .wf-field {
   display: flex;
   flex-direction: column;
+  justify-content: start;
   gap: 8px;
+  width: 80%;
 }
 
 .wf-label {
@@ -689,8 +701,8 @@ const urgencyOpts = [
   cursor: pointer;
   transition:
     border-color 0.22s ease,
-    background   0.22s ease,
-    box-shadow   0.22s ease;
+    background 0.22s ease,
+    box-shadow 0.22s ease;
 
   &:hover:not(.wf-opt--sel) {
     border-color: rgba(255, 255, 255, 0.16);
@@ -876,7 +888,9 @@ const urgencyOpts = [
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 // ── Privacidad ────────────────────────────────────────────────────────────────
@@ -913,8 +927,15 @@ const urgencyOpts = [
 }
 
 @keyframes pop {
-  from { transform: scale(0.5); opacity: 0; }
-  to   { transform: scale(1);   opacity: 1; }
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .wiz__ok-title {
@@ -942,8 +963,23 @@ const urgencyOpts = [
   transition: opacity 0.28s ease, transform 0.28s ease;
 }
 
-.wiz-fwd-enter-from  { opacity: 0; transform: translateX(24px); }
-.wiz-fwd-leave-to    { opacity: 0; transform: translateX(-24px); }
-.wiz-back-enter-from { opacity: 0; transform: translateX(-24px); }
-.wiz-back-leave-to   { opacity: 0; transform: translateX(24px); }
+.wiz-fwd-enter-from {
+  opacity: 0;
+  transform: translateX(24px);
+}
+
+.wiz-fwd-leave-to {
+  opacity: 0;
+  transform: translateX(-24px);
+}
+
+.wiz-back-enter-from {
+  opacity: 0;
+  transform: translateX(-24px);
+}
+
+.wiz-back-leave-to {
+  opacity: 0;
+  transform: translateX(24px);
+}
 </style>

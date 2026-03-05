@@ -1,8 +1,27 @@
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import bakanoLogo from '../../assets/logos/bakano-light.png'
 
 const currentYear = new Date().getFullYear()
+
+const seriousRef = ref<HTMLElement | null>(null)
+let observer: IntersectionObserver | null = null
+
+onMounted(() => {
+  observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        seriousRef.value?.classList.add('is-visible')
+        observer?.disconnect()
+      }
+    },
+    { threshold: 0.5 },
+  )
+  if (seriousRef.value) observer.observe(seriousRef.value)
+})
+
+onUnmounted(() => observer?.disconnect())
 
 const socialLinks = [
   {
@@ -66,6 +85,19 @@ const openWhatsApp = () =>
         <p class="footer__cta-sub">
           Cuéntanos tu reto. Nuestro equipo está listo para convertirlo en resultados.
         </p>
+
+        <!-- Énfasis "Lo decimos en serio" -->
+        <div class="footer__cta-serious" ref="seriousRef">
+          <span class="footer__cta-serious-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </span>
+          <span class="footer__cta-serious-text">Lo decimos en serio</span>
+          <span class="footer__cta-serious-divider" aria-hidden="true" />
+          <span class="footer__cta-serious-sub">Sin compromisos. Solo resultados.</span>
+        </div>
+
         <div class="footer__cta-actions">
           <button class="footer__cta-btn footer__cta-btn--primary" @click="openWhatsApp">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -210,10 +242,10 @@ const openWhatsApp = () =>
 @use '@/styles/colorVariables.module.scss' as colors;
 
 // ── Variables locales ─────────────────────────────────────────────────────────
-$footer-bg:    #09060f;
-$border:       rgba(255, 255, 255, 0.06);
-$text-muted:   rgba(255, 255, 255, 0.42);
-$text-body:    rgba(255, 255, 255, 0.65);
+$footer-bg: #09060f;
+$border: rgba(255, 255, 255, 0.06);
+$text-muted: rgba(255, 255, 255, 0.42);
+$text-body: rgba(255, 255, 255, 0.65);
 
 // ── Contenedor centrado reutilizable ─────────────────────────────────────────
 .footer__inner {
@@ -221,7 +253,9 @@ $text-body:    rgba(255, 255, 255, 0.65);
   margin-inline: auto;
   padding-inline: 24px;
 
-  @media (max-width: 600px) { padding-inline: 16px; }
+  @media (max-width: 600px) {
+    padding-inline: 16px;
+  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -241,7 +275,9 @@ $text-body:    rgba(255, 255, 255, 0.65);
   border-bottom: 1px solid $border;
   overflow: hidden;
 
-  @media (max-width: 768px) { padding: 72px 0 64px; }
+  @media (max-width: 768px) {
+    padding: 72px 0 64px;
+  }
 
   // Glow decorativo
   &-glow {
@@ -251,16 +287,18 @@ $text-body:    rgba(255, 255, 255, 0.65);
     transform: translate(-50%, -50%);
     width: 600px;
     height: 400px;
-    background: radial-gradient(
-      ellipse 60% 50% at 50% 50%,
-      rgba(colors.$BAKANO-PINK, 0.08) 0%,
-      rgba(colors.$BAKANO-PURPLE, 0.05) 40%,
-      transparent 70%
-    );
+    background: radial-gradient(ellipse 60% 50% at 50% 50%,
+        rgba(colors.$BAKANO-PINK, 0.08) 0%,
+        rgba(colors.$BAKANO-PURPLE, 0.05) 40%,
+        transparent 70%);
     pointer-events: none;
   }
 
-  .footer__inner { position: relative; z-index: 1; text-align: center; }
+  .footer__inner {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
 
   &-label {
     @include fonts.accent-font(700);
@@ -282,7 +320,10 @@ $text-body:    rgba(255, 255, 255, 0.65);
 
     @media (max-width: 600px) {
       font-size: clamp(2rem, 8vw, 3rem);
-      br { display: none; }
+
+      br {
+        display: none;
+      }
     }
   }
 
@@ -303,7 +344,71 @@ $text-body:    rgba(255, 255, 255, 0.65);
     margin-inline: auto;
     margin-bottom: 44px;
 
-    @media (max-width: 600px) { font-size: 0.92rem; }
+    @media (max-width: 600px) {
+      font-size: 0.92rem;
+    }
+  }
+
+  // ── Énfasis "Lo decimos en serio" ─────────────────────────────────────────
+  &-serious {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 auto 40px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    opacity: 0;
+    transform: translateY(-20px) scale(0.92);
+    transition: opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    &.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    &-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
+      color: colors.$white;
+      flex-shrink: 0;
+    }
+
+    &-text {
+      @include fonts.interface-font(600);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: colors.$white;
+      white-space: nowrap;
+    }
+
+    &-divider {
+      width: 1px;
+      height: 14px;
+      background: rgba(255, 255, 255, 0.15);
+      flex-shrink: 0;
+    }
+
+    &-sub {
+      @include fonts.interface-font(400);
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.4);
+      white-space: nowrap;
+
+      @media (max-width: 480px) {
+        display: none;
+      }
+    }
   }
 
   &-actions {
@@ -328,8 +433,13 @@ $text-body:    rgba(255, 255, 255, 0.65);
     text-decoration: none;
     transition: transform 0.2s ease, box-shadow 0.25s ease, opacity 0.2s ease;
 
-    &:hover { transform: translateY(-2px); }
-    &:active { transform: translateY(0); }
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
 
     // Botón principal: gradiente
     &--primary {
@@ -338,7 +448,9 @@ $text-body:    rgba(255, 255, 255, 0.65);
       color: colors.$white;
       box-shadow: 0 8px 32px rgba(colors.$BAKANO-PINK, 0.25);
 
-      &:hover { box-shadow: 0 16px 48px rgba(colors.$BAKANO-PINK, 0.4); }
+      &:hover {
+        box-shadow: 0 16px 48px rgba(colors.$BAKANO-PINK, 0.4);
+      }
     }
 
     // Botón fantasma: borde
@@ -386,8 +498,13 @@ $text-body:    rgba(255, 255, 255, 0.65);
   gap: 0;
 
   &--brand {
-    @media (max-width: 1024px) { grid-column: 1 / -1; }
-    @media (max-width: 600px)  { grid-column: 1; }
+    @media (max-width: 1024px) {
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 600px) {
+      grid-column: 1;
+    }
   }
 }
 
@@ -405,7 +522,9 @@ $text-body:    rgba(255, 255, 255, 0.65);
   display: inline-flex;
   margin-bottom: 16px;
 
-  &:hover .footer__logo { opacity: 0.8; }
+  &:hover .footer__logo {
+    opacity: 0.8;
+  }
 }
 
 .footer__logo {
@@ -470,11 +589,17 @@ $text-body:    rgba(255, 255, 255, 0.65);
   text-decoration: none;
   transition: color 0.2s ease;
 
-  svg { flex-shrink: 0; opacity: 0.5; }
+  svg {
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
 
   &:hover {
     color: colors.$white;
-    svg { opacity: 1; }
+
+    svg {
+      opacity: 1;
+    }
   }
 }
 
@@ -486,7 +611,10 @@ $text-body:    rgba(255, 255, 255, 0.65);
   font-size: 0.88rem;
   color: $text-body;
 
-  svg { flex-shrink: 0; opacity: 0.5; }
+  svg {
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
 
   &--service {
     gap: 10px;
@@ -554,6 +682,20 @@ $text-body:    rgba(255, 255, 255, 0.65);
   background-clip: text;
   transition: opacity 0.2s ease;
 
-  &:hover { opacity: 0.8; }
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+@keyframes cta-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 </style>
