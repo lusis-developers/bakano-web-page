@@ -9,6 +9,7 @@ const heroContainer = ref<HTMLElement | null>(null)
 const revealShape = ref<HTMLElement | null>(null)
 const revealContent = ref<HTMLElement | null>(null)
 const hugeTitle = ref<HTMLElement | null>(null)
+const horizontalTrack = ref<HTMLElement | null>(null)
 
 // Animaciones y estado reactivo
 const currentStat = ref(0)
@@ -24,22 +25,22 @@ const stats = [
 // Beneficios clave
 const benefits = [
   {
-    icon: '📈',
+    icon: 'fa-solid fa-chart-line',
     title: 'Crecimiento Garantizado',
     description: 'Estrategias probadas que aumentan tu facturación hasta un 20%'
   },
   {
-    icon: '🎯',
+    icon: 'fa-solid fa-bullseye', // Sin Dependencias
     title: 'Sin Dependencias',
     description: 'No necesitas agencias, campañas virales ni caos operativo'
   },
   {
-    icon: '🚀',
+    icon: 'fa-solid fa-rocket',
     title: 'Resultados Rápidos',
     description: 'Ve el impacto en tu negocio desde el primer mes'
   },
   {
-    icon: '💡',
+    icon: 'fa-solid fa-lightbulb',
     title: 'Soluciones Inteligentes',
     description: 'Tecnología avanzada adaptada a tu industria'
   }
@@ -54,14 +55,14 @@ onMounted(() => {
   }, 3000)
 
   // GSAP Scroll Animations
-  if (!heroContainer.value || !revealShape.value || !revealContent.value || !hugeTitle.value) return
+  if (!heroContainer.value || !revealShape.value || !revealContent.value || !hugeTitle.value || !horizontalTrack.value) return
 
   ctx = gsap.context(() => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: heroContainer.value,
         start: 'top top',
-        end: '+=200%', // Scroll distance to complete animation
+        end: '+=400%', // Extendemos el scroll para dar espacio a la pista horizontal
         scrub: 1, // Smooth scrubbing
         pin: true,
         anticipatePin: 1
@@ -96,6 +97,13 @@ onMounted(() => {
       ease: 'power2.out'
     }, 1) // Inicia antes de que termine de escalar la forma
 
+    // Fase 4: Scroll horizontal del track de beneficios
+    tl.to(horizontalTrack.value, {
+      x: () => -(horizontalTrack.value!.scrollWidth - window.innerWidth),
+      ease: 'none',
+      duration: 2 // Ocupará la segunda mitad del pin
+    }, 2)
+
   }, heroContainer.value)
 })
 
@@ -125,10 +133,12 @@ const openWhatsApp = () => {
       <div class="hero-huge__shape" ref="revealShape"></div>
     </div>
 
-    <!-- Capa 3: El contenido revelado dentro/después de la forma -->
+    <!-- Capa 3: El contenido revelado (Horizontal Track) -->
     <div class="hero-huge__revealed" ref="revealContent">
-      <div class="hero-huge__revealed-inner">
-        <div class="hero-huge__text">
+      <div class="hero-huge__track" ref="horizontalTrack">
+        
+        <!-- Panel 1: Texto Masivo -->
+        <div class="track-panel panel-intro">
           <p class="hero-huge__subtitle">
             Ayudamos a Dueños de Negocios a Aumentar hasta un<br/>
             <strong>20% su Facturación Mensual o Rentabilidad</strong>
@@ -146,24 +156,23 @@ const openWhatsApp = () => {
           </div>
         </div>
 
-        <div class="hero-huge__visuals">
-          <div class="hero-huge__stat-card">
+        <!-- Panel 2: Estadísticas -->
+        <div class="track-panel panel-stats">
+          <div class="huge-stat-card">
             <span class="stat-number">{{ stats[currentStat].number }}</span>
             <span class="stat-label">{{ stats[currentStat].label }}</span>
           </div>
+        </div>
 
-          <div class="hero-huge__benefits-grid">
-            <div 
-              v-for="(benefit, index) in benefits" 
-              :key="index"
-              class="benefit-item"
-            >
-              <span class="benefit-icon">{{ benefit.icon }}</span>
-              <h3 class="benefit-title">{{ benefit.title }}</h3>
-              <p class="benefit-desc">{{ benefit.description }}</p>
-            </div>
+        <!-- Panels 3+: Beneficios (Scroll Horizontal) -->
+        <div class="track-panel panel-benefit" v-for="(benefit, index) in benefits" :key="index">
+          <div class="huge-benefit-card">
+            <span class="benefit-icon"><i :class="benefit.icon"></i></span>
+            <h3 class="benefit-title">{{ benefit.title }}</h3>
+            <p class="benefit-desc">{{ benefit.description }}</p>
           </div>
         </div>
+
       </div>
     </div>
   </section>
@@ -256,7 +265,7 @@ const openWhatsApp = () => {
 }
 
 // ---------------------------------
-// Capa 3: Contenido Revelado
+// Capa 3: Contenido Revelado (Horizontal Scroll)
 // ---------------------------------
 .hero-huge__revealed {
   position: absolute;
@@ -265,147 +274,220 @@ const openWhatsApp = () => {
   right: 0;
   bottom: 0;
   z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 2rem;
   color: colors.$white;
   opacity: 0; // Oculto hasta que el scroll lo revela
-}
-
-.hero-huge__revealed-inner {
-  max-width: 1200px;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  overflow: hidden; // Prevenir barras de scroll reales
+  display: flex;
   align-items: center;
 }
 
-.hero-huge__text {
-  text-align: left;
+.hero-huge__track {
+  display: flex;
+  flex-wrap: nowrap;
+  width: max-content;
+  height: 100vh;
+  align-items: center;
+  padding: 0 10vw; // padding inicial y final para centrado
+  gap: 8vw;
 }
 
-.hero-huge__subtitle {
-  @include fonts.heading-font(600);
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
-  line-height: 1.2;
-  margin-bottom: 2rem;
+.track-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
 
-  strong {
-    color: colors.$BAKANO-PRIMARY;
+// Panel 1: Texto Masivo
+.panel-intro {
+  width: 800px;
+
+  .hero-huge__subtitle {
+    @include fonts.heading-font(800);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    letter-spacing: -0.02em;
+
+    strong {
+      color: colors.$BAKANO-PRIMARY;
+    }
   }
-}
 
-.hero-huge__desc {
-  @include fonts.body-font(400);
-  font-size: 1.25rem;
-  line-height: 1.6;
-  opacity: 0.9;
-  margin-bottom: 3rem;
+  .hero-huge__desc {
+    @include fonts.body-font(400);
+    font-size: clamp(1.2rem, 2vw, 1.6rem);
+    line-height: 1.5;
+    opacity: 0.9;
+    margin-bottom: 3rem;
+
+    strong {
+      color: colors.$white;
+      font-weight: 700;
+      background: rgba(colors.$BAKANO-PRIMARY, 0.2);
+    }
+  }
+
+  .hero-huge__cta {
+    margin-top: 2rem;
+  }
 }
 
 .btn--primary {
   @include fonts.body-font(700);
   background: colors.$BAKANO-PRIMARY;
   color: colors.$white;
-  padding: 1.25rem 2.5rem;
+  padding: 1.5rem 3rem;
   border: none;
-  font-size: 1rem;
+  font-size: 1.1rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   cursor: pointer;
-  transition: transform 0.3s ease, background 0.3s ease;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-4px);
     background: colors.$BAKANO-PURPLE;
+    box-shadow: 0 20px 40px rgba(colors.$BAKANO-PRIMARY, 0.4);
   }
 }
 
 .hero-huge__note {
-  @include fonts.body-font(400);
-  font-size: 0.85rem;
-  margin-top: 1rem;
+  @include fonts.body-font(500);
+  font-size: 0.95rem;
+  margin-top: 1.5rem;
   opacity: 0.7;
 }
 
-.hero-huge__visuals {
+// Panel 2: Estadísticas enormes
+.panel-stats {
+  width: 500px;
   display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  justify-content: center;
 }
 
-.hero-huge__stat-card {
-  background: rgba(colors.$white, 0.05);
-  border-left: 4px solid colors.$BAKANO-PRIMARY;
-  padding: 2rem;
-  backdrop-filter: blur(10px);
-}
+.huge-stat-card {
+  background: colors.$BAKANO-PRIMARY;
+  border-radius: 30px;
+  padding: 5rem 3rem;
+  text-align: center;
+  box-shadow: 0 30px 60px rgba(colors.$BAKANO-PRIMARY, 0.3);
+  width: 100%;
 
-.stat-number {
-  @include fonts.heading-font(800);
-  font-size: 4rem;
-  display: block;
-  color: colors.$BAKANO-PRIMARY;
-  line-height: 1;
-}
-
-.stat-label {
-  @include fonts.body-font(500);
-  font-size: 1.1rem;
-  opacity: 0.8;
-  margin-top: 0.5rem;
-  display: block;
-}
-
-.hero-huge__benefits-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
-
-.benefit-item {
-  background: rgba(colors.$white, 0.03);
-  padding: 1.5rem;
-  border-radius: 8px;
-
-  .benefit-icon {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+  .stat-number {
+    @include fonts.heading-font(800);
+    font-size: clamp(4rem, 8vw, 7rem);
+    color: colors.$white;
+    line-height: 1;
     display: block;
+    margin-bottom: 1rem;
+    text-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   }
 
-  .benefit-title {
-    @include fonts.heading-font(700);
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
+  .stat-label {
+    @include fonts.body-font(600);
+    font-size: 1.5rem;
+    color: rgba(colors.$white, 0.9);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
+}
 
-  .benefit-desc {
-    @include fonts.body-font(400);
-    font-size: 0.85rem;
-    opacity: 0.7;
+// Panel 3+: Beneficios masivos
+.panel-benefit {
+  width: 450px;
+
+  .huge-benefit-card {
+    background: rgba(colors.$white, 0.03);
+    border: 1px solid rgba(colors.$white, 0.1);
+    border-radius: 30px;
+    padding: 4rem 3rem;
+    height: 550px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.4s ease, background 0.4s ease, border-color 0.4s ease;
+
+    &:hover {
+      background: rgba(colors.$white, 0.08);
+      transform: translateY(-15px);
+      border-color: colors.$BAKANO-PURPLE;
+      box-shadow: 0 30px 60px rgba(colors.$BAKANO-PURPLE, 0.2);
+    }
+
+    .benefit-icon {
+      font-size: 5rem;
+      color: colors.$BAKANO-PINK; // Usar rosa llamativo
+      margin-bottom: 2.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover .benefit-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .benefit-title {
+      @include fonts.heading-font(800);
+      font-size: 2.5rem;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      color: colors.$text-light;
+    }
+
+    .benefit-desc {
+      @include fonts.body-font(400);
+      font-size: 1.25rem;
+      opacity: 0.8;
+      line-height: 1.6;
+      color: colors.$gray-200;
+    }
   }
 }
 
 // Responsive
-@media (max-width: 900px) {
-  .hero-huge__revealed-inner {
-    grid-template-columns: 1fr;
-    text-align: center;
+@media (max-width: 1024px) {
+  .hero-huge__track {
+    gap: 6vw;
   }
 
-  .hero-huge__text {
-    text-align: center;
+  .panel-intro {
+    width: 600px;
+  }
+
+  .panel-stats {
+    width: 400px;
+  }
+
+  .panel-benefit {
+    width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-huge__track {
+    gap: 15vw;
+    padding: 0 5vw;
+  }
+
+  .panel-intro {
+    width: 85vw;
+  }
+
+  .panel-stats {
+    width: 85vw;
+  }
+
+  .panel-benefit {
+    width: 85vw;
+  }
+
+  .btn--primary {
+    padding: 1rem 2rem;
+    font-size: 1rem;
   }
 }
 
 @media (max-width: 600px) {
-  .hero-huge__benefits-grid {
-    grid-template-columns: 1fr;
-  }
-
   .hero-huge__shape {
     clip-path: circle(50% at 50% 50%);
   }
