@@ -56,7 +56,7 @@ onMounted(() => {
 
   ctx = gsap.context(() => {
 
-    // ── 1. Intro: fade in al entrar en viewport ───────────────────────────────
+    // ── 1. Intro: fade in al entrar en viewport (mobile + desktop) ────────────
     gsap.from('.team__intro-content > *', {
       y: 48,
       opacity: 0,
@@ -69,8 +69,10 @@ onMounted(() => {
       },
     })
 
-    // ── 2. Horizontal scroll pinning ─────────────────────────────────────────
-    // GSAP pega `pinRef` al viewport y desplaza `trackRef` hacia la izquierda
+    // ── 2 + 3. Scroll horizontal con GSAP (mobile + desktop) ─────────────────
+    // GSAP pega `pinRef` al viewport y desplaza `trackRef` horizontalmente.
+    // En mobile: los paneles tienen layout apilado (foto arriba, info abajo)
+    // y el track sigue siendo una fila horizontal de 100vw × 100svh.
     const hTween = gsap.to(track, {
       x: () => -(track.scrollWidth - window.innerWidth),
       ease: 'none',
@@ -83,18 +85,14 @@ onMounted(() => {
       },
     })
 
-    // ── 3. Animaciones por panel (containerAnimation) ─────────────────────────
-    // containerAnimation le dice a GSAP que el scroll que "dispara" el trigger
-    // es el tween horizontal, no el scroll de página.
     const panels = track.querySelectorAll<HTMLElement>('.team__panel')
 
     panels.forEach((panel) => {
-      const photo    = panel.querySelector<HTMLElement>('.team__panel-photo')
-      const infoEls  = panel.querySelectorAll<HTMLElement>(
+      const photo   = panel.querySelector<HTMLElement>('.team__panel-photo')
+      const infoEls = panel.querySelectorAll<HTMLElement>(
         '.team__panel-eyebrow, .team__panel-name, .team__panel-role, .team__panel-divider, .team__panel-bio, .team__panel-cta'
       )
 
-      // Foto: ligero zoom out mientras el panel entra (parallax suave)
       if (photo) {
         gsap.fromTo(photo,
           { scale: 1.12 },
@@ -112,7 +110,6 @@ onMounted(() => {
         )
       }
 
-      // Info: stagger de entrada cuando el panel entra al 70 % del viewport
       if (infoEls.length) {
         gsap.from(infoEls, {
           x: 60,
@@ -300,8 +297,10 @@ $glass-border: rgba(255, 255, 255, 0.07);
   margin: 0 0 24px;
 
   @media (max-width: 600px) {
-    font-size: clamp(2.2rem, 9vw, 3.2rem);
-    br { display: none; }
+    // Tamaño más pequeño para que cada línea quepa en pantalla
+    // (no ocultamos el br: mantiene "Los fundadores" y "detrás del resultado"
+    //  separados y evita el overflow horizontal)
+    font-size: clamp(1.5rem, 5vw, 2.4rem);
   }
 
   &-gradient {
@@ -611,26 +610,63 @@ $glass-border: rgba(255, 255, 255, 0.07);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MOBILE — layout vertical, sin pin horizontal
+// MOBILE — scroll horizontal CSS (sin GSAP pin)
+// El .team__pin se convierte en un contenedor scrolleable horizontal con
+// scroll-snap. Cada panel ocupa 100vw × 100svh y apila foto arriba / info abajo.
+// svh (small viewport height) evita el salto de la barra URL en iOS/Android.
 // ─────────────────────────────────────────────────────────────────────────────
 @media (max-width: 768px) {
+  // GSAP controla el movimiento: solo necesitamos overflow:hidden para clijar
   .team__pin {
-    height: auto;
-    overflow: visible;
+    height: 100svh;
+    overflow: hidden;
   }
 
+  // El track sigue siendo una fila horizontal; GSAP lo translateX
   .team__track {
-    flex-direction: column;
-    width: 100%;
-    height: auto;
+    flex-direction: row;
+    width: max-content;
+    height: 100%;
   }
 
+  // Cada panel: pantalla completa, foto arriba (48%), info abajo (52%)
+  // grid-template-rows con porcentaje funciona porque el panel tiene height:100%
+  // que hereda del track → del pin (100svh)
   .team__panel {
-    width: 100%;
-    height: auto;
-    min-height: 100vh;
+    width: 100vw;
+    height: 100%;
+    grid-template-columns: 1fr;
+    grid-template-rows: 48% 52%;
 
     &::after { display: none; }
   }
+
+  // Ajustar padding del lado foto para el layout apilado
+  .team__panel-photo-side {
+    padding: 24px 24px 12px;
+    align-items: flex-end;
+  }
+
+  // Hacer que el frame de la foto llene toda su celda
+  .team__panel-photo-frame {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    border-radius: 12px;
+  }
+
+  // Info: scroll interno si el contenido no cabe
+  .team__panel-info {
+    padding: 16px 24px 24px;
+    justify-content: flex-start;
+    overflow-y: auto;
+    gap: 0;
+  }
+
+  .team__panel-eyebrow  { margin-bottom: 10px; }
+  .team__panel-name     { font-size: clamp(1.8rem, 7vw, 2.8rem); margin-bottom: 8px; }
+  .team__panel-role     { margin-bottom: 12px; }
+  .team__panel-divider  { margin-bottom: 12px; }
+  .team__panel-bio      { margin-bottom: 16px; font-size: 0.88rem; }
 }
 </style>

@@ -8,7 +8,7 @@ import TestimonialCard from './TestimonialCard.vue'
 import imgMauro from '../assets/testimonios/mauro.webp'
 import imgJohanna from '../assets/testimonios/johanna.png'
 import imgMariaIsabel from '../assets/testimonios/mariaisabel.webp'
-import bgVideo from '../assets/hero/IMG_9668.mp4'
+const bgVideo = 'https://res.cloudinary.com/dpimsaaa4/video/upload/v1772741965/IMG_9668_tmxlid.mp4'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -65,63 +65,70 @@ onMounted(() => {
     if (!header) return
 
     ctx = gsap.context(() => {
-      /**
-       * Proxy para scrubbing del video.
-       * GSAP tween su propiedad currentTime y nosotros la transferimos al
-       * elemento <video>.  Esto es el patrón oficial de GSAP para video scrub.
-       */
-      const videoProxy = { currentTime: 0 }
 
-      /**
-       * Timeline principal sincronizada con el scroll.
-       * scrub: 1 → 1 s de lag para suavizar cambios bruscos de scroll.
-       *
-       * El "tiempo" del timeline está normalizado [0 → 1]:
-       *   0.00 → 0.40  Header sube desde el centro al top
-       *   0.38 → 0.79  Cards aparecen con stagger
-       *   0.00 → 1.00  Video avanza / retrocede con el scroll
-       */
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end:   'bottom bottom',
-          scrub: 1,
-        },
-      })
+      if (window.innerWidth <= 768) {
+        // ── MOBILE: scroll vertical → tarjetas se deslizan horizontalmente ──
+        // La sección tiene 350 vh. El sticky queda fijo mientras el usuario
+        // scrollea; GSAP mueve el grid de tarjetas hacia la izquierda.
+        // Las tarjetas son visibles desde el inicio (sin stagger de opacidad).
+        const grid = section.querySelector<HTMLElement>('.testimonials__grid')
+        if (!grid) return
 
-      // 1 ─ Video scrub (rango completo 0 → 100 % del scroll)
-      tl.fromTo(
-        videoProxy,
-        { currentTime: 0 },
-        {
-          currentTime: video.duration,
+        gsap.to(grid, {
+          x: () => -(grid.scrollWidth - window.innerWidth + 24),
           ease: 'none',
-          duration: 1,
-          onUpdate() { video.currentTime = videoProxy.currentTime },
-        },
-        0,
-      )
+          scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end:   'bottom bottom',
+            scrub: 1,
+            invalidateOnRefresh: true,
+          },
+        })
 
-      // 2 ─ Título: parte centrado en pantalla (y ≈ 20 vh bajo su posición
-      //    natural en el layout centrado) y sube a su lugar (y = 0).
-      //    Con justify-content:center en __ui, y=0 es el top del bloque
-      //    completo (header + gap + grid) perfectamente centrado en el viewport.
-      tl.fromTo(
-        header,
-        { y: '20vh' },
-        { y: 0, ease: 'power2.out', duration: 0.4 },
-        0,
-      )
+      } else {
+        // ── DESKTOP: comportamiento original ─────────────────────────────
+        const videoProxy = { currentTime: 0 }
 
-      // 3 ─ Tarjetas: aparecen con stagger desde el 38 % al ~80 %
-      //    (card 1: 38-63 %, card 2: 46-71 %, card 3: 54-79 %)
-      tl.fromTo(
-        cardEls.value,
-        { opacity: 0, y: 70 },
-        { opacity: 1, y: 0, stagger: 0.08, ease: 'power2.out', duration: 0.25 },
-        0.38,
-      )
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end:   'bottom bottom',
+            scrub: 1,
+          },
+        })
+
+        // 1 ─ Video scrub
+        tl.fromTo(
+          videoProxy,
+          { currentTime: 0 },
+          {
+            currentTime: video.duration,
+            ease: 'none',
+            duration: 1,
+            onUpdate() { video.currentTime = videoProxy.currentTime },
+          },
+          0,
+        )
+
+        // 2 ─ Título sube desde el centro al top
+        tl.fromTo(
+          header,
+          { y: '20vh' },
+          { y: 0, ease: 'power2.out', duration: 0.4 },
+          0,
+        )
+
+        // 3 ─ Tarjetas con stagger
+        tl.fromTo(
+          cardEls.value,
+          { opacity: 0, y: 70 },
+          { opacity: 1, y: 0, stagger: 0.08, ease: 'power2.out', duration: 0.25 },
+          0.38,
+        )
+      }
+
     }, section)
   }
 
@@ -305,34 +312,66 @@ const openVideo = (url: string) => window.open(url, '_blank')
     max-width: 1160px;
 
     // Tablet: 2 columnas
-    @media (max-width: 1024px) and (min-width: 601px) {
+    @media (max-width: 1024px) and (min-width: 769px) {
       grid-template-columns: repeat(2, 1fr);
-    }
-
-    // Mobile: carrusel horizontal
-    @media (max-width: 600px) {
-      display: flex;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      overflow-y: visible;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      gap: 16px;
-      padding-bottom: 4px;
-
-      &::-webkit-scrollbar { display: none; }
     }
   }
 
   &__card-wrapper {
-    // GSAP anima opacity y y de este wrapper
+    // GSAP anima opacity y y de este wrapper (solo desktop)
     will-change: transform, opacity;
+  }
+}
 
-    @media (max-width: 600px) {
-      flex: 0 0 82vw;
-      scroll-snap-align: center;
-    }
+// ─────────────────────────────────────────────────────────────────
+// MOBILE (≤768 px) — scroll vertical mueve tarjetas horizontalmente
+// La sección mantiene su sticky + GSAP (igual que desktop), pero:
+//  • Altura reducida a 350 vh (3 tarjetas × ~100 vh + buffer)
+//  • Grid en fila horizontal (una tarjeta de 84 vw a la vez)
+//  • Header centrado y estático (sin animación y)
+//  • Tarjetas visibles desde el inicio (sin stagger de opacidad)
+// ─────────────────────────────────────────────────────────────────
+@media (max-width: 768px) {
+  .testimonials {
+    height: 350vh;  // Suficiente para 3 tarjetas con buen ritmo de scroll
+  }
+
+  // El sticky se mantiene: position:sticky + height:100vh siguen activos.
+  // Solo ajustamos el overflow para que el clip no bloquee el translate del grid.
+  .testimonials__sticky {
+    overflow: hidden;
+  }
+
+  // UI: header arriba, tarjetas debajo (sin centering vertical del desktop)
+  .testimonials__ui {
+    justify-content: flex-start;
+    padding: 72px 0 24px;   // 72 px = espacio para la nav de la app
+    gap: 28px;
+  }
+
+  // Grid: fila horizontal de tarjetas (GSAP las translateX con el scroll)
+  .testimonials__grid {
+    display: flex;
+    flex-wrap: nowrap;
+    width: max-content;     // Se expande para contener las 3 tarjetas
+    gap: 16px;
+    padding: 0 24px;
+    max-width: none;
+    align-self: flex-start; // Sin centrado horizontal (el grid empieza en el borde)
+    // Anular el display:grid del desktop
+    grid-template-columns: unset;
+    // Ocultar scroll nativo (GSAP controla el movimiento)
+    overflow: visible;
+  }
+
+  // Cada tarjeta = casi pantalla completa
+  .testimonials__card-wrapper {
+    width: 84vw;
+    flex-shrink: 0;
+    // Visibles desde el inicio: anular posibles estilos inline de GSAP
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    will-change: transform;
   }
 }
 </style>

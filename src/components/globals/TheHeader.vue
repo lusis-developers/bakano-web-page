@@ -7,19 +7,19 @@ import bakanoLogo from '../../assets/logos/bakano-light.png'
 
 // ── Estado ────────────────────────────────────────────────────────────────────
 const isMenuOpen = ref(false)
-const isScrolled  = ref(false)
+const isScrolled = ref(false)
 const router = useRouter()
-const route  = useRoute()
+const route = useRoute()
 
 // Refs de accesibilidad
-const toggleBtnRef  = ref<HTMLButtonElement | null>(null)
+const toggleBtnRef = ref<HTMLButtonElement | null>(null)
 const mobileMenuRef = ref<HTMLElement | null>(null)
 
 // ── Datos de navegación ────────────────────────────────────────────────────────
 const navLinks = [
-  { id: 'inicio',      num: '01', label: 'Inicio',      section: 'inicio' },
-  { id: 'servicios',   num: '02', label: 'Servicios',   section: 'servicios' },
-  { id: 'nosotros',    num: '03', label: 'Nosotros',    section: 'nosotros' },
+  { id: 'inicio', num: '01', label: 'Inicio', section: 'inicio' },
+  { id: 'servicios', num: '02', label: 'Servicios', section: 'servicios' },
+  { id: 'nosotros', num: '03', label: 'Nosotros', section: 'nosotros' },
   { id: 'testimonios', num: '04', label: 'Testimonios', section: 'testimonios' },
 ]
 
@@ -146,7 +146,7 @@ onUnmounted(() => {
           class="nav__hamburger"
           :class="{ 'is-open': isMenuOpen }"
           @click="toggleMenu"
-          :aria-expanded="String(isMenuOpen)"
+          :aria-expanded="isMenuOpen"
           aria-controls="mobile-overlay"
           aria-label="Abrir menú de navegación"
         >
@@ -226,8 +226,8 @@ onUnmounted(() => {
 
 // ── Variables ─────────────────────────────────────────────────────────────────
 $header-h: 56px;
-$bp:       768px;
-$dark-bg:  #0b0815;
+$bp: 768px;
+$dark-bg: #0b0815;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // HEADER
@@ -283,7 +283,9 @@ $dark-bg:  #0b0815;
       filter: brightness(1);
       transition: opacity 0.25s ease;
 
-      &:hover { opacity: 0.8; }
+      &:hover {
+        opacity: 0.8;
+      }
     }
   }
 
@@ -296,7 +298,9 @@ $dark-bg:  #0b0815;
     margin: 0 auto 0 40px;
     padding: 0;
 
-    @media (max-width: $bp) { display: none; }
+    @media (max-width: $bp) {
+      display: none;
+    }
   }
 
   &__link {
@@ -326,7 +330,10 @@ $dark-bg:  #0b0815;
 
     &:hover {
       color: colors.$white;
-      &::after { transform: scaleX(1); }
+
+      &::after {
+        transform: scaleX(1);
+      }
     }
   }
 
@@ -361,10 +368,14 @@ $dark-bg:  #0b0815;
       border-color: colors.$BAKANO-PINK;
       box-shadow: 0 0 24px rgba(colors.$BAKANO-PINK, 0.35);
 
-      svg { transform: translateX(3px); }
+      svg {
+        transform: translateX(3px);
+      }
     }
 
-    @media (max-width: $bp) { display: none; }
+    @media (max-width: $bp) {
+      display: none;
+    }
   }
 
   // ── Hamburger ─────────────────────────────────────────────────────────────
@@ -382,7 +393,9 @@ $dark-bg:  #0b0815;
     cursor: pointer;
     padding: 0;
 
-    @media (max-width: $bp) { display: flex; }
+    @media (max-width: $bp) {
+      display: flex;
+    }
 
     &-line {
       display: block;
@@ -391,16 +404,36 @@ $dark-bg:  #0b0815;
       border-radius: 1px;
       transition: transform 0.3s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.2s ease, width 0.3s ease;
 
-      &:nth-child(1) { width: 22px; }
-      &:nth-child(2) { width: 16px; } // más corta → detalle visual
-      &:nth-child(3) { width: 22px; }
+      &:nth-child(1) {
+        width: 22px;
+      }
+
+      &:nth-child(2) {
+        width: 16px;
+      }
+
+      // más corta → detalle visual
+      &:nth-child(3) {
+        width: 22px;
+      }
     }
 
     &.is-open {
       .nav__hamburger-line {
-        &:nth-child(1) { width: 22px; transform: rotate(45deg) translate(5px, 4.5px); }
-        &:nth-child(2) { opacity: 0; transform: scaleX(0); }
-        &:nth-child(3) { width: 22px; transform: rotate(-45deg) translate(5px, -4.5px); }
+        &:nth-child(1) {
+          width: 22px;
+          transform: rotate(45deg) translate(5px, 4.5px);
+        }
+
+        &:nth-child(2) {
+          opacity: 0;
+          transform: scaleX(0);
+        }
+
+        &:nth-child(3) {
+          width: 22px;
+          transform: rotate(-45deg) translate(5px, -4.5px);
+        }
       }
     }
   }
@@ -424,9 +457,9 @@ $dark-bg:  #0b0815;
       width: 320px;
       height: 320px;
       background: radial-gradient(circle,
-        rgba(colors.$BAKANO-PINK, 0.09) 0%,
-        rgba(colors.$BAKANO-PURPLE, 0.05) 50%,
-        transparent 70%);
+          rgba(colors.$BAKANO-PINK, 0.09) 0%,
+          rgba(colors.$BAKANO-PURPLE, 0.05) 50%,
+          transparent 70%);
       pointer-events: none;
       border-radius: 50%;
     }
@@ -503,10 +536,17 @@ $dark-bg:  #0b0815;
       transition: left 0.3s ease;
     }
 
-    &:hover::before { left: 0; }
+    &:hover::before {
+      left: 0;
+    }
 
-    &:hover .nav__overlay-label { color: colors.$white; }
-    &:hover .nav__overlay-num   { color: colors.$BAKANO-PINK; }
+    &:hover .nav__overlay-label {
+      color: colors.$white;
+    }
+
+    &:hover .nav__overlay-num {
+      color: colors.$BAKANO-PINK;
+    }
   }
 
   &__overlay-num {
@@ -555,7 +595,9 @@ $dark-bg:  #0b0815;
       box-shadow: 0 12px 32px rgba(colors.$BAKANO-PINK, 0.35);
     }
 
-    &:active { transform: translateY(0); }
+    &:active {
+      transform: translateY(0);
+    }
   }
 }
 
@@ -579,6 +621,7 @@ $dark-bg:  #0b0815;
 // Respeto a reduce-motion
 // ─────────────────────────────────────────────────────────────────────────────
 @media (prefers-reduced-motion: reduce) {
+
   .overlay-enter-active,
   .overlay-leave-active {
     transition: opacity 0.2s ease;

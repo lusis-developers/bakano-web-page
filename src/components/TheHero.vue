@@ -2,9 +2,9 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
-import heroVideo from '@/assets/hero/IMG_8601.MOV'
-import bgFoto1 from '@/assets/hero/fotos/IMG_7973.JPG'
-import bgFoto2 from '@/assets/hero/fotos/IMG_8099.JPG'
+const heroVideo = 'https://res.cloudinary.com/dpimsaaa4/video/upload/v1772741967/IMG_8601_y5tgbu.mov'
+const bgFoto1   = 'https://res.cloudinary.com/dpimsaaa4/image/upload/v1772741965/IMG_7973_fm7dfc.jpg'
+const bgFoto2   = 'https://res.cloudinary.com/dpimsaaa4/image/upload/v1772741964/IMG_8099_h9zifs.jpg'
 
 gsap.registerPlugin(ScrollTrigger)
 
