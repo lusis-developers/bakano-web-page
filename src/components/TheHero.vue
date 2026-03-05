@@ -2,6 +2,8 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
+import heroVideo from '@/assets/hero/IMG_8601.MOV'
+import heroImage from '@/assets/hero/IMG_8906.JPG'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -9,6 +11,7 @@ const heroContainer = ref<HTMLElement | null>(null)
 const revealShape = ref<HTMLElement | null>(null)
 const revealContent = ref<HTMLElement | null>(null)
 const horizontalTrack = ref<HTMLElement | null>(null)
+const hiddenVideo = ref<HTMLElement | null>(null)
 
 // Animaciones y estado reactivo
 const currentStat = ref(0)
@@ -77,6 +80,20 @@ onMounted(() => {
       ease: 'power2.inOut'
     }, 0)
 
+    // Forzar la opacidad del video a 1 cuando empieza el scroll aunque no tengan hover
+    tl.to(hiddenVideo.value, {
+      opacity: 1,
+      duration: 0.1
+    }, 0)
+
+    // Desvanecer el texto/logo interno rápidamente para evitar pixelación al hacer zoom masivo
+    tl.to('.cube-logo', {
+      opacity: 0,
+      scale: 0.8,
+      duration: 0.3, // Se desvanece de inmediato al empezar
+      ease: 'power1.inOut'
+    }, 0)
+
     // Fase 2: El fondo del héroe debe volverse oscuro gradualmente (o ya lo era)
 
     // Fase 3: Aparición del contenido desde dentro del portal
@@ -117,8 +134,23 @@ const openWhatsApp = () => {
     <!-- Capa 1: Contenedor 3D del Portal -->
     <div class="hero-huge__cube-container">
       <div class="hero-huge__cube" ref="revealShape">
-        <!-- Contenido pseudo-video animado -->
-        <h1 class="hero-huge__cube-title">BAKANO</h1>
+        
+        <!-- Cara Frontal (Negra + Video) -->
+        <div class="cube-face cube-front">
+          <!-- Video Oculto (Se muestra en hover o scroll) -->
+          <video :src="heroVideo" ref="hiddenVideo" class="cube-abstract-video" autoplay loop muted playsinline></video>
+          
+          <!-- Logo Textual Sutil (Se oculta al hacer zoom) -->
+          <div class="cube-logo">
+            <svg viewBox="0 0 300 100" class="cube-logo__svg">
+              <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-size="48" font-weight="900" letter-spacing="4">BAKANO</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Cara Trasera (Rosa Estático) -->
+        <div class="cube-face cube-back"></div>
+
       </div>
     </div>
 
@@ -126,22 +158,27 @@ const openWhatsApp = () => {
     <div class="hero-huge__revealed" ref="revealContent">
       <div class="hero-huge__track" ref="horizontalTrack">
         
-        <!-- Panel 1: Texto Masivo -->
+        <!-- Panel 1: Texto Masivo y Fotografía Humanizada -->
         <div class="track-panel panel-intro">
-          <p class="hero-huge__subtitle">
-            Ayudamos a Dueños de Negocios a Aumentar hasta un<br/>
-            <strong>20% su Facturación Mensual o Rentabilidad</strong>
-          </p>
-          <p class="hero-huge__desc">
-            Sin depender de agencias, campañas virales, ni caos operativo.<br/>
-            <strong>Resultados medibles, crecimiento sostenible.</strong>
-          </p>
+          <div class="panel-intro__content">
+            <p class="hero-huge__subtitle">
+              Ayudamos a Dueños de Negocios a Aumentar hasta un<br/>
+              <strong>20% su Facturación Mensual o Rentabilidad</strong>
+            </p>
+            <p class="hero-huge__desc">
+              Sin depender de agencias, campañas virales, ni caos operativo.<br/>
+              Resultados medibles, crecimiento sostenible.
+            </p>
 
-          <div class="hero-huge__cta">
-            <button class="btn btn--primary" @click="openWhatsApp">
-              <span>ESCALA MI NEGOCIO AHORA</span>
-            </button>
-            <p class="hero-huge__note">✅ Consulta gratuita • ✅ Sin compromisos</p>
+            <div class="hero-huge__cta">
+              <button class="btn btn--primary" @click="openWhatsApp">
+                <span>ESCALA MI NEGOCIO AHORA</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="panel-intro__image">
+            <img :src="heroImage" alt="Equipo Bakano humanizado" class="human-image" />
           </div>
         </div>
 
@@ -197,17 +234,17 @@ const openWhatsApp = () => {
   pointer-events: none; // Evitar bloquear clicks de otras capas
 }
 
-@keyframes fluidGradient {
+@keyframes spinOrbs {
   0% {
-    background-position: 0% 50%;
+    transform: rotate(0deg) scale(1);
   }
 
   50% {
-    background-position: 100% 50%;
+    transform: rotate(180deg) scale(1.2);
   }
 
   100% {
-    background-position: 0% 50%;
+    transform: rotate(360deg) scale(1);
   }
 }
 
@@ -217,33 +254,66 @@ const openWhatsApp = () => {
   height: 30vw;
   min-width: 250px;
   min-height: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transform-style: preserve-3d;
   will-change: transform;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 
-  // Fondo simulando video abstracto con degradado potente
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    // Efecto "video" dinámico
-    background: linear-gradient(-45deg, colors.$BAKANO-PINK, #ff00cc, #3300ff, colors.$BAKANO-PURPLE);
-    background-size: 400% 400%;
-    animation: fluidGradient 6s ease infinite;
-    z-index: 0;
+  // Efecto Hover
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+
+    .cube-abstract-video {
+      opacity: 0.7; // Reveal video on hover
+    }
   }
 }
 
-.hero-huge__cube-title {
+.cube-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; // Video contenido
+}
+
+.cube-front {
+  background-color: #000;
+  transform: rotateY(0deg);
+}
+
+.cube-back {
+  background-color: colors.$BAKANO-PRIMARY; // Color estático post-transición
+  transform: rotateY(180deg);
+}
+
+.cube-abstract-video {
+  position: absolute;
+  inset: -10%; // Sobredimensionado para que la rotación no muestre bordes negros
+  width: 120%;
+  height: 120%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0; // Oculto inicialmente
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+
+.cube-logo {
   position: relative;
-  z-index: 1;
-  @include fonts.heading-font(800);
-  font-size: clamp(3rem, 6vw, 8rem);
-  color: colors.$white;
-  letter-spacing: -0.05em;
-  margin: 0;
+  z-index: 2;
+  width: 80%;
+  max-width: 250px;
+  will-change: opacity, transform;
+
+  &__svg {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+  }
 }
 
 // ---------------------------------
@@ -280,19 +350,41 @@ const openWhatsApp = () => {
   height: 100%;
 }
 
-// Panel 1: Texto Masivo
+// Panel 1: Texto Masivo y Foto
 .panel-intro {
-  width: 800px;
+  width: 1200px;
+  flex-direction: row;
+  align-items: center;
+  gap: 4rem;
+
+  &__content {
+    flex: 1;
+  }
+
+  &__image {
+    flex: 1;
+    height: 60vh;
+    border-radius: 30px;
+    overflow: hidden;
+
+    .human-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(20%) contrast(1.1);
+    }
+  }
 
   .hero-huge__subtitle {
     @include fonts.heading-font(800);
-    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
     line-height: 1.1;
     margin-bottom: 2rem;
     letter-spacing: -0.02em;
+    color: colors.$white; // Contraste absoluto
 
     strong {
-      color: colors.$BAKANO-PRIMARY;
+      color: colors.$white;
     }
   }
 
@@ -302,12 +394,7 @@ const openWhatsApp = () => {
     line-height: 1.5;
     opacity: 0.9;
     margin-bottom: 3rem;
-
-    strong {
-      color: colors.$white;
-      font-weight: 700;
-      background: rgba(colors.$BAKANO-PRIMARY, 0.2);
-    }
+    color: rgba(colors.$white, 0.8);
   }
 
   .hero-huge__cta {
@@ -349,11 +436,11 @@ const openWhatsApp = () => {
 }
 
 .huge-stat-card {
-  background: colors.$BAKANO-PRIMARY;
+  background: rgba(colors.$white, 0.05);
+  border: 1px solid rgba(colors.$white, 0.1);
   border-radius: 30px;
   padding: 5rem 3rem;
   text-align: center;
-  box-shadow: 0 30px 60px rgba(colors.$BAKANO-PRIMARY, 0.3);
   width: 100%;
 
   .stat-number {
@@ -363,13 +450,12 @@ const openWhatsApp = () => {
     line-height: 1;
     display: block;
     margin-bottom: 1rem;
-    text-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   }
 
   .stat-label {
     @include fonts.body-font(600);
     font-size: 1.5rem;
-    color: rgba(colors.$white, 0.9);
+    color: rgba(colors.$white, 0.8);
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
@@ -380,26 +466,24 @@ const openWhatsApp = () => {
   width: 450px;
 
   .huge-benefit-card {
-    background: rgba(colors.$white, 0.03);
-    border: 1px solid rgba(colors.$white, 0.1);
+    background: transparent;
+    border: 1px solid rgba(colors.$white, 0.2);
     border-radius: 30px;
     padding: 4rem 3rem;
     height: 550px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    transition: transform 0.4s ease, background 0.4s ease, border-color 0.4s ease;
+    transition: background 0.4s ease, border-color 0.4s ease;
 
     &:hover {
-      background: rgba(colors.$white, 0.08);
-      transform: translateY(-15px);
-      border-color: colors.$BAKANO-PURPLE;
-      box-shadow: 0 30px 60px rgba(colors.$BAKANO-PURPLE, 0.2);
+      background: rgba(colors.$white, 0.05);
+      border-color: colors.$white;
     }
 
     .benefit-icon {
       font-size: 5rem;
-      color: colors.$BAKANO-PINK; // Usar rosa llamativo
+      color: colors.$white; // Contraste total
       margin-bottom: 2.5rem;
       transition: transform 0.3s ease;
     }
@@ -413,7 +497,7 @@ const openWhatsApp = () => {
       font-size: 2.5rem;
       line-height: 1.1;
       margin-bottom: 1.5rem;
-      color: colors.$text-light;
+      color: colors.$white; // Contraste total
     }
 
     .benefit-desc {
@@ -421,7 +505,7 @@ const openWhatsApp = () => {
       font-size: 1.25rem;
       opacity: 0.8;
       line-height: 1.6;
-      color: colors.$gray-200;
+      color: rgba(colors.$white, 0.8); // Contraste total
     }
   }
 }
@@ -433,7 +517,11 @@ const openWhatsApp = () => {
   }
 
   .panel-intro {
-    width: 600px;
+    width: 900px;
+
+    &__image {
+      height: 40vh;
+    }
   }
 
   .panel-stats {
@@ -453,6 +541,13 @@ const openWhatsApp = () => {
 
   .panel-intro {
     width: 85vw;
+    flex-direction: column;
+    gap: 2rem;
+
+    &__image {
+      height: 30vh;
+      width: 100%;
+    }
   }
 
   .panel-stats {
