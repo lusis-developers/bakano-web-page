@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 // Importar imágenes directamente
 import imgMauro from '../assets/testimonios/mauro.webp'
@@ -37,11 +37,45 @@ const testimonials = [
   }
 ]
 
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
+const sectionRef = ref<HTMLElement | null>(null)
+let ctx: gsap.Context
+
 onMounted(() => {
-  // Trigger animations after component mount
-  setTimeout(() => {
-    isVisible.value = true
-  }, 200)
+  if (!sectionRef.value) return
+
+  ctx = gsap.context(() => {
+    gsap.from('.testimonials__header', {
+      scrollTrigger: {
+        trigger: sectionRef.value,
+        start: 'top 80%'
+      },
+      y: 50,
+      opacity: 0,
+      duration: 1,
+      ease: 'power3.out'
+    })
+
+    gsap.from('.testimonials__card', {
+      scrollTrigger: {
+        trigger: '.testimonials__grid',
+        start: 'top 85%'
+      },
+      y: 80,
+      opacity: 0,
+      duration: 1.2,
+      stagger: 0.2,
+      ease: 'power3.out'
+    })
+  }, sectionRef.value)
+})
+
+onUnmounted(() => {
+  ctx?.revert()
 })
 
 const openVideo = (url: string) => {
@@ -50,7 +84,7 @@ const openVideo = (url: string) => {
 </script>
 
 <template>
-  <section class="testimonials" :class="{ 'testimonials--visible': isVisible }">
+  <section class="testimonials" ref="sectionRef">
     <div class="testimonials__container">
       <!-- Header Section -->
       <div class="testimonials__header">
@@ -160,9 +194,6 @@ const openVideo = (url: string) => {
   &__header {
     text-align: center;
     margin-bottom: 80px;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s ease-out;
 
     @media (max-width: 768px) {
       margin-bottom: 60px;
@@ -184,11 +215,14 @@ const openVideo = (url: string) => {
   }
 
   &__title {
-    @include fonts.heading-font(700);
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    @include fonts.heading-font(800);
+    font-size: clamp(3rem, 7vw, 6rem);
+    /* Huge Inc Style Size */
+    text-transform: uppercase;
     color: colors.$text-light;
     margin-bottom: 0;
-    line-height: 1.2;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
 
     @media (max-width: 768px) {
       font-size: clamp(1.8rem, 6vw, 2.5rem);
@@ -223,9 +257,6 @@ const openVideo = (url: string) => {
     position: relative;
     overflow: hidden;
     cursor: pointer;
-    opacity: 0;
-    transform: translateY(50px);
-    transition: all 0.8s ease-out;
 
     @media (max-width: 768px) {
       padding: 32px 24px;
@@ -420,17 +451,5 @@ const openVideo = (url: string) => {
     }
   }
 
-  // Visibility animations
-  &--visible {
-    .testimonials__header {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .testimonials__card {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 }
 </style>
