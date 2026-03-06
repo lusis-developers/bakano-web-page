@@ -23,6 +23,8 @@ const navLinks = [
   { id: 'testimonios', num: '04', label: 'Testimonios', section: 'testimonios' },
 ]
 
+const toolsLink = { id: 'herramientas', num: '05', label: 'Herramientas', route: '/herramientas' }
+
 // ── Scroll / nav helpers ───────────────────────────────────────────────────────
 const handleScroll = () => { isScrolled.value = window.scrollY > 30 }
 
@@ -130,6 +132,13 @@ onUnmounted(() => {
               @click.prevent="scrollToSection(link.section)"
             >{{ link.label }}</a>
           </li>
+          <li>
+            <RouterLink
+              :to="toolsLink.route"
+              class="nav__link nav__link--tools"
+              @click="closeMenu"
+            >{{ toolsLink.label }}</RouterLink>
+          </li>
         </ul>
 
         <!-- ── CTA desktop ───────────────────────────── -->
@@ -200,6 +209,17 @@ onUnmounted(() => {
             <span class="nav__overlay-num" aria-hidden="true">{{ link.num }}</span>
             <span class="nav__overlay-label">{{ link.label }}</span>
           </a>
+
+          <!-- Herramientas — navega a página -->
+          <RouterLink
+            :to="toolsLink.route"
+            class="nav__overlay-link nav__overlay-link--tools"
+            @click="closeMenu"
+          >
+            <span class="nav__overlay-num" aria-hidden="true">{{ toolsLink.num }}</span>
+            <span class="nav__overlay-label">{{ toolsLink.label }}</span>
+            <span class="nav__overlay-badge" aria-hidden="true">Nuevo</span>
+          </RouterLink>
         </nav>
 
         <!-- CTA Formulario -->
@@ -332,6 +352,25 @@ $dark-bg: #0b0815;
 
       &::after {
         transform: scaleX(1);
+      }
+    }
+
+    // Herramientas — estilo especial
+    &--tools {
+      color: colors.$BAKANO-PINK;
+      border: 1px solid rgba(colors.$BAKANO-PINK, 0.3);
+      border-radius: 100px;
+      padding: 4px 12px;
+
+      &::after {
+        display: none;
+      }
+
+      &:hover,
+      &.router-link-active {
+        color: colors.$white;
+        background: colors.$BAKANO-PINK;
+        border-color: colors.$BAKANO-PINK;
       }
     }
   }
@@ -535,17 +574,38 @@ $dark-bg: #0b0815;
       transition: left 0.3s ease;
     }
 
-    &:hover::before {
+    &:hover::before,
+    &.router-link-active::before {
       left: 0;
     }
 
-    &:hover .nav__overlay-label {
+    &:hover .nav__overlay-label,
+    &.router-link-active .nav__overlay-label {
       color: colors.$white;
     }
 
-    &:hover .nav__overlay-num {
+    &:hover .nav__overlay-num,
+    &.router-link-active .nav__overlay-num {
       color: colors.$BAKANO-PINK;
     }
+
+    // Herramientas — badge "Nuevo"
+    &--tools {
+      align-items: center;
+    }
+  }
+
+  &__overlay-badge {
+    @include fonts.interface-font(700);
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: colors.$white;
+    background: linear-gradient(135deg, colors.$BAKANO-PINK, colors.$BAKANO-PURPLE);
+    border-radius: 100px;
+    padding: 2px 8px;
+    margin-left: auto;
+    flex-shrink: 0;
   }
 
   &__overlay-num {
