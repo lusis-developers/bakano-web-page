@@ -191,10 +191,10 @@ const { open: openContactModal } = useContactModal()
         <!-- Panel 1: Texto Masivo -->
         <div class="track-panel panel-intro">
           <div class="panel-intro__content">
-            <p class="hero-huge__subtitle">
+            <h1 class="hero-huge__subtitle">
               Ayudamos a Dueños de Negocios a Aumentar hasta un<br/>
               <strong>20% su Facturación Mensual o Rentabilidad</strong>
-            </p>
+            </h1>
             <p class="hero-huge__desc">
               Sin depender de agencias, campañas virales, ni caos operativo.<br/>
               Resultados medibles, crecimiento sostenible.

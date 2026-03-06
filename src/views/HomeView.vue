@@ -7,17 +7,17 @@ import TheContact from '@/components/TheContact.vue'
 </script>
 
 <template>
-  <main class="home">
-    <section id="inicio">
+  <main class="home" itemscope itemtype="https://schema.org/WebPage">
+    <section id="inicio" aria-label="Bakano - Agencia de Marketing Digital en Ecuador">
       <TheHero />
     </section>
-    <section id="servicios">
+    <section id="servicios" aria-label="Servicios de marketing digital y metodología de crecimiento">
       <TheStrategies />
     </section>
-    <section id="testimonios">
+    <section id="testimonios" aria-label="Testimonios de clientes de Bakano Ecuador">
       <TheTestimonials />
     </section>
-    <section id="nosotros">
+    <section id="nosotros" aria-label="Equipo fundador de Bakano">
       <TheTeam />
     </section>
     <TheContact />
