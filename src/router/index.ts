@@ -1,18 +1,21 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type RouteMeta } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import PrivacyPolicyView from '../views/PrivacyPolicyView.vue'
 import LegalNoticeView from '../views/LegalNoticeView.vue'
 import ToolsView from '../views/ToolsView.vue'
 
-// ── Tipos ──────────────────────────────────────────────────────────────────────
-interface RouteMeta {
-  title: string
-  description: string
-  canonical: string
-  ogTitle: string
-  ogDescription: string
-  ogUrl: string
-  jsonLd?: object[]
+import 'vue-router'
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    title: string
+    description: string
+    canonical: string
+    ogTitle: string
+    ogDescription: string
+    ogUrl: string
+    jsonLd?: object[]
+  }
 }
 
 // ── JSON-LD por página ─────────────────────────────────────────────────────────
@@ -180,7 +183,7 @@ const syncJsonLd = (schemas: object[] | undefined) => {
 }
 
 router.afterEach((to) => {
-  const meta = to.meta as RouteMeta
+  const meta = to.meta
 
   document.title = meta.title ?? 'Bakano'
   setMeta('description', meta.description ?? '')
