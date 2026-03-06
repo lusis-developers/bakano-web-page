@@ -12,6 +12,16 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://bakano.ec/"/>
   </url>
 
+  <!-- Herramientas -->
+  <url>
+    <loc>https://bakano.ec/herramientas</loc>
+    <lastmod>2026-03-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es-EC" href="https://bakano.ec/herramientas"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://bakano.ec/herramientas"/>
+  </url>
+
   <!-- Política de Privacidad -->
   <url>
     <loc>https://bakano.ec/politicas-privacidad</loc>
