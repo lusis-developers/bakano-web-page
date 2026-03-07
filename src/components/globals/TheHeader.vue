@@ -170,6 +170,7 @@ onUnmounted(() => {
     <!-- ════════════════════════════════════════════════
          OVERLAY MÓVIL — full-screen, desliza desde la derecha
          ════════════════════════════════════════════════ -->
+    <Teleport to="body">
     <Transition name="overlay">
       <div
         v-show="isMenuOpen"
@@ -234,6 +235,7 @@ onUnmounted(() => {
         <div class="nav__overlay-glow" aria-hidden="true" />
       </div>
     </Transition>
+    </Teleport>
 
   </header>
 </template>
@@ -485,6 +487,7 @@ $dark-bg: #0b0815;
     display: flex;
     flex-direction: column;
     padding: 0 0 40px;
+    overflow-x: hidden;
     overflow-y: auto;
 
     // Gradiente decorativo
