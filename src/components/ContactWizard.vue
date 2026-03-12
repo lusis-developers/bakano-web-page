@@ -95,7 +95,7 @@ function buildNotes(): string {
     `Objetivo principal: ${s2.value.objective}`,
     `Urgencia: ${URGENCY_LABEL[s2.value.urgency] ?? s2.value.urgency}`,
     s2.value.message.trim() ? `Mensaje del lead: ${s2.value.message.trim()}` : null,
-    `Fuente: Formulario web bakano.com.ec`,
+    `Fuente: Formulario web bakano.ec`,
   ].filter(Boolean).join('\n')
 }
 
