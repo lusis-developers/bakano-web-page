@@ -1,11 +1,13 @@
+```
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useContactModal } from '@/composables/useContactModal'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
+import TheScrollOverlay from '@/components/TheScrollOverlay.vue' // Added this import
 const heroVideo = 'https://res.cloudinary.com/dpimsaaa4/video/upload/v1772741967/IMG_8601_y5tgbu.mov'
 const bgFoto1   = 'https://res.cloudinary.com/dpimsaaa4/image/upload/v1772741965/IMG_7973_fm7dfc.jpg'
-const bgFoto2   = 'https://res.cloudinary.com/dpimsaaa4/image/upload/v1772741964/IMG_8099_h9zifs.jpg'
+const bgFoto2   = 'https://res.com/dpimsaaa4/image/upload/v1772741964/IMG_8099_h9zifs.jpg'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -228,16 +230,11 @@ const { open: openContactModal } = useContactModal()
       </div>
     </div>
     <!-- ══════════════════════════════════════════
-         INDICADOR INICIAL — "scroll para empezar"
+         OVERLAY INICIAL — "Para empezar la experiencia"
          Se muestra solo cuando progress < 3 %
          ══════════════════════════════════════════ -->
     <Transition name="hint">
-      <div v-if="showScrollDown" class="scroll-hint scroll-hint--down" aria-hidden="true">
-        <div class="scroll-hint__mouse">
-          <div class="scroll-hint__wheel" />
-        </div>
-        <span class="scroll-hint__label">SCROLL</span>
-      </div>
+      <TheScrollOverlay v-if="showScrollDown" />
     </Transition>
 
     <!-- ══════════════════════════════════════════
@@ -583,64 +580,12 @@ const { open: openContactModal } = useContactModal()
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// INDICADORES DE SCROLL
-// ─────────────────────────────────────────────────────────────────────────────
+// ── INDICADORES DE SCROLL ──────────────────────────────────────────────────────
 .scroll-hint {
   position: absolute;
   z-index: 10;
   pointer-events: none;
   user-select: none;
-}
-
-// ── "SCROLL ↓" inicial ────────────────────────────────────────────────────────
-.scroll-hint--down {
-  bottom: 36px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.scroll-hint__mouse {
-  width: 24px;
-  height: 38px;
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
-  border-radius: 12px;
-  display: flex;
-  justify-content: center;
-  padding-top: 7px;
-  animation: mouse-bounce 2s ease-in-out infinite;
-}
-
-.scroll-hint__wheel {
-  width: 3px;
-  height: 7px;
-  background: colors.$BAKANO-PINK;
-  border-radius: 2px;
-  animation: wheel-scroll 2s ease-in-out infinite;
-}
-
-.scroll-hint__label {
-  @include fonts.interface-font(600);
-  font-size: 0.6rem;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
-}
-
-@keyframes mouse-bounce {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(5px); }
-}
-
-@keyframes wheel-scroll {
-  0%   { opacity: 1; transform: translateY(0); }
-  60%  { opacity: 0; transform: translateY(6px); }
-  61%  { opacity: 0; transform: translateY(0); }
-  100% { opacity: 1; }
 }
 
 // ── Indicador horizontal ──────────────────────────────────────────────────────
