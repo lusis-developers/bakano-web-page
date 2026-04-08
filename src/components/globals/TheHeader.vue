@@ -17,13 +17,14 @@ const mobileMenuRef = ref<HTMLElement | null>(null)
 
 // ── Datos de navegación ────────────────────────────────────────────────────────
 const navLinks = [
-  { id: 'inicio', num: '01', label: 'Inicio', section: 'inicio' },
-  { id: 'servicios', num: '02', label: 'Servicios', section: 'servicios' },
-  { id: 'nosotros', num: '03', label: 'Nosotros', section: 'nosotros' },
+  { id: 'inicio',      num: '01', label: 'Inicio',      section: 'inicio' },
+  { id: 'servicios',   num: '02', label: 'Servicios',   section: 'servicios' },
+  { id: 'nosotros',    num: '03', label: 'Nosotros',    section: 'nosotros' },
   { id: 'testimonios', num: '04', label: 'Testimonios', section: 'testimonios' },
+  { id: 'autoridad',   num: '05', label: 'Alianzas',    section: 'autoridad' },
 ]
 
-const toolsLink = { id: 'herramientas', num: '05', label: 'Herramientas', route: '/herramientas' }
+const toolsLink = { id: 'herramientas', num: '06', label: 'Herramientas', route: '/herramientas' }
 
 // ── Scroll / nav helpers ───────────────────────────────────────────────────────
 const handleScroll = () => { isScrolled.value = window.scrollY > 30 }
