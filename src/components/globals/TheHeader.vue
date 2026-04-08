@@ -284,11 +284,18 @@ $dark-bg: #0b0815;
     padding-inline: 24px;
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 24px;
+    overflow: hidden;
+
+    @media (max-width: 1024px) {
+      gap: 16px;
+      padding-inline: 20px;
+    }
 
     @media (max-width: $bp) {
       padding-inline: 16px;
       gap: 0;
+      overflow: visible;
     }
   }
 
@@ -300,8 +307,11 @@ $dark-bg: #0b0815;
     text-decoration: none;
 
     &-img {
-      height: 28px;
+      height: 26px;
       width: auto;
+      max-width: 120px;
+      object-fit: contain;
+      flex-shrink: 0;
       filter: brightness(1);
       transition: opacity 0.25s ease;
 
@@ -315,10 +325,17 @@ $dark-bg: #0b0815;
   &__links {
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 20px;
     list-style: none;
-    margin: 0 auto 0 40px;
+    margin: 0 auto 0 16px;
     padding: 0;
+    flex-shrink: 1;
+    min-width: 0;
+
+    @media (max-width: 1024px) {
+      gap: 14px;
+      margin-left: 8px;
+    }
 
     @media (max-width: $bp) {
       display: none;
@@ -327,14 +344,20 @@ $dark-bg: #0b0815;
 
   &__link {
     @include fonts.interface-font(500);
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     text-transform: uppercase;
-    letter-spacing: 2.5px;
+    letter-spacing: 2px;
     color: rgba(255, 255, 255, 0.6);
     text-decoration: none;
     padding: 4px 0;
+    white-space: nowrap;
     position: relative;
     transition: color 0.25s ease;
+
+    @media (max-width: 1024px) {
+      font-size: 0.63rem;
+      letter-spacing: 1.5px;
+    }
 
     // Underline gradiente en hover
     &::after {
@@ -384,14 +407,14 @@ $dark-bg: #0b0815;
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.70rem;
+    font-size: 0.68rem;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
     color: colors.$white;
     background: transparent;
     border: 1px solid rgba(colors.$BAKANO-PINK, 0.45);
     border-radius: 24px;
-    padding: 7px 16px;
+    padding: 7px 14px;
     cursor: pointer;
     white-space: nowrap;
     flex-shrink: 0;
@@ -402,6 +425,7 @@ $dark-bg: #0b0815;
 
     svg {
       transition: transform 0.25s ease;
+      flex-shrink: 0;
     }
 
     &:hover {
@@ -412,6 +436,14 @@ $dark-bg: #0b0815;
       svg {
         transform: translateX(3px);
       }
+    }
+
+    @media (max-width: 1024px) {
+      font-size: 0.63rem;
+      padding: 6px 12px;
+      letter-spacing: 1px;
+
+      svg { display: none; }
     }
 
     @media (max-width: $bp) {
@@ -487,9 +519,10 @@ $dark-bg: #0b0815;
     background: $dark-bg;
     display: flex;
     flex-direction: column;
-    padding: 0 0 40px;
+    padding: 0 0 max(40px, env(safe-area-inset-bottom));
     overflow-x: hidden;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 
     // Gradiente decorativo
     &-glow {
