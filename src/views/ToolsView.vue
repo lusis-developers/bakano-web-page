@@ -24,6 +24,22 @@ const tools = [
       <line x1="6" y1="20" x2="6" y2="14"/>
     </svg>`,
   },
+  {
+    id: 'bakanology',
+    num: '02',
+    name: 'Bakanology',
+    tagline: 'Academia de growth marketing',
+    description:
+      'Aprende paso a paso todo lo que hacemos para que puedas ejecutarlo tú mismo y hacer crecer tu negocio, incluso si aún no puedes contratarnos.',
+    tags: ['Academia', 'Cursos', 'DIY Growth'],
+    url: 'https://bakanology.com/',
+    urlLabel: 'bakanology.com',
+    gradient: 'linear-gradient(135deg, #3bb77e 0%, #85529c 100%)',
+    glowColor: 'rgba(59, 183, 126, 0.18)',
+    icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+    </svg>`,
+  },
 ]
 
 const heroRef = ref<HTMLElement | null>(null)
