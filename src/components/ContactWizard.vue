@@ -125,6 +125,8 @@ async function submitS1() {
   errMsg.value = ''
   try {
     const phone = `${s1.value.dial}${s1.value.phone.replace(/\D/g, '')}`
+    // event_id compartido entre Pixel y CAPI para deduplicación
+    const leadEventId = `lead_web_${Date.now()}_${Math.random().toString(36).slice(2)}`
     await fetch(WH_CONTACT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -136,8 +138,14 @@ async function submitS1() {
         companyName: s1.value.company.trim(),
         source: 'bakano-web',
         tags: ['web-lead'],
+        event_id: leadEventId,
       }),
     })
+    // Meta Pixel — Lead (deduplicado con CAPI via event_id)
+    ;(window as any).fbq?.('track', 'Lead',
+      { content_name: 'contacto-web' },
+      { eventID: leadEventId }
+    )
     dir.value = 'fwd'
     step.value = 2
   } catch {
