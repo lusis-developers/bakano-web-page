@@ -18,8 +18,8 @@ const ROW_BOTTOM = [
   'dsc07044', 'dsc07091', 'dsc07155', 'dsc07214',
 ]
 
-// Las tarjetas miden 250 px como máximo; 300 px cubre 1x y el 2x del srcset, 600.
-const CARD = 'c_fill,g_auto,w_300,h_400'
+// Las tarjetas miden 320 px como máximo; 360 px cubre 1x y el 2x del srcset, 720.
+const CARD = 'c_fill,g_auto,w_360,h_480'
 
 const toCard = (id: string) => {
   const publicId = `bakano/sesion-karen/${id}`
@@ -184,33 +184,41 @@ $ink: #141019;
 .culture__row {
   display: flex;
   width: max-content;
-  gap: clamp(14px, 1.6vw, 22px);
+  gap: clamp(10px, 1.1vw, 16px);
 
+  // La de arriba corre hacia la izquierda, la de abajo hacia la derecha
   &--left  { animation: culture-slide-left  72s linear infinite; }
   &--right { animation: culture-slide-right 88s linear infinite; }
 
-  // Pausa al pasar el cursor: deja mirar una foto concreta
-  .culture__marquee:hover & {
+  // Pausa solo la fila señalada; la otra sigue corriendo
+  &:hover {
     animation-play-state: paused;
+  }
+
+  // Foco: la foto señalada queda a plena luz y el resto de su fila cede
+  &:hover .culture__card:not(:hover) {
+    opacity: 0.45;
   }
 }
 
 .culture__strip {
   display: flex;
-  gap: clamp(14px, 1.6vw, 22px);
+  gap: clamp(10px, 1.1vw, 16px);
   flex-shrink: 0;
 }
 
 .culture__card {
   margin: 0;
   flex-shrink: 0;
-  width: clamp(150px, 17vw, 250px);
+  width: clamp(190px, 21vw, 320px);
   aspect-ratio: 3 / 4;
   overflow: hidden;
-  border-radius: 14px;
+  // Canto casi recto: lee como copia fotográfica, no como tarjeta de interfaz
+  border-radius: 4px;
   background: #e4e1db;
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.45s ease;
+              box-shadow 0.45s ease,
+              opacity 0.4s ease;
 
   &:hover {
     transform: translateY(-10px);
