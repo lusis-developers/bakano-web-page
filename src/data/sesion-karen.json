@@ -1,0 +1,742 @@
+[
+  {
+    "order": 0,
+    "name": "DSC06427.jpg",
+    "public_id": "bakano/sesion-karen/dsc06427",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480946/bakano/sesion-karen/dsc06427.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 336352,
+    "orientation": "portrait"
+  },
+  {
+    "order": 1,
+    "name": "DSC06428.jpg",
+    "public_id": "bakano/sesion-karen/dsc06428",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480946/bakano/sesion-karen/dsc06428.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 289208,
+    "orientation": "portrait"
+  },
+  {
+    "order": 2,
+    "name": "DSC06453.jpg",
+    "public_id": "bakano/sesion-karen/dsc06453",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480946/bakano/sesion-karen/dsc06453.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 322821,
+    "orientation": "portrait"
+  },
+  {
+    "order": 3,
+    "name": "DSC06460.jpg",
+    "public_id": "bakano/sesion-karen/dsc06460",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480946/bakano/sesion-karen/dsc06460.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 299905,
+    "orientation": "portrait"
+  },
+  {
+    "order": 4,
+    "name": "DSC06478.jpg",
+    "public_id": "bakano/sesion-karen/dsc06478",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480947/bakano/sesion-karen/dsc06478.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 317925,
+    "orientation": "portrait"
+  },
+  {
+    "order": 5,
+    "name": "DSC06487.jpg",
+    "public_id": "bakano/sesion-karen/dsc06487",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480946/bakano/sesion-karen/dsc06487.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 290692,
+    "orientation": "portrait"
+  },
+  {
+    "order": 6,
+    "name": "DSC06492.jpg",
+    "public_id": "bakano/sesion-karen/dsc06492",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480947/bakano/sesion-karen/dsc06492.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 307495,
+    "orientation": "portrait"
+  },
+  {
+    "order": 7,
+    "name": "DSC06501.jpg",
+    "public_id": "bakano/sesion-karen/dsc06501",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480948/bakano/sesion-karen/dsc06501.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 291151,
+    "orientation": "portrait"
+  },
+  {
+    "order": 8,
+    "name": "DSC06509.jpg",
+    "public_id": "bakano/sesion-karen/dsc06509",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480948/bakano/sesion-karen/dsc06509.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 292214,
+    "orientation": "portrait"
+  },
+  {
+    "order": 9,
+    "name": "DSC06512.jpg",
+    "public_id": "bakano/sesion-karen/dsc06512",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480948/bakano/sesion-karen/dsc06512.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 291741,
+    "orientation": "portrait"
+  },
+  {
+    "order": 10,
+    "name": "DSC06523.jpg",
+    "public_id": "bakano/sesion-karen/dsc06523",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480948/bakano/sesion-karen/dsc06523.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 319694,
+    "orientation": "portrait"
+  },
+  {
+    "order": 11,
+    "name": "DSC06529.jpg",
+    "public_id": "bakano/sesion-karen/dsc06529",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480948/bakano/sesion-karen/dsc06529.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 336603,
+    "orientation": "portrait"
+  },
+  {
+    "order": 12,
+    "name": "DSC06573.jpg",
+    "public_id": "bakano/sesion-karen/dsc06573",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480949/bakano/sesion-karen/dsc06573.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 340933,
+    "orientation": "portrait"
+  },
+  {
+    "order": 13,
+    "name": "DSC06577.jpg",
+    "public_id": "bakano/sesion-karen/dsc06577",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480949/bakano/sesion-karen/dsc06577.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 379993,
+    "orientation": "portrait"
+  },
+  {
+    "order": 14,
+    "name": "DSC06580.jpg",
+    "public_id": "bakano/sesion-karen/dsc06580",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480949/bakano/sesion-karen/dsc06580.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 388275,
+    "orientation": "portrait"
+  },
+  {
+    "order": 15,
+    "name": "DSC06628.jpg",
+    "public_id": "bakano/sesion-karen/dsc06628",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480949/bakano/sesion-karen/dsc06628.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 266788,
+    "orientation": "portrait"
+  },
+  {
+    "order": 16,
+    "name": "DSC06635.jpg",
+    "public_id": "bakano/sesion-karen/dsc06635",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480949/bakano/sesion-karen/dsc06635.jpg",
+    "width": 1600,
+    "height": 1067,
+    "bytes": 194275,
+    "orientation": "landscape"
+  },
+  {
+    "order": 17,
+    "name": "DSC06637.jpg",
+    "public_id": "bakano/sesion-karen/dsc06637",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480949/bakano/sesion-karen/dsc06637.jpg",
+    "width": 1600,
+    "height": 1067,
+    "bytes": 217375,
+    "orientation": "landscape"
+  },
+  {
+    "order": 18,
+    "name": "DSC06644.jpg",
+    "public_id": "bakano/sesion-karen/dsc06644",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480950/bakano/sesion-karen/dsc06644.jpg",
+    "width": 1600,
+    "height": 2453,
+    "bytes": 474771,
+    "orientation": "portrait"
+  },
+  {
+    "order": 19,
+    "name": "DSC06656.jpg",
+    "public_id": "bakano/sesion-karen/dsc06656",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480950/bakano/sesion-karen/dsc06656.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 366622,
+    "orientation": "portrait"
+  },
+  {
+    "order": 20,
+    "name": "DSC06674.jpg",
+    "public_id": "bakano/sesion-karen/dsc06674",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480951/bakano/sesion-karen/dsc06674.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 264432,
+    "orientation": "portrait"
+  },
+  {
+    "order": 21,
+    "name": "DSC06685.jpg",
+    "public_id": "bakano/sesion-karen/dsc06685",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480951/bakano/sesion-karen/dsc06685.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 299918,
+    "orientation": "portrait"
+  },
+  {
+    "order": 22,
+    "name": "DSC06687.jpg",
+    "public_id": "bakano/sesion-karen/dsc06687",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480951/bakano/sesion-karen/dsc06687.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 354254,
+    "orientation": "portrait"
+  },
+  {
+    "order": 23,
+    "name": "DSC06716.jpg",
+    "public_id": "bakano/sesion-karen/dsc06716",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480951/bakano/sesion-karen/dsc06716.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 341907,
+    "orientation": "portrait"
+  },
+  {
+    "order": 24,
+    "name": "DSC06730.jpg",
+    "public_id": "bakano/sesion-karen/dsc06730",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480951/bakano/sesion-karen/dsc06730.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 342988,
+    "orientation": "portrait"
+  },
+  {
+    "order": 25,
+    "name": "DSC06740.jpg",
+    "public_id": "bakano/sesion-karen/dsc06740",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480952/bakano/sesion-karen/dsc06740.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 369641,
+    "orientation": "portrait"
+  },
+  {
+    "order": 26,
+    "name": "DSC06754.jpg",
+    "public_id": "bakano/sesion-karen/dsc06754",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480952/bakano/sesion-karen/dsc06754.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 412632,
+    "orientation": "portrait"
+  },
+  {
+    "order": 27,
+    "name": "DSC06756.jpg",
+    "public_id": "bakano/sesion-karen/dsc06756",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480952/bakano/sesion-karen/dsc06756.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 355063,
+    "orientation": "portrait"
+  },
+  {
+    "order": 28,
+    "name": "DSC06802.jpg",
+    "public_id": "bakano/sesion-karen/dsc06802",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480952/bakano/sesion-karen/dsc06802.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 391664,
+    "orientation": "portrait"
+  },
+  {
+    "order": 29,
+    "name": "DSC06811.jpg",
+    "public_id": "bakano/sesion-karen/dsc06811",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480952/bakano/sesion-karen/dsc06811.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 382415,
+    "orientation": "portrait"
+  },
+  {
+    "order": 30,
+    "name": "DSC06821.jpg",
+    "public_id": "bakano/sesion-karen/dsc06821",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480953/bakano/sesion-karen/dsc06821.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 292950,
+    "orientation": "portrait"
+  },
+  {
+    "order": 31,
+    "name": "DSC06865.jpg",
+    "public_id": "bakano/sesion-karen/dsc06865",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480953/bakano/sesion-karen/dsc06865.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 501725,
+    "orientation": "portrait"
+  },
+  {
+    "order": 32,
+    "name": "DSC06871.jpg",
+    "public_id": "bakano/sesion-karen/dsc06871",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480953/bakano/sesion-karen/dsc06871.jpg",
+    "width": 1600,
+    "height": 1067,
+    "bytes": 231973,
+    "orientation": "landscape"
+  },
+  {
+    "order": 33,
+    "name": "DSC06874.jpg",
+    "public_id": "bakano/sesion-karen/dsc06874",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480953/bakano/sesion-karen/dsc06874.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 419723,
+    "orientation": "portrait"
+  },
+  {
+    "order": 34,
+    "name": "DSC06884.jpg",
+    "public_id": "bakano/sesion-karen/dsc06884",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480953/bakano/sesion-karen/dsc06884.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 267479,
+    "orientation": "portrait"
+  },
+  {
+    "order": 35,
+    "name": "DSC06892.jpg",
+    "public_id": "bakano/sesion-karen/dsc06892",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480954/bakano/sesion-karen/dsc06892.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 300312,
+    "orientation": "portrait"
+  },
+  {
+    "order": 36,
+    "name": "DSC06897.jpg",
+    "public_id": "bakano/sesion-karen/dsc06897",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480954/bakano/sesion-karen/dsc06897.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 385302,
+    "orientation": "portrait"
+  },
+  {
+    "order": 37,
+    "name": "DSC06910.jpg",
+    "public_id": "bakano/sesion-karen/dsc06910",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480954/bakano/sesion-karen/dsc06910.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 349666,
+    "orientation": "portrait"
+  },
+  {
+    "order": 38,
+    "name": "DSC06918.jpg",
+    "public_id": "bakano/sesion-karen/dsc06918",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480955/bakano/sesion-karen/dsc06918.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 370303,
+    "orientation": "portrait"
+  },
+  {
+    "order": 39,
+    "name": "DSC06926.jpg",
+    "public_id": "bakano/sesion-karen/dsc06926",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480955/bakano/sesion-karen/dsc06926.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 259112,
+    "orientation": "portrait"
+  },
+  {
+    "order": 40,
+    "name": "DSC06933.jpg",
+    "public_id": "bakano/sesion-karen/dsc06933",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480955/bakano/sesion-karen/dsc06933.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 326744,
+    "orientation": "portrait"
+  },
+  {
+    "order": 41,
+    "name": "DSC06935.jpg",
+    "public_id": "bakano/sesion-karen/dsc06935",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480955/bakano/sesion-karen/dsc06935.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 282896,
+    "orientation": "portrait"
+  },
+  {
+    "order": 42,
+    "name": "DSC06939.jpg",
+    "public_id": "bakano/sesion-karen/dsc06939",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480955/bakano/sesion-karen/dsc06939.jpg",
+    "width": 1600,
+    "height": 2401,
+    "bytes": 284934,
+    "orientation": "portrait"
+  },
+  {
+    "order": 43,
+    "name": "DSC06942.jpg",
+    "public_id": "bakano/sesion-karen/dsc06942",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480955/bakano/sesion-karen/dsc06942.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 313220,
+    "orientation": "portrait"
+  },
+  {
+    "order": 44,
+    "name": "DSC06953.jpg",
+    "public_id": "bakano/sesion-karen/dsc06953",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480956/bakano/sesion-karen/dsc06953.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 345007,
+    "orientation": "portrait"
+  },
+  {
+    "order": 45,
+    "name": "DSC06966.jpg",
+    "public_id": "bakano/sesion-karen/dsc06966",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480956/bakano/sesion-karen/dsc06966.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 359372,
+    "orientation": "portrait"
+  },
+  {
+    "order": 46,
+    "name": "DSC06994.jpg",
+    "public_id": "bakano/sesion-karen/dsc06994",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480956/bakano/sesion-karen/dsc06994.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 399766,
+    "orientation": "portrait"
+  },
+  {
+    "order": 47,
+    "name": "DSC06996.jpg",
+    "public_id": "bakano/sesion-karen/dsc06996",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480956/bakano/sesion-karen/dsc06996.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 386463,
+    "orientation": "portrait"
+  },
+  {
+    "order": 48,
+    "name": "DSC07005.jpg",
+    "public_id": "bakano/sesion-karen/dsc07005",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480956/bakano/sesion-karen/dsc07005.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 307618,
+    "orientation": "portrait"
+  },
+  {
+    "order": 49,
+    "name": "DSC07008.jpg",
+    "public_id": "bakano/sesion-karen/dsc07008",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480956/bakano/sesion-karen/dsc07008.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 347430,
+    "orientation": "portrait"
+  },
+  {
+    "order": 50,
+    "name": "DSC07016.jpg",
+    "public_id": "bakano/sesion-karen/dsc07016",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480958/bakano/sesion-karen/dsc07016.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 361820,
+    "orientation": "portrait"
+  },
+  {
+    "order": 51,
+    "name": "DSC07024.jpg",
+    "public_id": "bakano/sesion-karen/dsc07024",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480957/bakano/sesion-karen/dsc07024.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 338717,
+    "orientation": "portrait"
+  },
+  {
+    "order": 52,
+    "name": "DSC07027.jpg",
+    "public_id": "bakano/sesion-karen/dsc07027",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480957/bakano/sesion-karen/dsc07027.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 397531,
+    "orientation": "portrait"
+  },
+  {
+    "order": 53,
+    "name": "DSC07033.jpg",
+    "public_id": "bakano/sesion-karen/dsc07033",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480958/bakano/sesion-karen/dsc07033.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 346723,
+    "orientation": "portrait"
+  },
+  {
+    "order": 54,
+    "name": "DSC07037.jpg",
+    "public_id": "bakano/sesion-karen/dsc07037",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480958/bakano/sesion-karen/dsc07037.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 288238,
+    "orientation": "portrait"
+  },
+  {
+    "order": 55,
+    "name": "DSC07044.jpg",
+    "public_id": "bakano/sesion-karen/dsc07044",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480958/bakano/sesion-karen/dsc07044.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 305135,
+    "orientation": "portrait"
+  },
+  {
+    "order": 56,
+    "name": "DSC07061.jpg",
+    "public_id": "bakano/sesion-karen/dsc07061",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480959/bakano/sesion-karen/dsc07061.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 394668,
+    "orientation": "portrait"
+  },
+  {
+    "order": 57,
+    "name": "DSC07071.jpg",
+    "public_id": "bakano/sesion-karen/dsc07071",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480959/bakano/sesion-karen/dsc07071.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 265866,
+    "orientation": "portrait"
+  },
+  {
+    "order": 58,
+    "name": "DSC07076.jpg",
+    "public_id": "bakano/sesion-karen/dsc07076",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480959/bakano/sesion-karen/dsc07076.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 299705,
+    "orientation": "portrait"
+  },
+  {
+    "order": 59,
+    "name": "DSC07083.jpg",
+    "public_id": "bakano/sesion-karen/dsc07083",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480959/bakano/sesion-karen/dsc07083.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 310482,
+    "orientation": "portrait"
+  },
+  {
+    "order": 60,
+    "name": "DSC07089.jpg",
+    "public_id": "bakano/sesion-karen/dsc07089",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480959/bakano/sesion-karen/dsc07089.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 314496,
+    "orientation": "portrait"
+  },
+  {
+    "order": 61,
+    "name": "DSC07091.jpg",
+    "public_id": "bakano/sesion-karen/dsc07091",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480959/bakano/sesion-karen/dsc07091.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 251298,
+    "orientation": "portrait"
+  },
+  {
+    "order": 62,
+    "name": "DSC07106.jpg",
+    "public_id": "bakano/sesion-karen/dsc07106",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480960/bakano/sesion-karen/dsc07106.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 392874,
+    "orientation": "portrait"
+  },
+  {
+    "order": 63,
+    "name": "DSC07113.jpg",
+    "public_id": "bakano/sesion-karen/dsc07113",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480960/bakano/sesion-karen/dsc07113.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 382130,
+    "orientation": "portrait"
+  },
+  {
+    "order": 64,
+    "name": "DSC07120.jpg",
+    "public_id": "bakano/sesion-karen/dsc07120",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480960/bakano/sesion-karen/dsc07120.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 330976,
+    "orientation": "portrait"
+  },
+  {
+    "order": 65,
+    "name": "DSC07137.jpg",
+    "public_id": "bakano/sesion-karen/dsc07137",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480960/bakano/sesion-karen/dsc07137.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 323507,
+    "orientation": "portrait"
+  },
+  {
+    "order": 66,
+    "name": "DSC07155.jpg",
+    "public_id": "bakano/sesion-karen/dsc07155",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480960/bakano/sesion-karen/dsc07155.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 256449,
+    "orientation": "portrait"
+  },
+  {
+    "order": 67,
+    "name": "DSC07158.jpg",
+    "public_id": "bakano/sesion-karen/dsc07158",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480961/bakano/sesion-karen/dsc07158.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 370069,
+    "orientation": "portrait"
+  },
+  {
+    "order": 68,
+    "name": "DSC07200.jpg",
+    "public_id": "bakano/sesion-karen/dsc07200",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480961/bakano/sesion-karen/dsc07200.jpg",
+    "width": 1600,
+    "height": 2290,
+    "bytes": 399983,
+    "orientation": "portrait"
+  },
+  {
+    "order": 69,
+    "name": "DSC07208.jpg",
+    "public_id": "bakano/sesion-karen/dsc07208",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480961/bakano/sesion-karen/dsc07208.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 403542,
+    "orientation": "portrait"
+  },
+  {
+    "order": 70,
+    "name": "DSC07213.jpg",
+    "public_id": "bakano/sesion-karen/dsc07213",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480962/bakano/sesion-karen/dsc07213.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 308094,
+    "orientation": "portrait"
+  },
+  {
+    "order": 71,
+    "name": "DSC07214.jpg",
+    "public_id": "bakano/sesion-karen/dsc07214",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480961/bakano/sesion-karen/dsc07214.jpg",
+    "width": 1600,
+    "height": 2400,
+    "bytes": 323684,
+    "orientation": "portrait"
+  },
+  {
+    "order": 72,
+    "name": "DSC07234.jpg",
+    "public_id": "bakano/sesion-karen/dsc07234",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480962/bakano/sesion-karen/dsc07234.jpg",
+    "width": 1600,
+    "height": 1067,
+    "bytes": 236006,
+    "orientation": "landscape"
+  },
+  {
+    "order": 73,
+    "name": "DSC07238.jpg",
+    "public_id": "bakano/sesion-karen/dsc07238",
+    "url": "https://res.cloudinary.com/mrp1wwq1/image/upload/v1786480962/bakano/sesion-karen/dsc07238.jpg",
+    "width": 1600,
+    "height": 1067,
+    "bytes": 241590,
+    "orientation": "landscape"
+  }
+]
