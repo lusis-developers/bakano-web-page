@@ -1,13 +1,17 @@
-```
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useContactModal } from '@/composables/useContactModal'
+import { cld } from '@/utils/cloudinary'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import TheScrollOverlay from '@/components/TheScrollOverlay.vue' // Added this import
 const heroVideo = 'https://res.cloudinary.com/dpimsaaa4/video/upload/v1772741967/IMG_8601_y5tgbu.mov'
-const bgFoto1   = 'https://res.cloudinary.com/dpimsaaa4/image/upload/v1772741965/IMG_7973_fm7dfc.jpg'
-const bgFoto2   = 'https://res.com/dpimsaaa4/image/upload/v1772741964/IMG_8099_h9zifs.jpg'
+
+// Fondos de la sesión de estudio (Karen Muñoz). Van detrás del texto con un
+// overlay oscuro al 75 %, así que se recortan anchos y se sirven a 1920.
+const BG = 'c_fill,g_auto,w_1920,h_1080'
+const bgFoto1 = cld('bakano/sesion-karen/dsc06635', BG)
+const bgFoto2 = cld('bakano/sesion-karen/dsc07238', BG)
 
 gsap.registerPlugin(ScrollTrigger)
 

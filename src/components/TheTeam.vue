@@ -3,9 +3,14 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-import luisImage    from '@/assets/team/luis.webp'
-import denisseImage from '@/assets/team/denisse.webp'
-import diegoImage   from '@/assets/team/diego.webp'
+import { cld } from '@/utils/cloudinary'
+
+// Retratos de la sesión de estudio (Karen Muñoz). Recorte 3:4 vertical:
+// el marco mide 78vh de alto, así que la foto llega a ~1013 px en pantallas grandes.
+const PORTRAIT = 'c_fill,g_auto,w_760,h_1013'
+const luisImage    = cld('bakano/sesion-karen/dsc06994', PORTRAIT)
+const denisseImage = cld('bakano/sesion-karen/dsc06942', PORTRAIT)
+const diegoImage   = cld('bakano/sesion-karen/dsc06685', PORTRAIT)
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -20,7 +25,7 @@ const members = [
     id: 1,
     num: '01',
     name: 'Luis Reyes',
-    role: 'Founder & Estratega de Datos y Decisiones de Alto Impacto',
+    role: 'CEO & Founder — Estratega de Datos y Decisiones de Alto Impacto',
     bio: 'Más de 5 años transformando negocios con datos. Convierte números en decisiones que mueven la aguja.',
     image: luisImage,
     linkedin: 'https://www.linkedin.com/in/lualreye/',
@@ -29,7 +34,7 @@ const members = [
     id: 2,
     num: '02',
     name: 'Denisse Quimi',
-    role: 'CMO & Estratega de Marketing Digital',
+    role: 'COO & Estratega de Marketing Digital',
     bio: 'Arquitecta de marcas que conectan. Campañas de alto impacto que convierten audiencias en comunidades.',
     image: denisseImage,
     linkedin: 'https://www.linkedin.com/in/qneniis/',
