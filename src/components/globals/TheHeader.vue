@@ -4,6 +4,7 @@ import { RouterLink, useRouter, useRoute } from 'vue-router'
 import { gsap } from 'gsap'
 
 import bakanoLogo from '../../assets/logos/bakano-light.png'
+import { whatsappUrl } from '@/constants/contact'
 
 // ── Estado ────────────────────────────────────────────────────────────────────
 const isMenuOpen = ref(false)
@@ -45,7 +46,7 @@ const scrollToSection = async (sectionId: string) => {
 }
 
 const openWhatsApp = () => {
-  window.open('https://wa.me/593984934039', '_blank', 'noopener,noreferrer')
+  window.open(whatsappUrl(), '_blank', 'noopener,noreferrer')
   closeMenu()
 }
 
