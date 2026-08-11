@@ -8,9 +8,9 @@ import { cld } from '@/utils/cloudinary'
 // Retratos de la sesión de estudio (Karen Muñoz). Recorte 3:4 vertical:
 // el marco mide 78vh de alto, así que la foto llega a ~1013 px en pantallas grandes.
 const PORTRAIT = 'c_fill,g_auto,w_760,h_1013'
-const luisImage    = cld('bakano/sesion-karen/dsc06453', PORTRAIT)
-const denisseImage = cld('bakano/sesion-karen/dsc06580', PORTRAIT)
-const diegoImage   = cld('bakano/sesion-karen/dsc07071', PORTRAIT)
+const luisImage    = cld('bakano/sesion-karen/dsc06994', PORTRAIT)
+const denisseImage = cld('bakano/sesion-karen/dsc06942', PORTRAIT)
+const diegoImage   = cld('bakano/sesion-karen/dsc06685', PORTRAIT)
 
 gsap.registerPlugin(ScrollTrigger)
 
