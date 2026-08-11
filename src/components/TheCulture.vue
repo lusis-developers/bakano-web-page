@@ -4,11 +4,12 @@ import { cld, cldSrcset } from '@/utils/cloudinary'
 // Sesión de estudio Karen Muñoz — retratos del equipo completo.
 // Dos filas que se desplazan en sentidos opuestos: la fila superior avanza
 // hacia la izquierda, la inferior hacia la derecha.
-// dsc06453 / dsc06580 / dsc07071 quedan fuera: los usa TheTeam para los fundadores.
+// dsc06994 / dsc06942 / dsc06685 quedan fuera: los usa TheTeam para los fundadores.
+// Sí aparecen otras tomas de los tres, que para eso es la marquesina del equipo.
 const ROW_TOP = [
   'dsc06427', 'dsc06501', 'dsc06577', 'dsc06674',
   'dsc06802', 'dsc06892', 'dsc06933', 'dsc06966',
-  'dsc07037', 'dsc07089', 'dsc07120', 'dsc07213',
+  'dsc07037', 'dsc07071', 'dsc07120', 'dsc07213',
 ]
 
 const ROW_BOTTOM = [
