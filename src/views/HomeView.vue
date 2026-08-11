@@ -4,6 +4,7 @@ import TheStrategies from '@/components/TheStrategies.vue'
 import TheTestimonials from '@/components/TheTestimonials.vue'
 import TheAuthority from '@/components/TheAuthority.vue'
 import TheTeam from '@/components/TheTeam.vue'
+import TheCulture from '@/components/TheCulture.vue'
 import TheContact from '@/components/TheContact.vue'
 </script>
 
@@ -23,6 +24,9 @@ import TheContact from '@/components/TheContact.vue'
     </section>
     <section id="nosotros" aria-label="Equipo fundador de Bakano">
       <TheTeam />
+    </section>
+    <section id="equipo" aria-label="El equipo completo de Bakano">
+      <TheCulture />
     </section>
     <TheContact />
   </main>
