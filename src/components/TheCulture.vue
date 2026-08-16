@@ -1,37 +1,90 @@
 <script setup lang="ts">
-import { cld, cldSrcset } from '@/utils/cloudinary'
+import { ref } from 'vue'
+import { useScrollAnimations } from '@/composables/useScrollAnimations'
+import { CULTURE_ROW_TOP, CULTURE_ROW_BOTTOM, toCultureCard } from '@/data/culture'
 
-// Sesión de estudio Karen Muñoz — retratos del equipo completo.
-// Dos filas que se desplazan en sentidos opuestos: la fila superior avanza
-// hacia la izquierda, la inferior hacia la derecha.
-// dsc06994 / dsc06942 / dsc06685 quedan fuera: los usa TheTeam para los fundadores.
-// Sí aparecen otras tomas de los tres, que para eso es la marquesina del equipo.
-const ROW_TOP = [
-  'dsc06427', 'dsc06501', 'dsc06577', 'dsc06674',
-  'dsc06802', 'dsc06892', 'dsc06933', 'dsc06966',
-  'dsc07037', 'dsc07071', 'dsc07120', 'dsc07213',
-]
+// Dos filas que se desplazan en sentidos opuestos: la superior hacia la
+// izquierda, la inferior hacia la derecha.
+const rowTop = CULTURE_ROW_TOP.map(toCultureCard)
+const rowBottom = CULTURE_ROW_BOTTOM.map(toCultureCard)
 
-const ROW_BOTTOM = [
-  'dsc06460', 'dsc06509', 'dsc06628', 'dsc06687',
-  'dsc06821', 'dsc06918', 'dsc06939', 'dsc07005',
-  'dsc07044', 'dsc07091', 'dsc07155', 'dsc07214',
-]
+// ── Marquee reactivo a la velocidad del scroll (solo desktop) ────────────────
+// Reemplaza los keyframes CSS por un ticker GSAP: misma velocidad base, pero
+// un flick de scroll acelera las filas y al soltar decaen a su ritmo normal.
+const sectionRef = ref<HTMLElement | null>(null)
+const rowLeftRef = ref<HTMLElement | null>(null)
+const rowRightRef = ref<HTMLElement | null>(null)
 
-// Las tarjetas miden 320 px como máximo; 360 px cubre 1x y el 2x del srcset, 720.
-const CARD = 'c_fill,g_auto,w_360,h_480'
+useScrollAnimations(
+  () => sectionRef.value,
+  ({ gsap, ScrollTrigger, mm }) => {
+    mm.add('(min-width: 769px)', () => {
+      const left = rowLeftRef.value
+      const right = rowRightRef.value
+      if (!left || !right) return
 
-const toCard = (id: string) => {
-  const publicId = `bakano/sesion-karen/${id}`
-  return { id, src: cld(publicId, CARD), srcset: cldSrcset(publicId, CARD) }
-}
+      // Velocidad base en %/s — más lenta que los keyframes CSS (50% en ~110s / 130s):
+      // las fotos deben poder mirarse; el scroll es lo que las acelera.
+      const rows = [
+        { el: left, dir: -1, base: 50 / 110 },
+        { el: right, dir: 1, base: 50 / 130 },
+      ]
+      // Las tiras están duplicadas → el bucle envuelve entre -50% y 0%
+      const wrap = gsap.utils.wrap(-50, 0)
+      const pos = [0, -50]
+      const hover = [1, 1]
+      let boost = 0
+      let active = false
 
-const rowTop = ROW_TOP.map(toCard)
-const rowBottom = ROW_BOTTOM.map(toCard)
+      const st = ScrollTrigger.create({
+        trigger: sectionRef.value,
+        start: 'top bottom',
+        end: 'bottom top',
+        onToggle: (self) => { active = self.isActive },
+        onUpdate: (self) => {
+          boost = gsap.utils.clamp(-2.5, 2.5, self.getVelocity() / 400)
+        },
+      })
+      active = st.isActive
+
+      const enter = rows.map((_, i) => () => { hover[i] = 0 })
+      const leave = rows.map((_, i) => () => { hover[i] = 1 })
+      rows.forEach((row, i) => {
+        row.el.classList.add('culture__row--js')
+        row.el.addEventListener('pointerenter', enter[i])
+        row.el.addEventListener('pointerleave', leave[i])
+      })
+
+      const tick = (_time: number, delta: number) => {
+        if (!active) return
+        boost = gsap.utils.interpolate(boost, 0, 0.08)
+        rows.forEach((row, i) => {
+          const speed =
+            row.dir * row.base * (1 + Math.abs(boost) * 1.6) * hover[i]
+          const kick = row.dir * boost * 0.06 * hover[i]
+          pos[i] = wrap(pos[i] + speed * (delta / 1000) + kick)
+          gsap.set(row.el, { xPercent: pos[i] })
+        })
+      }
+      gsap.ticker.add(tick)
+
+      return () => {
+        gsap.ticker.remove(tick)
+        st.kill()
+        rows.forEach((row, i) => {
+          row.el.removeEventListener('pointerenter', enter[i])
+          row.el.removeEventListener('pointerleave', leave[i])
+          row.el.classList.remove('culture__row--js')
+          gsap.set(row.el, { clearProps: 'transform' })
+        })
+      }
+    })
+  }
+)
 </script>
 
 <template>
-  <section class="culture" aria-labelledby="culture-title">
+  <section class="culture" aria-labelledby="culture-title" ref="sectionRef">
     <header class="culture__head">
       <p class="culture__eyebrow">El equipo completo</p>
       <h2 id="culture-title" class="culture__title">
@@ -46,7 +99,7 @@ const rowBottom = ROW_BOTTOM.map(toCard)
     </header>
 
     <div class="culture__marquee" role="list" aria-label="Retratos del equipo Bakano">
-      <div class="culture__row culture__row--left">
+      <div class="culture__row culture__row--left" ref="rowLeftRef">
         <div class="culture__strip">
           <figure v-for="p in rowTop" :key="p.id" class="culture__card" role="listitem">
             <img
@@ -70,7 +123,7 @@ const rowBottom = ROW_BOTTOM.map(toCard)
         </div>
       </div>
 
-      <div class="culture__row culture__row--right">
+      <div class="culture__row culture__row--right" ref="rowRightRef">
         <div class="culture__strip">
           <figure v-for="p in rowBottom" :key="p.id" class="culture__card" role="listitem">
             <img
@@ -187,8 +240,14 @@ $ink: #141019;
   gap: clamp(10px, 1.1vw, 16px);
 
   // La de arriba corre hacia la izquierda, la de abajo hacia la derecha
-  &--left  { animation: culture-slide-left  72s linear infinite; }
-  &--right { animation: culture-slide-right 88s linear infinite; }
+  &--left  { animation: culture-slide-left  110s linear infinite; }
+  &--right { animation: culture-slide-right 130s linear infinite; }
+
+  // Cuando el ticker GSAP toma el control (desktop), los keyframes CSS se apagan
+  &--js {
+    animation: none;
+    will-change: transform;
+  }
 
   // Pausa solo la fila señalada; la otra sigue corriendo
   &:hover {
