@@ -1,12 +1,94 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import ContactWizard from './ContactWizard.vue'
+import ContactBackdrop from './contact/ContactBackdrop.vue'
+import { useScrollAnimations } from '@/composables/useScrollAnimations'
+
+const sectionRef = ref<HTMLElement | null>(null)
+
+useScrollAnimations(
+  () => sectionRef.value,
+  ({ gsap }) => {
+    // Coreografía de entrada: dispara una sola vez (el formulario no debe re-ocultarse)
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.value,
+        start: 'top 70%',
+        toggleActions: 'play none none none',
+      },
+    })
+
+    tl.from('.contact__label, .contact__title, .contact__desc', {
+      x: -40,
+      opacity: 0,
+      stagger: 0.1,
+      duration: 0.8,
+      ease: 'power3.out',
+    }, 0)
+
+    tl.from('.contact__trust-item', {
+      y: 24,
+      opacity: 0,
+      stagger: 0.1,
+      duration: 0.6,
+      ease: 'power2.out',
+    }, 0.25)
+
+    tl.from('.contact__stat', {
+      y: 24,
+      opacity: 0,
+      duration: 0.7,
+      ease: 'power2.out',
+    }, 0.55)
+
+    // Contador del stat 20% — proxy porque el texto lleva el símbolo %
+    const statNum = sectionRef.value?.querySelector<HTMLElement>('.contact__stat-num')
+    if (statNum) {
+      const proxy = { v: 0 }
+      tl.to(proxy, {
+        v: 20,
+        duration: 1.1,
+        ease: 'power2.out',
+        onUpdate: () => { statNum.textContent = `${Math.round(proxy.v)}%` },
+      }, 0.55)
+    }
+
+    tl.from('.contact__form-card', {
+      y: 48,
+      opacity: 0,
+      scale: 0.97,
+      duration: 0.9,
+      ease: 'power3.out',
+    }, 0.3)
+
+    // El glow respira al final — solo opacidad (su transform es de CSS)
+    tl.from('.contact__glow', { opacity: 0, duration: 1.2, ease: 'power1.out' }, 0.6)
+
+    // Nebulosa de fondo: deriva + zoom sutil scrubbed (mobile y desktop)
+    gsap.fromTo('.contact__bg-img',
+      { yPercent: -8, scale: 1.12 },
+      {
+        yPercent: 8,
+        scale: 1.04,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.value,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.8,
+          invalidateOnRefresh: true,
+        },
+      }
+    )
+  }
+)
 </script>
 
 <template>
-  <section class="contact" id="contacto">
+  <section class="contact" id="contacto" ref="sectionRef">
 
-    <!-- Radial glow de fondo -->
-    <div class="contact__glow" aria-hidden="true" />
+    <!-- Nebulosa Higgsfield + glow (animados desde este componente) -->
+    <ContactBackdrop />
 
     <div class="contact__inner">
 
@@ -93,7 +175,8 @@ import ContactWizard from './ContactWizard.vue'
 // ── Sección raíz ──────────────────────────────────────────────────────────────
 .contact {
   position: relative;
-  background-color: #0b0815;
+  // Translúcido: deja pasar el video-hilo global del homepage
+  background-color: rgba(11, 8, 21, 0.85);
   padding: 120px 24px;
   overflow: hidden;
 
@@ -102,23 +185,7 @@ import ContactWizard from './ContactWizard.vue'
   }
 }
 
-// Glow de fondo
-.contact__glow {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 70vw;
-  height: 70vw;
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(colors.$BAKANO-PINK, 0.06) 0%,
-    rgba(colors.$BAKANO-PURPLE, 0.04) 40%,
-    transparent 70%
-  );
-  pointer-events: none;
-}
+// Fondo (nebulosa + glow) → ContactBackdrop.vue
 
 // ── Layout interior ───────────────────────────────────────────────────────────
 .contact__inner {

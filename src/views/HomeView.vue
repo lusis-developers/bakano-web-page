@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import TheHero from '@/components/TheHero.vue'
+import TheStory from '@/components/TheStory.vue'
+import TheVideoBackdrop from '@/components/globals/TheVideoBackdrop.vue'
 import TheStrategies from '@/components/TheStrategies.vue'
 import TheTestimonials from '@/components/TheTestimonials.vue'
 import TheAuthority from '@/components/TheAuthority.vue'
@@ -10,8 +11,11 @@ import TheContact from '@/components/TheContact.vue'
 
 <template>
   <main class="home" itemscope itemtype="https://schema.org/WebPage">
+    <!-- Hilo cinemático: video fijo scrubbed por el scroll de TODA la página -->
+    <TheVideoBackdrop />
+
     <section id="inicio" aria-label="Bakano - Agencia de Marketing Digital en Ecuador">
-      <TheHero />
+      <TheStory />
     </section>
     <section id="servicios" aria-label="Servicios de marketing digital y metodología de crecimiento">
       <TheStrategies />
