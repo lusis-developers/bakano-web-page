@@ -6,6 +6,7 @@ import TheGlobalLoader from './components/globals/TheGlobalLoader.vue'
 import TheScrollGuide from './components/globals/TheScrollGuide.vue'
 import ContactWizard from './components/ContactWizard.vue'
 import { useContactModal } from './composables/useContactModal'
+import { refreshAfterLoad } from './composables/useScrollAnimations'
 
 const isLoaded = ref(false)
 const { isOpen, close } = useContactModal()
@@ -13,6 +14,7 @@ const { isOpen, close } = useContactModal()
 const handleLoaderComplete = () => {
   isLoaded.value = true
   document.body.style.overflow = ''
+  refreshAfterLoad()
 }
 
 onMounted(() => {
