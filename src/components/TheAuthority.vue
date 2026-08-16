@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ref } from 'vue'
+import { useScrollAnimations } from '@/composables/useScrollAnimations'
 
 import logoI3lab    from '@/assets/autoridad/Logo i3lab.webp'
 import logoImpulso  from '@/assets/autoridad/logo-impulso.png'
 import logoPrendo   from '@/assets/autoridad/prendo-logo.png'
-
-gsap.registerPlugin(ScrollTrigger)
 
 const sectionRef = ref<HTMLElement | null>(null)
 
@@ -17,13 +14,11 @@ const partners = [
   { id: 3, name: 'UTPL',    logo: logoPrendo,   url: 'https://www.utpl.edu.ec/' },
 ]
 
-let ctx: gsap.Context | null = null
+useScrollAnimations(
+  () => sectionRef.value,
+  ({ gsap, mm }) => {
+    const section = sectionRef.value
 
-onMounted(() => {
-  const section = sectionRef.value
-  if (!section) return
-
-  ctx = gsap.context(() => {
     gsap.from('.authority__label, .authority__title, .authority__desc, .authority__divider', {
       y: 40,
       opacity: 0,
@@ -39,20 +34,50 @@ onMounted(() => {
     gsap.from('.authority__logo-item', {
       y: 32,
       opacity: 0,
+      scale: 0.92,
       stagger: 0.15,
       duration: 0.9,
       ease: 'power3.out',
       scrollTrigger: {
         trigger: '.authority__logos',
         start: 'top 80%',
+        toggleActions: 'play none none reverse',
       },
     })
-  }, section)
-})
 
-onUnmounted(() => {
-  ctx?.revert()
-})
+    // Mobile: el glow respira con un fade barato (sin scrub)
+    mm.add('(max-width: 768px)', () => {
+      gsap.from('.authority__glow', {
+        opacity: 0,
+        duration: 1.4,
+        ease: 'power1.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 80%',
+        },
+      })
+    })
+
+    // Parallax del glow mientras la sección cruza el viewport (solo desktop)
+    mm.add('(min-width: 769px)', () => {
+      gsap.fromTo('.authority__glow',
+        { yPercent: 20, opacity: 0.35 },
+        {
+          yPercent: -20,
+          opacity: 0.8,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        }
+      )
+    })
+  }
+)
 </script>
 
 <template>
@@ -109,7 +134,8 @@ onUnmounted(() => {
 @use '@/styles/colorVariables.module.scss' as colors;
 
 .authority {
-  background-color: #0b0815;
+  // Translúcido: deja pasar el video-hilo global del homepage
+  background-color: rgba(11, 8, 21, 0.85);
   position: relative;
   overflow: hidden;
   padding: 120px 24px;
@@ -128,6 +154,7 @@ onUnmounted(() => {
       rgba(colors.$BAKANO-PURPLE, 0.08) 0%,
       transparent 70%);
   pointer-events: none;
+  will-change: transform, opacity;
 }
 
 // Contenedor centrado
