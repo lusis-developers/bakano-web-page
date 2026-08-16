@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import bakanoLogo from '../../assets/logos/bakano-light.png'
 import { PHONE_DISPLAY, whatsappUrl } from '@/constants/contact'
+import { useScrollAnimations } from '@/composables/useScrollAnimations'
 
 const currentYear = new Date().getFullYear()
 
 const seriousRef = ref<HTMLElement | null>(null)
-let observer: IntersectionObserver | null = null
 
-onMounted(() => {
-  observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        seriousRef.value?.classList.add('is-visible')
-        observer?.disconnect()
-      }
-    },
-    { threshold: 0.5 },
-  )
-  if (seriousRef.value) observer.observe(seriousRef.value)
-})
-
-onUnmounted(() => observer?.disconnect())
+// Mismo comportamiento que el antiguo IntersectionObserver (dispara una vez),
+// pero dentro del sistema ScrollTrigger para compartir el ciclo de refresh.
+useScrollAnimations(
+  () => seriousRef.value,
+  ({ ScrollTrigger }) => {
+    ScrollTrigger.create({
+      trigger: seriousRef.value,
+      start: 'top 85%',
+      once: true,
+      onEnter: () => seriousRef.value?.classList.add('is-visible'),
+    })
+  },
+  () => seriousRef.value?.classList.add('is-visible'),
+)
 
 // Iconos por Font Awesome 6 (CDN cargado en index.html), no por SVG en línea
 const socialLinks = [
