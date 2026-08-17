@@ -1,10 +1,10 @@
 // Fotos de perfil reales extraídas de los perfiles públicos de Instagram
-import avScarlett from '@/assets/testimonios/avatars/scarlett.jpg'
-import avAle from '@/assets/testimonios/avatars/ale.jpg'
-import avTeque from '@/assets/testimonios/avatars/teque.jpg'
-import avNato from '@/assets/testimonios/avatars/nato.jpg'
-import avMega from '@/assets/testimonios/avatars/mega.jpg'
-import avNicole from '@/assets/testimonios/avatars/nicole.jpg'
+import avScarlett from '@/assets/testimonios/avatars/scarlett.webp'
+import avAle from '@/assets/testimonios/avatars/ale.webp'
+import avTeque from '@/assets/testimonios/avatars/teque.webp'
+import avNato from '@/assets/testimonios/avatars/nato.webp'
+import avMega from '@/assets/testimonios/avatars/mega.webp'
+import avNicole from '@/assets/testimonios/avatars/nicole.webp'
 
 export interface Testimonial {
   id: number

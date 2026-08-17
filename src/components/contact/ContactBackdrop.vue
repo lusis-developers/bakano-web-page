@@ -2,7 +2,7 @@
 // Nebulosa generada con Higgsfield (grade de marca) — capa parallax de fondo.
 // Las animaciones viven en TheContact (gsap.context del padre encuentra
 // estas clases en el DOM); este componente solo aporta markup + estilos.
-import bgNebula from '@/assets/backgrounds/contact-nebula.jpg'
+import bgNebula from '@/assets/backgrounds/contact-nebula.webp'
 </script>
 
 <template>

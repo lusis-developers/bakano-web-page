@@ -6,6 +6,7 @@ import TheTestimonials from '@/components/TheTestimonials.vue'
 import TheAuthority from '@/components/TheAuthority.vue'
 import TheTeam from '@/components/TheTeam.vue'
 import TheCulture from '@/components/TheCulture.vue'
+import TheFaq from '@/components/TheFaq.vue'
 import TheContact from '@/components/TheContact.vue'
 </script>
 
@@ -31,6 +32,9 @@ import TheContact from '@/components/TheContact.vue'
     </section>
     <section id="equipo" aria-label="El equipo completo de Bakano">
       <TheCulture />
+    </section>
+    <section id="faq" aria-label="Preguntas frecuentes sobre Bakano y marketing digital en Ecuador">
+      <TheFaq />
     </section>
     <TheContact />
   </main>
