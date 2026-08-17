@@ -9,6 +9,8 @@
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
+    "postbuild": "node scripts/prerender.mjs",
+    "prerender": "node scripts/prerender.mjs",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
@@ -27,6 +29,7 @@
     "@vue/tsconfig": "^0.7.0",
     "npm-run-all2": "^8.0.4",
     "prettier": "3.6.2",
+    "puppeteer": "^25.7.0",
     "sass": "^1.90.0",
     "sass-loader": "^16.0.5",
     "typescript": "~5.8.0",
