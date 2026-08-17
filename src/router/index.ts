@@ -97,7 +97,7 @@ const router = createRouter({
       meta: {
         title: 'Bakano | Agencia de Marketing Digital #1 en Ecuador',
         description:
-          'Bakano es la agencia de marketing digital líder en Ecuador. Ayudamos a negocios en Guayaquil y todo Ecuador a aumentar hasta un 20% su facturación con estrategias data-driven, growth marketing y tecnología avanzada.',
+          'Bakano es la agencia de marketing digital líder en Ecuador. Aumenta hasta un 20% tu facturación con estrategias data-driven. +150 negocios transformados.',
         canonical: 'https://bakano.ec/',
         ogTitle: 'Bakano | Agencia de Marketing Digital #1 en Ecuador',
         ogDescription:
