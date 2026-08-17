@@ -6,7 +6,7 @@ import StepCard from './strategies/StepCard.vue'
 import StrategiesHeader from './strategies/StrategiesHeader.vue'
 import StrategiesCta from './strategies/StrategiesCta.vue'
 // Aurora abstracta generada con Higgsfield (grade de marca) — capa parallax
-import bgAurora from '@/assets/backgrounds/strategies-aurora.jpg'
+import bgAurora from '@/assets/backgrounds/strategies-aurora.webp'
 
 const sectionRef = ref<HTMLElement | null>(null)
 

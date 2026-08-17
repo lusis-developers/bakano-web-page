@@ -3,8 +3,8 @@ import { ref } from 'vue'
 import { useScrollAnimations } from '@/composables/useScrollAnimations'
 
 import logoI3lab    from '@/assets/autoridad/Logo i3lab.webp'
-import logoImpulso  from '@/assets/autoridad/logo-impulso.png'
-import logoPrendo   from '@/assets/autoridad/prendo-logo.png'
+import logoImpulso  from '@/assets/autoridad/logo-impulso.webp'
+import logoPrendo   from '@/assets/autoridad/prendo-logo.webp'
 
 const sectionRef = ref<HTMLElement | null>(null)
 
