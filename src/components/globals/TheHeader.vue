@@ -20,9 +20,9 @@ const mobileMenuRef = ref<HTMLElement | null>(null)
 const navLinks = [
   { id: 'inicio',      num: '01', label: 'Inicio',      section: 'inicio' },
   { id: 'servicios',   num: '02', label: 'Servicios',   section: 'servicios' },
-  { id: 'nosotros',    num: '03', label: 'Nosotros',    section: 'nosotros' },
-  { id: 'testimonios', num: '04', label: 'Testimonios', section: 'testimonios' },
-  { id: 'autoridad',   num: '05', label: 'Alianzas',    section: 'autoridad' },
+  { id: 'testimonios', num: '03', label: 'Resultados',  section: 'testimonios' },
+  { id: 'nosotros',    num: '04', label: 'Nosotros',    section: 'nosotros' },
+  { id: 'faq',         num: '05', label: 'Preguntas',   section: 'faq' },
 ]
 
 const toolsLink = { id: 'herramientas', num: '06', label: 'Herramientas', route: '/herramientas' }

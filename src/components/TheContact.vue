@@ -175,8 +175,8 @@ useScrollAnimations(
 // ── Sección raíz ──────────────────────────────────────────────────────────────
 .contact {
   position: relative;
-  // Translúcido: deja pasar el video-hilo global del homepage
-  background-color: rgba(11, 8, 21, 0.85);
+  // Opaco: en el recorrido de escenas tapa a la sección anterior
+  background-color: #0b0815;
   padding: 120px 24px;
   overflow: hidden;
 

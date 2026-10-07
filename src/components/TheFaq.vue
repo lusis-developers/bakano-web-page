@@ -1,17 +1,28 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { faqItems } from '@/data/faq'
+import { useReveal } from '@/composables/useReveal'
+
+const sectionRef = ref<HTMLElement | null>(null)
+useReveal(() => sectionRef.value, { from: 'right' })
 </script>
 
 <template>
-  <section class="faq">
-    <div class="faq__inner">
-      <p class="faq__eyebrow">Preguntas frecuentes</p>
-      <h2 class="faq__title">
+  <section class="faq" ref="sectionRef">
+    <div class="faq__inner" data-drift>
+      <p class="faq__eyebrow" data-reveal>Preguntas frecuentes</p>
+      <h2 class="faq__title" data-reveal>
         Todo lo que necesitas saber <strong>antes de escalar tu negocio</strong>
       </h2>
 
       <div class="faq__list">
-        <details v-for="(item, i) in faqItems" :key="item.q" class="faq__item" :open="i === 0">
+        <details
+          v-for="(item, i) in faqItems"
+          :key="item.q"
+          class="faq__item"
+          data-reveal
+          :open="i === 0"
+        >
           <summary class="faq__question">
             <span>{{ item.q }}</span>
             <i class="fa-solid fa-chevron-down faq__chevron" aria-hidden="true"></i>
@@ -27,6 +38,7 @@ import { faqItems } from '@/data/faq'
 @use '@/styles/colorVariables.module.scss' as colors;
 
 .faq {
+  overflow-x: clip;
   background-color: colors.$BAKANO-DARK;
   padding: clamp(64px, 10vw, 120px) 24px;
 }
@@ -67,7 +79,9 @@ import { faqItems } from '@/data/faq'
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.03);
   overflow: hidden;
-  transition: border-color 0.25s ease, background 0.25s ease;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease;
 
   &[open] {
     border-color: rgba(colors.$BAKANO-PINK, 0.35);
