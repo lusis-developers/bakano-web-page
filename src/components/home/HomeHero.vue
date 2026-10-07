@@ -391,6 +391,13 @@ const { open: openContactModal } = useContactModal()
   }
 
   // ── Responsive ──────────────────────────────────────────────────────────────
+  // Sin margen lateral sobrante, la tarjeta flotante no puede salirse del borde
+  @media (max-width: 1260px) {
+    &__card--clients {
+      right: 12px;
+    }
+  }
+
   @media (max-width: 960px) {
     &__inner {
       grid-template-columns: 1fr;

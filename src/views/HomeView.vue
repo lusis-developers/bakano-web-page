@@ -72,6 +72,21 @@ useSceneTransitions(() => homeRef.value)
     position: relative;
     overflow: hidden;
     --scene-shade: 0;
+    // Cada escena ocupa al menos una pantalla: si fuera más corta, la siguiente
+    // asomaría al cargar y su transición arrancaría antes de tiempo (monitores altos).
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    // El bloque de la escena se estira y centra su contenido en el alto sobrante
+    > :only-child {
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
     // Velo que oscurece la escena que se va
     &::after {
