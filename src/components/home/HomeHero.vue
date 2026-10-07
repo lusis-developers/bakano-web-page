@@ -112,7 +112,8 @@ const { open: openContactModal } = useContactModal()
   overflow: hidden;
   background: $BAKANO-DARK;
   color: $white;
-  padding: calc(56px + clamp(32px, 5vw, 64px)) 24px 32px;
+  // Abajo deja lugar al aviso flotante "Sigue bajando"
+  padding: calc(56px + clamp(32px, 5vw, 64px)) 24px 96px;
 
   &__glow {
     position: absolute;
