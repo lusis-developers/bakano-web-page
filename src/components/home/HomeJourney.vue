@@ -1,22 +1,13 @@
 <script setup lang="ts">
-import { ref, nextTick } from 'vue'
-import {
-  useScrollAnimations,
-  prefersReducedMotion,
-  ScrollTrigger,
-} from '@/composables/useScrollAnimations'
+import { ref } from 'vue'
+import { useScrollAnimations, prefersReducedMotion } from '@/composables/useScrollAnimations'
 import { useContactModal } from '@/composables/useContactModal'
 import { steps } from '@/data/home'
 
 const sectionRef = ref<HTMLElement | null>(null)
-const DESKTOP = '(min-width: 961px)'
-// Se decide antes del primer render para que el pin mida el layout final
-const pinned = ref(
-  typeof window !== 'undefined' &&
-    window.matchMedia(DESKTOP).matches &&
-    !prefersReducedMotion() &&
-    !navigator.webdriver,
-)
+// Se decide antes del primer render para que el pin mida el layout final.
+// Mobile y desktop: solo se desactiva con reduced-motion o en el prerender.
+const pinned = ref(typeof window !== 'undefined' && !prefersReducedMotion() && !navigator.webdriver)
 const active = ref(0)
 const { open: openContactModal } = useContactModal()
 
@@ -34,19 +25,15 @@ const variants = [
 ]
 const months = ['Mes 1', 'Mes 2', 'Mes 3', 'Mes 4', 'Mes 5', 'Mes 6']
 
-// Recorrido fijo solo en desktop y con movimiento permitido. En mobile o con
-// reduced-motion las tres escenas quedan apiladas y legibles, en su estado final.
+// Recorrido fijo en mobile y desktop. Con reduced-motion (o en el prerender)
+// las tres escenas quedan apiladas y legibles, en su estado final.
 useScrollAnimations(
   () => sectionRef.value,
   ({ gsap, mm }) => {
     if (navigator.webdriver) return
 
-    mm.add(DESKTOP, () => {
-      // Si se cruzó el breakpoint con la página abierta, re-medir tras el render
-      if (!pinned.value) {
-        pinned.value = true
-        nextTick(() => ScrollTrigger.refresh())
-      }
+    mm.add({ desktop: '(min-width: 961px)', mobile: '(max-width: 960px)' }, (ctx) => {
+      const mobile = !!ctx.conditions?.mobile
       const section = sectionRef.value!
       const scenes = gsap.utils.toArray<HTMLElement>('.journey__scene')
       const texts = gsap.utils.toArray<HTMLElement>('.journey__text')
@@ -56,8 +43,10 @@ useScrollAnimations(
         scrollTrigger: {
           trigger: section.querySelector('.journey__stage'),
           start: 'top top',
-          end: '+=280%',
+          // En mobile un poco más corto: el pulgar recorre menos por escena
+          end: mobile ? '+=240%' : '+=280%',
           pin: true,
+          anticipatePin: 1,
           scrub: 0.8,
           invalidateOnRefresh: true,
           onUpdate(self) {
@@ -132,7 +121,6 @@ useScrollAnimations(
       tl.to({}, { duration: 0.3 }) // respiro antes de soltar el pin
 
       return () => {
-        pinned.value = false
         active.value = 0
       }
     })
@@ -248,7 +236,9 @@ useScrollAnimations(
           </div>
         </div>
       </div>
+    </div>
 
+    <div class="journey__after">
       <div class="journey__cta">
         <p>El primer paso es gratis: revisamos tu caso y te decimos dónde está la oportunidad.</p>
         <button type="button" class="btn btn--primary" @click="openContactModal">
@@ -270,6 +260,10 @@ useScrollAnimations(
 
   &__stage {
     padding: clamp(72px, 9vw, 112px) 24px;
+  }
+
+  &__after {
+    padding: 0 24px clamp(72px, 9vw, 112px);
   }
 
   &__inner {
@@ -459,8 +453,114 @@ useScrollAnimations(
       min-height: 340px;
     }
 
-    .journey__cta {
-      margin-top: 40px;
+    // ── Mobile: todo el recorrido cabe en una pantalla de celular
+    @media (max-width: 960px) {
+      .journey__stage {
+        height: 100vh;
+        height: 100svh;
+        min-height: 0;
+        justify-content: flex-start;
+        padding: 72px 16px 16px;
+      }
+
+      .journey__inner {
+        gap: 14px;
+        align-items: stretch;
+      }
+
+      .eyebrow {
+        margin-bottom: 6px;
+      }
+
+      .journey__title {
+        margin-bottom: 14px;
+        font-size: clamp(1.5rem, 6.4vw, 2rem);
+      }
+
+      .journey__progress {
+        margin-bottom: 14px;
+
+        li {
+          padding-top: 8px;
+          font-size: 0.75rem;
+        }
+      }
+
+      .journey__text {
+        h3 {
+          margin-bottom: 6px;
+          font-size: 1.25rem;
+        }
+
+        p {
+          font-size: 0.92rem;
+          line-height: 1.5;
+        }
+      }
+
+      p.journey__outcome {
+        margin-top: 8px;
+        font-size: 0.88rem;
+      }
+
+      .journey__panel {
+        border-radius: 18px;
+      }
+
+      .journey__panel-bar {
+        padding: 10px 14px;
+      }
+
+      .journey__scene {
+        min-height: 0;
+        padding: 16px;
+      }
+
+      .scene__title {
+        margin-bottom: 12px;
+        font-size: 0.85rem;
+      }
+
+      .leaks {
+        gap: 6px;
+      }
+
+      .leak {
+        padding: 9px 12px;
+        font-size: 0.8rem;
+      }
+
+      .variants {
+        gap: 12px;
+      }
+
+      .variant__head {
+        font-size: 0.78rem;
+      }
+
+      .growth {
+        height: 130px;
+      }
+
+      .growth__kpi {
+        margin-top: 12px;
+
+        strong {
+          font-size: 1.4rem;
+        }
+
+        span {
+          font-size: 0.75rem;
+        }
+      }
+    }
+
+    // Celulares bajitos (iPhone SE): el título cede su espacio al recorrido
+    @media (max-width: 960px) and (max-height: 700px) {
+      .journey__title,
+      .eyebrow {
+        display: none;
+      }
     }
   }
 
@@ -471,7 +571,8 @@ useScrollAnimations(
   }
 
   @media (max-width: 600px) {
-    &__stage {
+    &__stage,
+    &__after {
       padding-inline: 16px;
     }
 
