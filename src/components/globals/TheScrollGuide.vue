@@ -1,33 +1,43 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useContactModal } from '@/composables/useContactModal'
 
-const scrollY      = ref(0)
-const docHeight    = ref(1)
+const scrollY = ref(0)
+const docHeight = ref(1)
 const activeSection = ref(0)
 
 const sections = [
-  { id: 'inicio',      label: 'Inicio' },
-  { id: 'servicios',   label: 'Servicios' },
+  { id: 'inicio', label: 'Inicio' },
+  { id: 'servicios', label: 'Servicios' },
   { id: 'testimonios', label: 'Resultados' },
-  { id: 'nosotros',    label: 'Nosotros' },
-  { id: 'contacto',    label: 'Contacto' },
+  { id: 'nosotros', label: 'Nosotros' },
+  { id: 'contacto', label: 'Contacto' },
 ]
 
-// Flecha: oculta en el primer tramo (el hero ya tiene la suya)
-// y también cuando estamos casi al final de la página.
-const showArrow = computed(() => {
+// Aviso "sigue bajando": aparece cuando la persona se queda quieta un momento
+// (incluido el inicio) y se esconde apenas vuelve a hacer scroll o al llegar al final.
+const IDLE_MS = 1400
+const idle = ref(false)
+const isTouch = ref(false)
+const { isOpen: contactOpen } = useContactModal()
+let idleTimer: ReturnType<typeof setTimeout> | undefined
+
+const armIdle = () => {
+  idle.value = false
+  clearTimeout(idleTimer)
+  idleTimer = setTimeout(() => (idle.value = true), IDLE_MS)
+}
+
+const showHint = computed(() => {
   const progress = scrollY.value / docHeight.value
-  return scrollY.value > 80 && progress < 0.93
+  return idle.value && progress < 0.95 && !contactOpen.value
 })
 
 let ticking = false
 
 const update = () => {
-  scrollY.value  = window.scrollY
-  docHeight.value = Math.max(
-    1,
-    document.documentElement.scrollHeight - window.innerHeight,
-  )
+  scrollY.value = window.scrollY
+  docHeight.value = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
 
   // Sección activa: la última cuyo top ya pasó el centro de la pantalla
   const mid = window.innerHeight * 0.5
@@ -42,6 +52,7 @@ const update = () => {
 }
 
 const onScroll = () => {
+  armIdle()
   if (!ticking) {
     ticking = true
     requestAnimationFrame(update)
@@ -57,21 +68,22 @@ const scrollDown = () => {
 }
 
 onMounted(() => {
+  isTouch.value = window.matchMedia('(pointer: coarse)').matches
   window.addEventListener('scroll', onScroll, { passive: true })
   update()
+  armIdle()
 })
-onUnmounted(() => window.removeEventListener('scroll', onScroll))
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+  clearTimeout(idleTimer)
+})
 </script>
 
 <template>
   <!-- ── Dots de navegación lateral (desktop) ──────────────────────── -->
   <nav class="scroll-guide" aria-label="Navegación de secciones">
     <ul class="scroll-guide__list">
-      <li
-        v-for="(section, i) in sections"
-        :key="section.id"
-        class="scroll-guide__item"
-      >
+      <li v-for="(section, i) in sections" :key="section.id" class="scroll-guide__item">
         <button
           class="scroll-guide__dot"
           :class="{ 'is-active': activeSection === i }"
@@ -83,18 +95,40 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
     </ul>
   </nav>
 
-  <!-- ── Flecha "seguir scrolleando" ───────────────────────────────── -->
-  <Transition name="arrow-fade">
+  <!-- ── Aviso "sigue bajando" (aparece al quedarse quieto) ───────── -->
+  <!-- type="transition": la animación infinita del aviso no debe retrasar su salida -->
+  <Transition name="hint-pop" type="transition">
     <button
-      v-if="showArrow"
-      class="scroll-down-hint"
+      v-if="showHint"
+      type="button"
+      class="keep-scrolling"
       @click="scrollDown"
-      aria-label="Desplazarse hacia abajo"
+      aria-label="Seguir bajando para ver más"
     >
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-           stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-        <polyline points="6 9 12 15 18 9"/>
-      </svg>
+      <!-- Desktop: mouse con rueda animada · Touch: dedo deslizando -->
+      <span v-if="!isTouch" class="keep-scrolling__mouse" aria-hidden="true">
+        <span class="keep-scrolling__wheel"></span>
+      </span>
+      <span v-else class="keep-scrolling__swipe" aria-hidden="true">
+        <i class="fa-solid fa-hand-pointer"></i>
+      </span>
+
+      <span class="keep-scrolling__text">
+        {{ isTouch ? 'Desliza para ver más' : 'Sigue bajando' }}
+      </span>
+
+      <span class="keep-scrolling__chevrons" aria-hidden="true">
+        <svg
+          v-for="n in 3"
+          :key="n"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.4"
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </span>
     </button>
   </Transition>
 </template>
@@ -113,7 +147,9 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   pointer-events: auto;
 
   // Ocultar en pantallas pequeñas (no hay espacio)
-  @media (max-width: 768px) { display: none; }
+  @media (max-width: 768px) {
+    display: none;
+  }
 }
 
 .scroll-guide__list {
@@ -153,21 +189,21 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.30);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
   background: transparent;
   cursor: pointer;
   padding: 0;
   transition:
-    background    0.3s ease,
-    border-color  0.3s ease,
-    box-shadow    0.3s ease,
-    transform     0.3s ease;
+    background 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
 
   &.is-active {
     background: colors.$BAKANO-PINK;
     border-color: colors.$BAKANO-PINK;
     box-shadow:
-      0 0 8px  rgba(colors.$BAKANO-PINK, 0.55),
+      0 0 8px rgba(colors.$BAKANO-PINK, 0.55),
       0 0 22px rgba(colors.$BAKANO-PINK, 0.22);
     transform: scale(1.4);
   }
@@ -191,7 +227,9 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   color: rgba(255, 255, 255, 0.5);
   opacity: 0;
   transform: translateX(8px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
   pointer-events: none;
 }
 
@@ -200,60 +238,210 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   transform: translateX(0);
 }
 
-// ── Flecha "scroll abajo" centrada en el bottom ───────────────────────────
-.scroll-down-hint {
+// ── Aviso "sigue bajando" ─────────────────────────────────────────────────
+.keep-scrolling {
+  @include fonts.interface-font(700);
   position: fixed;
-  bottom: 30px;
   left: 50%;
-  transform: translateX(-50%);
-  z-index: 90;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: rgba(255, 255, 255, 0.55);
-  cursor: pointer;
-  display: flex;
+  bottom: max(28px, env(safe-area-inset-bottom));
+  z-index: 95;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  animation: chevron-bounce 2s ease-in-out infinite;
-  transition:
-    border-color 0.3s ease,
-    color        0.3s ease,
-    background   0.3s ease;
+  gap: 12px;
+  padding: 10px 18px 10px 12px;
+  border: 1px solid rgba(colors.$BAKANO-PINK, 0.55);
+  border-radius: 999px;
+  background: rgba(colors.$BAKANO-DARK, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transform: translateX(-50%);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.35),
+    0 0 0 0 rgba(colors.$BAKANO-PINK, 0.5);
+  animation:
+    hint-float 2.4s ease-in-out infinite,
+    hint-pulse 2.4s ease-out infinite;
 
   &:hover {
-    border-color: rgba(colors.$BAKANO-PINK, 0.5);
+    border-color: colors.$BAKANO-PINK;
+  }
+
+  &:focus-visible {
+    outline: 2px solid colors.$BAKANO-PINK;
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 600px) {
+    bottom: max(20px, env(safe-area-inset-bottom));
+    font-size: 0.85rem;
+  }
+}
+
+// Mouse con rueda que baja
+.keep-scrolling__mouse {
+  position: relative;
+  width: 20px;
+  height: 30px;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.keep-scrolling__wheel {
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  width: 4px;
+  height: 7px;
+  margin-left: -2px;
+  border-radius: 2px;
+  background: colors.$BAKANO-PINK;
+  animation: wheel-roll 1.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+// Dedo que desliza hacia arriba (gesto de scroll en touch)
+.keep-scrolling__swipe {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  color: colors.$BAKANO-PINK;
+  font-size: 1.1rem;
+  animation: finger-swipe 1.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+// Chevrons en cascada
+.keep-scrolling__chevrons {
+  display: flex;
+  flex-direction: column;
+  margin-left: 2px;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    margin-top: -7px;
     color: colors.$BAKANO-PINK;
-    background: rgba(colors.$BAKANO-PINK, 0.08);
-    animation-play-state: paused;
+    opacity: 0.2;
+    animation: chevron-cascade 1.4s ease-in-out infinite;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.3s;
+    }
   }
+}
 
-  // En móvil lo ocultamos si hay superposición con otros elementos
-  @media (max-width: 480px) {
-    bottom: 20px;
-    width: 36px;
-    height: 36px;
+@keyframes hint-float {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-6px);
   }
 }
 
-@keyframes chevron-bounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50%       { transform: translateX(-50%) translateY(6px); }
+@keyframes hint-pulse {
+  0% {
+    box-shadow:
+      0 12px 32px rgba(0, 0, 0, 0.35),
+      0 0 0 0 rgba(colors.$BAKANO-PINK, 0.45);
+  }
+  70% {
+    box-shadow:
+      0 12px 32px rgba(0, 0, 0, 0.35),
+      0 0 0 14px rgba(colors.$BAKANO-PINK, 0);
+  }
+  100% {
+    box-shadow:
+      0 12px 32px rgba(0, 0, 0, 0.35),
+      0 0 0 0 rgba(colors.$BAKANO-PINK, 0);
+  }
 }
 
-// ── Transición de la flecha ───────────────────────────────────────────────
-.arrow-fade-enter-active,
-.arrow-fade-leave-active {
-  transition: opacity 0.5s ease, transform 0.5s ease;
+@keyframes wheel-roll {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 0;
+  }
 }
 
-.arrow-fade-enter-from,
-.arrow-fade-leave-to {
+@keyframes finger-swipe {
+  0% {
+    transform: translateY(6px);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+}
+
+@keyframes chevron-cascade {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+// Entrada / salida
+.hint-pop-enter-active {
+  transition:
+    opacity 0.45s ease,
+    translate 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hint-pop-leave-active {
+  transition:
+    opacity 0.2s ease,
+    translate 0.2s ease;
+}
+
+.hint-pop-enter-from,
+.hint-pop-leave-to {
   opacity: 0;
-  transform: translateX(-50%) translateY(10px);
+  translate: 0 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .keep-scrolling,
+  .keep-scrolling__wheel,
+  .keep-scrolling__swipe,
+  .keep-scrolling__chevrons svg {
+    animation: none;
+  }
+
+  .keep-scrolling__chevrons svg {
+    opacity: 1;
+  }
 }
 </style>
