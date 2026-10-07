@@ -1,52 +1,88 @@
 <script setup lang="ts">
-import TheStory from '@/components/TheStory.vue'
-import TheVideoBackdrop from '@/components/globals/TheVideoBackdrop.vue'
-import TheStrategies from '@/components/TheStrategies.vue'
-import TheTestimonials from '@/components/TheTestimonials.vue'
-import TheAuthority from '@/components/TheAuthority.vue'
-import TheTeam from '@/components/TheTeam.vue'
+import { ref } from 'vue'
+import { useSceneTransitions } from '@/composables/useSceneTransitions'
+import HomeHero from '@/components/home/HomeHero.vue'
+import HomeProblem from '@/components/home/HomeProblem.vue'
+import HomeServices from '@/components/home/HomeServices.vue'
+import HomeJourney from '@/components/home/HomeJourney.vue'
+import HomeResults from '@/components/home/HomeResults.vue'
+import HomeFounders from '@/components/home/HomeFounders.vue'
 import TheCulture from '@/components/TheCulture.vue'
 import TheFaq from '@/components/TheFaq.vue'
 import TheContact from '@/components/TheContact.vue'
+
+const homeRef = ref<HTMLElement | null>(null)
+useSceneTransitions(() => homeRef.value)
 </script>
 
 <template>
-  <main class="home" itemscope itemtype="https://schema.org/WebPage">
-    <!-- Hilo cinemático: video fijo scrubbed por el scroll de TODA la página -->
-    <TheVideoBackdrop />
-
-    <section id="inicio" aria-label="Bakano - Agencia de Marketing Digital en Ecuador">
-      <TheStory />
+  <main class="home" ref="homeRef" itemscope itemtype="https://schema.org/WebPage">
+    <section
+      class="scene"
+      id="inicio"
+      aria-label="Bakano - Agencia de Marketing Digital en Ecuador"
+    >
+      <HomeHero />
     </section>
-    <section id="servicios" aria-label="Servicios de marketing digital y metodología de crecimiento">
-      <TheStrategies />
+    <section class="scene" aria-label="Problemas comunes al hacer marketing sin datos">
+      <HomeProblem />
     </section>
-    <section id="testimonios" aria-label="Testimonios de clientes de Bakano Ecuador">
-      <TheTestimonials />
+    <section
+      class="scene"
+      id="servicios"
+      aria-label="Servicios de marketing digital y metodología de crecimiento"
+    >
+      <HomeServices />
+      <HomeJourney />
     </section>
-    <section id="autoridad" aria-label="Instituciones con las que ha trabajado Bakano">
-      <TheAuthority />
+    <section class="scene" id="testimonios" aria-label="Testimonios de clientes de Bakano Ecuador">
+      <HomeResults />
     </section>
-    <section id="nosotros" aria-label="Equipo fundador de Bakano">
-      <TheTeam />
+    <section class="scene" id="nosotros" aria-label="Equipo fundador de Bakano">
+      <HomeFounders />
     </section>
-    <section id="equipo" aria-label="El equipo completo de Bakano">
+    <section class="scene" id="equipo" aria-label="El equipo completo de Bakano">
       <TheCulture />
     </section>
-    <section id="faq" aria-label="Preguntas frecuentes sobre Bakano y marketing digital en Ecuador">
+    <section
+      class="scene"
+      id="faq"
+      aria-label="Preguntas frecuentes sobre Bakano y marketing digital en Ecuador"
+    >
       <TheFaq />
     </section>
-    <TheContact />
+    <TheContact class="scene" />
   </main>
 </template>
 
 <style lang="scss" scoped>
-@use '@/styles/colorVariables.module.scss' as colors;
-
 .home {
-  margin-top: -56px;
-  /* Para compensar el margin-top del header en App.vue */
-  background-color: colors.$BAKANO-DARK;
-  /* Continuar con el tema oscuro del final del Hero */
+  margin-top: -56px; // el hero queda bajo el header transparente
+  // Las escenas que retroceden quedan corridas e inclinadas: sin scroll horizontal.
+  // `clip` (no `hidden`) para no crear un contenedor de scroll que rompa los pins.
+  overflow-x: clip;
+  background-color: $BAKANO-DARK;
+
+  section[id] {
+    scroll-margin-top: 56px;
+  }
+
+  // Escenas del recorrido (ver useSceneTransitions): cada una tapa a la anterior
+  :deep(.scene) {
+    position: relative;
+    overflow: hidden;
+    --scene-shade: 0;
+
+    // Velo que oscurece la escena que se va
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 50;
+      pointer-events: none;
+      background: #07050c;
+      opacity: var(--scene-shade);
+    }
+  }
 }
 </style>
