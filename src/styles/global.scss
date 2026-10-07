@@ -7,3 +7,69 @@ body {
   margin: 0;
   font-family: $font-principal;
 }
+
+// ── Botones compartidos (homepage) ────────────────────────────────────────────
+.btn {
+  @include interface-font(700);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 26px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.98rem;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+
+  &:focus-visible {
+    outline: 2px solid $BAKANO-PINK;
+    outline-offset: 3px;
+  }
+
+  &--primary {
+    background: $BAKANO-PINK;
+    color: $white;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba($BAKANO-PINK, 0.35);
+    }
+  }
+
+  &--ghost {
+    background: rgba($white, 0.06);
+    border-color: rgba($white, 0.18);
+    color: $white;
+
+    &:hover {
+      background: rgba($white, 0.12);
+      border-color: rgba($white, 0.3);
+    }
+  }
+
+  &--dark {
+    background: $BAKANO-DARK;
+    color: $white;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba($BAKANO-DARK, 0.25);
+    }
+  }
+}
+
+// ── Etiqueta sobre los títulos de sección ─────────────────────────────────────
+.eyebrow {
+  @include accent-font(700);
+  margin: 0 0 14px;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $BAKANO-PINK;
+}
