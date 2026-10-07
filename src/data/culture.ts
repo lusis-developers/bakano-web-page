@@ -1,7 +1,7 @@
 import { cld, cldSrcset } from '@/utils/cloudinary'
 
 // Sesión de estudio Karen Muñoz — retratos del equipo completo.
-// dsc06994 / dsc06942 / dsc06685 quedan fuera: los usa TheTeam para los fundadores.
+// dsc06994 / dsc06942 / dsc06685 quedan fuera: los usa HomeFounders para los fundadores.
 export const CULTURE_ROW_TOP = [
   'dsc06501', 'dsc06577', 'dsc06674', 'dsc06802',
   'dsc06892', 'dsc06933', 'dsc06966', 'dsc07071',
