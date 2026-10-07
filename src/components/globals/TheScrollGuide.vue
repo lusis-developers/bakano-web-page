@@ -8,8 +8,8 @@ const activeSection = ref(0)
 const sections = [
   { id: 'inicio',      label: 'Inicio' },
   { id: 'servicios',   label: 'Servicios' },
-  { id: 'testimonios', label: 'Testimonios' },
-  { id: 'nosotros',    label: 'Equipo' },
+  { id: 'testimonios', label: 'Resultados' },
+  { id: 'nosotros',    label: 'Nosotros' },
   { id: 'contacto',    label: 'Contacto' },
 ]
 
